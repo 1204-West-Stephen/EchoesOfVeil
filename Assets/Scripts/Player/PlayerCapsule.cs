@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerMovement : MonoBehaviour
+public class PlayerCapsule : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public GameObject player;
+
     void Start()
     {
-        
+        player.SetActive(false);
     }
 
     // Update is called once per frame
