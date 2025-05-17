@@ -316,7 +316,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   orientation: {fileID: 819987673}
-  staminaBar: {fileID: 0}
 --- !u!1 &756281856
 GameObject:
   m_ObjectHideFlags: 0
