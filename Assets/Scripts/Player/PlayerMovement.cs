@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -23,14 +24,24 @@ public class PlayerMovement : MonoBehaviour
     bool grounded;
 
     public Transform orientation;
+    public RectTransform staminaBar;
+    public Image staminaBarImage;
+    public Image staminaBarBackground;
+
+    [Header("Stamina UI Fade")]
+    public float fadeSpeed = 2f;
 
     Rigidbody rb;
     PlayerInput controls;
 
     bool moveForward, moveBackward, moveLeft, moveRight;
+    
     bool sprintInput;
-
+    bool isRecharging;
     float currentMoveSpeed;
+    private bool fadeOutAllowed = true;
+    private Coroutine fadeOutDelayCoroutine;
+    private bool wasStaminaFull = true;
 
     private void Awake()
     {
@@ -68,16 +79,25 @@ public class PlayerMovement : MonoBehaviour
         rb.drag = grounded ? groundDrag : 0f;
 
         HandleStamina();
+        FadeStaminaBar();
     }
 
     private void FixedUpdate()
     {
         MovePlayer();
         SpeedControl();
+        UpdateStamina();
     }
 
     private void HandleStamina()
     {
+        wasStaminaFull = stamina >= 1f;
+
+        if (sprintInput)
+        {
+            lastSprintTime = Time.time;
+        }
+
         bool canActuallySprint = sprintInput && stamina > 0;
 
         if (canActuallySprint)
@@ -85,7 +105,6 @@ public class PlayerMovement : MonoBehaviour
             currentMoveSpeed = sprintSpeed;
             stamina -= staminaDrainRate * Time.deltaTime;
             stamina = Mathf.Clamp01(stamina);
-            lastSprintTime = Time.time;
         }
         else
         {
@@ -97,6 +116,39 @@ public class PlayerMovement : MonoBehaviour
                 stamina = Mathf.Clamp01(stamina);
             }
         }
+
+        isRecharging = stamina < 1f;
+
+        // Check if stamina just hit full
+        if (!wasStaminaFull && stamina >= 1f)
+        {
+            if (fadeOutDelayCoroutine != null)
+                StopCoroutine(fadeOutDelayCoroutine);
+
+            fadeOutDelayCoroutine = StartCoroutine(DelayFadeOut());
+        }
+
+    }
+
+    private void FadeStaminaBar()
+    {
+        float timeSinceSprint = Time.time - lastSprintTime;
+        Color color = staminaBarImage.color;
+        Color color2 = staminaBarBackground.color;
+
+        if (!isRecharging && timeSinceSprint >= 3f && fadeOutAllowed)
+        {
+            color.a = Mathf.Lerp(color.a, 0f, Time.deltaTime * fadeSpeed);
+            color2.a = Mathf.Lerp(color2.a, 0f, Time.deltaTime * fadeSpeed);
+        }
+        else
+        {
+            color.a = Mathf.Lerp(color.a, 1f, Time.deltaTime * fadeSpeed);
+            color2.a = Mathf.Lerp(color2.a, 1f, Time.deltaTime * fadeSpeed);
+        }
+
+        staminaBarImage.color = color;
+        staminaBarBackground.color = color2;
     }
 
     private void MovePlayer()
@@ -118,6 +170,19 @@ public class PlayerMovement : MonoBehaviour
             Vector3 limitedVel = flatVel.normalized * maxSpeed;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
+    }
+
+    private void UpdateStamina()
+    {
+        Vector3 staminaScale = staminaBar.transform.localScale;
+        staminaScale.x = stamina;
+        staminaBar.transform.localScale = staminaScale;
+    }
+    private IEnumerator DelayFadeOut()
+    {
+        fadeOutAllowed = false;
+        yield return new WaitForSeconds(1f); // Wait 1 second after stamina is full
+        fadeOutAllowed = true;
     }
 
 }
