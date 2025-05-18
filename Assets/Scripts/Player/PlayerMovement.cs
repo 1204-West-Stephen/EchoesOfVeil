@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Linq;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -35,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
     PlayerInput controls;
 
     bool moveForward, moveBackward, moveLeft, moveRight;
-    
+
     bool sprintInput;
     bool isRecharging;
     float currentMoveSpeed;
@@ -61,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
 
         controls.Movement.Sprint.performed += _ => sprintInput = true;
         controls.Movement.Sprint.canceled += _ => sprintInput = false;
+
     }
 
     private void OnEnable() => controls.Enable();
@@ -183,6 +186,20 @@ public class PlayerMovement : MonoBehaviour
         fadeOutAllowed = false;
         yield return new WaitForSeconds(1f); // Wait 1 second after stamina is full
         fadeOutAllowed = true;
+    }
+
+    public void controlLock()
+    {
+        controls.Disable();
+
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void controlUnlock()
+    {
+        controls.Enable();
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
 }

@@ -22,16 +22,8 @@ public class PlayerCamera : MonoBehaviour
         controls.Movement.Look.performed += ctx => mouseDelta = ctx.ReadValue<Vector2>();
         controls.Movement.Look.canceled += ctx => mouseDelta = Vector2.zero;
     }
-
-    private void OnEnable()
-    {
-        controls.Enable();
-    }
-
-    private void OnDisable()
-    {
-        controls.Disable();
-    }
+    private void OnEnable() => controls.Enable();
+    private void OnDisable() => controls.Disable();
 
     private void Start()
     {
@@ -55,5 +47,14 @@ public class PlayerCamera : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(rotateX, rotateY, 0);
         orientation.rotation = Quaternion.Euler(0, rotateY, 0);
+    }
+    public void controlLock()
+    {
+        controls.Disable();
+    }
+
+    public void controlUnlock()
+    {
+        controls.Enable();
     }
 }
