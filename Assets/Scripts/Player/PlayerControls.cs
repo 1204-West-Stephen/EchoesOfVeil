@@ -74,18 +74,19 @@ public class PlayerControls : MonoBehaviour
     {
         pauseToggle = !pauseToggle;
         pauseMenu.gameObject.SetActive(pauseToggle);
-        
+
         if (pauseToggle)
         {
+            Time.timeScale = 0f; // Freeze game time
             movement.controlLock();
             playerCamera.controlLock();
         }
         else
         {
+            Time.timeScale = 1f; // Resume game time
             movement.controlUnlock();
             playerCamera.controlUnlock();
         }
     }
-
 
 }
