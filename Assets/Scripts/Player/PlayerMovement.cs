@@ -37,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
     PlayerInput controls;
 
     bool moveForward, moveBackward, moveLeft, moveRight;
+    bool moved;
 
     bool sprintInput;
     bool isRecharging;
@@ -74,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         currentMoveSpeed = moveSpeed;
+
     }
 
     private void Update()
@@ -83,6 +85,8 @@ public class PlayerMovement : MonoBehaviour
 
         HandleStamina();
         FadeStaminaBar();
+
+        moved = (moveForward || moveBackward || moveLeft || moveRight);
     }
 
     private void FixedUpdate()
@@ -101,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
             lastSprintTime = Time.time;
         }
 
-        bool canActuallySprint = sprintInput && stamina > 0;
+        bool canActuallySprint = moved && sprintInput && stamina > 0;
 
         if (canActuallySprint)
         {
