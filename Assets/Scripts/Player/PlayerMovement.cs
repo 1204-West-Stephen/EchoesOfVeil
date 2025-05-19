@@ -13,11 +13,11 @@ public class PlayerMovement : MonoBehaviour
     public float groundDrag = 5f;
 
     [Header("Stamina")]
-    public float staminaDrainRate = 0.4f; // per second
-    public float staminaRegenRate = 0.2f; // per second
-    public float staminaRegenDelay = 2f;  // seconds after last sprint
+    public float staminaDrainRate = 0.4f;
+    public float staminaRegenRate = 0.2f;
+    public float staminaRegenDelay = 2f;
 
-    private float stamina = 1f; // normalized (0 to 1)
+    private float stamina = 1f;
     private float lastSprintTime;
 
     [Header("Ground Check")]
@@ -64,7 +64,6 @@ public class PlayerMovement : MonoBehaviour
 
         controls.Movement.Sprint.performed += _ => sprintInput = true;
         controls.Movement.Sprint.canceled += _ => sprintInput = false;
-
     }
 
     private void OnEnable() => controls.Enable();
@@ -75,7 +74,6 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         currentMoveSpeed = moveSpeed;
-
     }
 
     private void Update()
@@ -96,14 +94,21 @@ public class PlayerMovement : MonoBehaviour
         UpdateStamina();
     }
 
+    private void LateUpdate()
+    {
+        if (transform.position.y < -20f)
+        {
+            transform.position = new Vector3(0, 5, 0); // fallback reset
+            rb.velocity = Vector3.zero;
+        }
+    }
+
     private void HandleStamina()
     {
         wasStaminaFull = stamina >= 1f;
 
         if (sprintInput)
-        {
             lastSprintTime = Time.time;
-        }
 
         bool canActuallySprint = moved && sprintInput && stamina > 0;
 
@@ -126,7 +131,6 @@ public class PlayerMovement : MonoBehaviour
 
         isRecharging = stamina < 1f;
 
-        // Check if stamina just hit full
         if (!wasStaminaFull && stamina >= 1f)
         {
             if (fadeOutDelayCoroutine != null)
@@ -134,7 +138,6 @@ public class PlayerMovement : MonoBehaviour
 
             fadeOutDelayCoroutine = StartCoroutine(DelayFadeOut());
         }
-
     }
 
     private void FadeStaminaBar()
@@ -185,25 +188,23 @@ public class PlayerMovement : MonoBehaviour
         staminaScale.x = stamina;
         staminaBar.transform.localScale = staminaScale;
     }
+
     private IEnumerator DelayFadeOut()
     {
         fadeOutAllowed = false;
-        yield return new WaitForSeconds(1f); // Wait 1 second after stamina is full
+        yield return new WaitForSeconds(1f);
         fadeOutAllowed = true;
     }
 
     public void controlLock()
     {
         controls.Disable();
-
         Cursor.lockState = CursorLockMode.None;
     }
 
     public void controlUnlock()
     {
         controls.Enable();
-
         Cursor.lockState = CursorLockMode.Locked;
     }
-
 }

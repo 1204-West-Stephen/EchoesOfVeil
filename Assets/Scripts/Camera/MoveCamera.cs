@@ -1,13 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveCamera : MonoBehaviour
 {
     public Transform cameraPosition;
 
-    private void Update()
+    private void LateUpdate()
     {
-        transform.position = cameraPosition.position;
+        if (cameraPosition != null)
+        {
+            transform.position = cameraPosition.position;
+            transform.rotation = cameraPosition.rotation;
+        }
     }
 }
