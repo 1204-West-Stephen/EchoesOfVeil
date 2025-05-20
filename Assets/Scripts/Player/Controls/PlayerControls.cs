@@ -19,6 +19,9 @@ public class PlayerControls : MonoBehaviour
     public Canvas pauseMenu;
     bool pauseToggle;
 
+    bool didStore;
+    private Inventory inventory;
+
     private void Awake()
     {
         movement = GetComponent<PlayerMovement>();
@@ -30,6 +33,9 @@ public class PlayerControls : MonoBehaviour
 
         controls.Menus.Pause.performed += _ => isPaused = true;
         controls.Menus.Pause.canceled += _ => isPaused = false;
+
+        controls.Movement.StoreItem.performed += _ => didStore = true;
+        controls.Movement.StoreItem.canceled += _ => didStore = false;
     }
 
     private void OnEnable() => controls.Enable();
@@ -49,6 +55,12 @@ public class PlayerControls : MonoBehaviour
 
     private void Update()
     {
+        if (didStore)
+        {
+            //inventory.RemoveItem(item);
+            didStore = false;
+        }
+
         if (interacted)
         {
             Interacted();
