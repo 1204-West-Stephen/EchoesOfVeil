@@ -837,6 +837,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 1
   sprintSpeed: 2
+  crouchSpeed: 0.5
   groundDrag: 1
   staminaDrainRate: 0.4
   staminaRegenRate: 0.2
