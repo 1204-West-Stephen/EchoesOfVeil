@@ -69,9 +69,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "StoreItem",
+                    "name": "PressF",
                     "type": "Button",
                     "id": "be89d4d9-1a8e-4ed0-a35f-b8f9902cd934",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Crouch",
+                    "type": "Button",
+                    "id": "7f2bd8c4-b40d-40f6-83d2-3633041a5ab2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PressQ",
+                    "type": "Button",
+                    "id": "57f03d78-8a61-4787-aa66-5cd3dd6ab264",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -163,7 +181,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "StoreItem",
+                    "action": "PressF",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "54a660c3-be67-4986-a713-9c09b7459204",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1b28036d-f69e-4c4b-9f7e-b7e45e27edc9",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PressQ",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

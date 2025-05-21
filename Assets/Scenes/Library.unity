@@ -786,13 +786,14 @@ Transform:
   m_GameObject: {fileID: 447217854}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 0.5, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 819987673}
   - {fileID: 831496192}
   - {fileID: 1618863400}
+  - {fileID: 1852534360}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &447217856
@@ -841,14 +842,17 @@ MonoBehaviour:
   staminaRegenRate: 0.2
   staminaRegenDelay: 2
   playerHeight: 2
+  groundCheckDistance: 1.2
   Ground:
     serializedVersion: 2
     m_Bits: 64
   orientation: {fileID: 819987673}
+  cameraTransform: {fileID: 47483465}
   staminaBar: {fileID: 2133776755}
   staminaBarImage: {fileID: 2133776756}
   staminaBarBackground: {fileID: 1528156788}
   fadeSpeed: 2
+  crouchCameraYOffset: 0.2
 --- !u!114 &447217858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2099,13 +2103,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1852534358}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.8, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 47483465}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 447217855}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1929803586
 GameObject:
@@ -2294,7 +2298,6 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1852534360}
   - {fileID: 1106057306}
   - {fileID: 447217855}
   - {fileID: 1435961801}

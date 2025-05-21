@@ -91,9 +91,27 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""StoreItem"",
+                    ""name"": ""PressF"",
                     ""type"": ""Button"",
                     ""id"": ""be89d4d9-1a8e-4ed0-a35f-b8f9902cd934"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""7f2bd8c4-b40d-40f6-83d2-3633041a5ab2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PressQ"",
+                    ""type"": ""Button"",
+                    ""id"": ""57f03d78-8a61-4787-aa66-5cd3dd6ab264"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -185,7 +203,29 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""StoreItem"",
+                    ""action"": ""PressF"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""54a660c3-be67-4986-a713-9c09b7459204"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1b28036d-f69e-4c4b-9f7e-b7e45e27edc9"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PressQ"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -231,7 +271,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Movement_Look = m_Movement.FindAction("Look", throwIfNotFound: true);
         m_Movement_Sprint = m_Movement.FindAction("Sprint", throwIfNotFound: true);
         m_Movement_Interact = m_Movement.FindAction("Interact", throwIfNotFound: true);
-        m_Movement_StoreItem = m_Movement.FindAction("StoreItem", throwIfNotFound: true);
+        m_Movement_PressF = m_Movement.FindAction("PressF", throwIfNotFound: true);
+        m_Movement_Crouch = m_Movement.FindAction("Crouch", throwIfNotFound: true);
+        m_Movement_PressQ = m_Movement.FindAction("PressQ", throwIfNotFound: true);
         // Menus
         m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
         m_Menus_Pause = m_Menus.FindAction("Pause", throwIfNotFound: true);
@@ -303,7 +345,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_Look;
     private readonly InputAction m_Movement_Sprint;
     private readonly InputAction m_Movement_Interact;
-    private readonly InputAction m_Movement_StoreItem;
+    private readonly InputAction m_Movement_PressF;
+    private readonly InputAction m_Movement_Crouch;
+    private readonly InputAction m_Movement_PressQ;
     public struct MovementActions
     {
         private @PlayerInput m_Wrapper;
@@ -315,7 +359,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Movement_Look;
         public InputAction @Sprint => m_Wrapper.m_Movement_Sprint;
         public InputAction @Interact => m_Wrapper.m_Movement_Interact;
-        public InputAction @StoreItem => m_Wrapper.m_Movement_StoreItem;
+        public InputAction @PressF => m_Wrapper.m_Movement_PressF;
+        public InputAction @Crouch => m_Wrapper.m_Movement_Crouch;
+        public InputAction @PressQ => m_Wrapper.m_Movement_PressQ;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -346,9 +392,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
-            @StoreItem.started += instance.OnStoreItem;
-            @StoreItem.performed += instance.OnStoreItem;
-            @StoreItem.canceled += instance.OnStoreItem;
+            @PressF.started += instance.OnPressF;
+            @PressF.performed += instance.OnPressF;
+            @PressF.canceled += instance.OnPressF;
+            @Crouch.started += instance.OnCrouch;
+            @Crouch.performed += instance.OnCrouch;
+            @Crouch.canceled += instance.OnCrouch;
+            @PressQ.started += instance.OnPressQ;
+            @PressQ.performed += instance.OnPressQ;
+            @PressQ.canceled += instance.OnPressQ;
         }
 
         private void UnregisterCallbacks(IMovementActions instance)
@@ -374,9 +426,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
-            @StoreItem.started -= instance.OnStoreItem;
-            @StoreItem.performed -= instance.OnStoreItem;
-            @StoreItem.canceled -= instance.OnStoreItem;
+            @PressF.started -= instance.OnPressF;
+            @PressF.performed -= instance.OnPressF;
+            @PressF.canceled -= instance.OnPressF;
+            @Crouch.started -= instance.OnCrouch;
+            @Crouch.performed -= instance.OnCrouch;
+            @Crouch.canceled -= instance.OnCrouch;
+            @PressQ.started -= instance.OnPressQ;
+            @PressQ.performed -= instance.OnPressQ;
+            @PressQ.canceled -= instance.OnPressQ;
         }
 
         public void RemoveCallbacks(IMovementActions instance)
@@ -449,7 +507,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
-        void OnStoreItem(InputAction.CallbackContext context);
+        void OnPressF(InputAction.CallbackContext context);
+        void OnCrouch(InputAction.CallbackContext context);
+        void OnPressQ(InputAction.CallbackContext context);
     }
     public interface IMenusActions
     {

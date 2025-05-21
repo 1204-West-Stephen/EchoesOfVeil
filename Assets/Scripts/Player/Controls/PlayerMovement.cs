@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Linq;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -22,10 +20,13 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Ground Check")]
     public float playerHeight = 2f;
+    public float groundCheckDistance = 1.2f;
     public LayerMask Ground;
     bool grounded;
 
+    [Header("References")]
     public Transform orientation;
+    public Transform cameraTransform;
     public RectTransform staminaBar;
     public Image staminaBarImage;
     public Image staminaBarBackground;
@@ -37,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
     PlayerInput controls;
 
     bool moveForward, moveBackward, moveLeft, moveRight;
-    bool moved;
+    bool moved, crouchPressed;
 
     bool sprintInput;
     bool isRecharging;
@@ -45,6 +46,15 @@ public class PlayerMovement : MonoBehaviour
     private bool fadeOutAllowed = true;
     private Coroutine fadeOutDelayCoroutine;
     private bool wasStaminaFull = true;
+
+    // Crouch handling
+    private bool isCrouching = false;
+    private float originalHeight;
+    private float originalMoveSpeed;
+    private float originalCameraY;
+
+    [Header("Crouch Settings")]
+    public float crouchCameraYOffset = 0.2f;
 
     private void Awake()
     {
@@ -64,6 +74,8 @@ public class PlayerMovement : MonoBehaviour
 
         controls.Movement.Sprint.performed += _ => sprintInput = true;
         controls.Movement.Sprint.canceled += _ => sprintInput = false;
+
+        controls.Movement.Crouch.performed += _ => crouchPressed = true;
     }
 
     private void OnEnable() => controls.Enable();
@@ -74,17 +86,27 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         currentMoveSpeed = moveSpeed;
+
+        originalHeight = playerHeight;
+        originalMoveSpeed = moveSpeed;
+        originalCameraY = cameraTransform.localPosition.y;
     }
 
     private void Update()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, Ground);
+        grounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, Ground);
         rb.drag = grounded ? groundDrag : 0f;
 
         HandleStamina();
         FadeStaminaBar();
 
-        moved = (moveForward || moveBackward || moveLeft || moveRight);
+        moved = (moveForward || moveBackward || moveLeft || moveRight || isCrouching);
+
+        if (crouchPressed)
+        {
+            ToggleCrouch();
+            crouchPressed = false;
+        }
     }
 
     private void FixedUpdate()
@@ -98,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (transform.position.y < -20f)
         {
-            transform.position = new Vector3(0, 5, 0); // fallback reset
+            transform.position = new Vector3(0, 5, 0);
             rb.velocity = Vector3.zero;
         }
     }
@@ -110,7 +132,8 @@ public class PlayerMovement : MonoBehaviour
         if (sprintInput)
             lastSprintTime = Time.time;
 
-        bool canActuallySprint = moved && sprintInput && stamina > 0;
+        // Only allow sprinting if NOT crouching
+        bool canActuallySprint = moved && sprintInput && stamina > 0f && !isCrouching;
 
         if (canActuallySprint)
         {
@@ -120,7 +143,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            currentMoveSpeed = moveSpeed;
+            currentMoveSpeed = isCrouching ? originalMoveSpeed / 2f : moveSpeed;
 
             if (Time.time - lastSprintTime >= staminaRegenDelay)
             {
@@ -131,7 +154,7 @@ public class PlayerMovement : MonoBehaviour
 
         isRecharging = stamina < 1f;
 
-        if (!wasStaminaFull && stamina >= 1f)
+        if (!wasStaminaFull && !isCrouching && stamina >= 1f)
         {
             if (fadeOutDelayCoroutine != null)
                 StopCoroutine(fadeOutDelayCoroutine);
@@ -139,6 +162,7 @@ public class PlayerMovement : MonoBehaviour
             fadeOutDelayCoroutine = StartCoroutine(DelayFadeOut());
         }
     }
+
 
     private void FadeStaminaBar()
     {
@@ -194,6 +218,37 @@ public class PlayerMovement : MonoBehaviour
         fadeOutAllowed = false;
         yield return new WaitForSeconds(1f);
         fadeOutAllowed = true;
+    }
+
+    private void ToggleCrouch()
+    {
+        isCrouching = !isCrouching;
+        currentMoveSpeed = isCrouching ? originalMoveSpeed / 2f : originalMoveSpeed;
+
+        if (cameraTransform != null)
+        {
+            Vector3 camPos = cameraTransform.localPosition;
+            camPos.y = isCrouching
+                ? originalCameraY - crouchCameraYOffset
+                : originalCameraY;
+            StartCoroutine(SmoothCameraHeight(camPos));
+        }
+    }
+
+    private IEnumerator SmoothCameraHeight(Vector3 targetPos)
+    {
+        float elapsed = 0f;
+        float duration = 0.2f;
+        Vector3 startPos = cameraTransform.localPosition;
+
+        while (elapsed < duration)
+        {
+            cameraTransform.localPosition = Vector3.Lerp(startPos, targetPos, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        cameraTransform.localPosition = targetPos;
     }
 
     public void controlLock()

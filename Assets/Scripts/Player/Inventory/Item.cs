@@ -12,7 +12,11 @@ public class Item : MonoBehaviour, i_Interactable
             Inventory inventory = player.GetComponent<Inventory>();
             if (inventory != null)
             {
-                inventory.TryAddItem(item);
+                if (inventory.CheckInventory())
+                {
+                    inventory.AddItem(item);
+                    Destroy(gameObject);
+                }
             }
             else
             {
@@ -25,3 +29,4 @@ public class Item : MonoBehaviour, i_Interactable
     public void ShowUI() { }
     public void HideUI() { }
 }
+

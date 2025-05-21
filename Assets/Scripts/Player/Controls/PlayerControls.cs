@@ -8,7 +8,7 @@ public class PlayerControls : MonoBehaviour
 {
     [Header("Interactable")]
     public float interactionRange = 1f;
-    public Transform interactionOrigin; // NEW
+    public Transform interactionOrigin;
     bool interacted;
 
     PlayerInput controls;
@@ -19,12 +19,15 @@ public class PlayerControls : MonoBehaviour
     public Canvas pauseMenu;
     bool pauseToggle;
 
-    bool didStore;
+    bool pressedF;
     private Inventory inventory;
+
+    bool pressedQ;
 
     private void Awake()
     {
         movement = GetComponent<PlayerMovement>();
+        inventory = GetComponent<Inventory>();
 
         controls = new PlayerInput();
 
@@ -34,8 +37,11 @@ public class PlayerControls : MonoBehaviour
         controls.Menus.Pause.performed += _ => isPaused = true;
         controls.Menus.Pause.canceled += _ => isPaused = false;
 
-        controls.Movement.StoreItem.performed += _ => didStore = true;
-        controls.Movement.StoreItem.canceled += _ => didStore = false;
+        controls.Movement.PressF.performed += _ => pressedF = true;
+        controls.Movement.PressF.canceled += _ => pressedF = false;
+
+        controls.Movement.PressQ.performed += _ => pressedQ = true;
+        controls.Movement.PressQ.canceled += _ => pressedQ = false;
     }
 
     private void OnEnable() => controls.Enable();
@@ -55,10 +61,10 @@ public class PlayerControls : MonoBehaviour
 
     private void Update()
     {
-        if (didStore)
+        if (pressedF)
         {
-            //inventory.RemoveItem(item);
-            didStore = false;
+            inventory.RemoveLastItem();
+            pressedF = false;
         }
 
         if (interacted)
