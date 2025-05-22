@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 public enum InputType
 {
     None,
@@ -14,4 +16,5 @@ public class ItemData : ScriptableObject
     public string itemName;
     public int puzzleNumber;
     public InputType typeInput;
+    public Sprite sprite;
 }
