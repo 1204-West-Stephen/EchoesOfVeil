@@ -5,6 +5,9 @@ public class Inventory : MonoBehaviour
 {
     public List<ScriptableObject> inventory;
 
+    public bool itemAdded = false;
+
+
     private void Start()
     {
 
@@ -27,6 +30,8 @@ public class Inventory : MonoBehaviour
     {
         Debug.Log($"Item Added: {item.name}");
         inventory.Add(item);
+
+        itemAdded = true;
     }
 
     public void RemoveLastItem()

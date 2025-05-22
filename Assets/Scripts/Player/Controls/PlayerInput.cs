@@ -243,6 +243,69 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Press1"",
+                    ""type"": ""Button"",
+                    ""id"": ""c01263a9-55c5-4f7a-b5a3-45cad10032ec"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Press2"",
+                    ""type"": ""Button"",
+                    ""id"": ""f3734d5c-8f8d-4b2e-94a4-23d8eaa3119d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Press3"",
+                    ""type"": ""Button"",
+                    ""id"": ""51e1fe53-2744-4133-bc00-657dc834701e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Press4"",
+                    ""type"": ""Button"",
+                    ""id"": ""b6dfb420-297f-4eb4-aec6-ba8741ac1ad2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Press5"",
+                    ""type"": ""Button"",
+                    ""id"": ""8dbc7e92-224d-45ab-8976-619d8debfa5a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Press6"",
+                    ""type"": ""Button"",
+                    ""id"": ""b58b48b3-5a65-4bb3-b71a-17b83e1da946"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Scroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""02096b1d-a084-4f19-9aea-3e18c356f9b3"",
+                    ""expectedControlType"": ""Delta"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -254,6 +317,83 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68222d4c-5a9f-4771-ab4f-ab04d0972f5b"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Press1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""affcfbdc-d99b-4302-b24a-67c47c6a2d75"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Press2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2393f0d0-5e8a-4858-a1c0-2324c79bc699"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Press3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""226e80ba-ee3b-4758-b24f-313011c880da"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Press4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""42bdd61f-a312-4081-a629-653b436ae80d"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Press5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""62a743a7-053d-4559-8870-aeeae281eb36"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Press6"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""95f4de89-f980-4959-99c1-32d224b54063"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -277,6 +417,13 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         // Menus
         m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
         m_Menus_Pause = m_Menus.FindAction("Pause", throwIfNotFound: true);
+        m_Menus_Press1 = m_Menus.FindAction("Press1", throwIfNotFound: true);
+        m_Menus_Press2 = m_Menus.FindAction("Press2", throwIfNotFound: true);
+        m_Menus_Press3 = m_Menus.FindAction("Press3", throwIfNotFound: true);
+        m_Menus_Press4 = m_Menus.FindAction("Press4", throwIfNotFound: true);
+        m_Menus_Press5 = m_Menus.FindAction("Press5", throwIfNotFound: true);
+        m_Menus_Press6 = m_Menus.FindAction("Press6", throwIfNotFound: true);
+        m_Menus_Scroll = m_Menus.FindAction("Scroll", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -457,11 +604,25 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Menus;
     private List<IMenusActions> m_MenusActionsCallbackInterfaces = new List<IMenusActions>();
     private readonly InputAction m_Menus_Pause;
+    private readonly InputAction m_Menus_Press1;
+    private readonly InputAction m_Menus_Press2;
+    private readonly InputAction m_Menus_Press3;
+    private readonly InputAction m_Menus_Press4;
+    private readonly InputAction m_Menus_Press5;
+    private readonly InputAction m_Menus_Press6;
+    private readonly InputAction m_Menus_Scroll;
     public struct MenusActions
     {
         private @PlayerInput m_Wrapper;
         public MenusActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Pause => m_Wrapper.m_Menus_Pause;
+        public InputAction @Press1 => m_Wrapper.m_Menus_Press1;
+        public InputAction @Press2 => m_Wrapper.m_Menus_Press2;
+        public InputAction @Press3 => m_Wrapper.m_Menus_Press3;
+        public InputAction @Press4 => m_Wrapper.m_Menus_Press4;
+        public InputAction @Press5 => m_Wrapper.m_Menus_Press5;
+        public InputAction @Press6 => m_Wrapper.m_Menus_Press6;
+        public InputAction @Scroll => m_Wrapper.m_Menus_Scroll;
         public InputActionMap Get() { return m_Wrapper.m_Menus; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -474,6 +635,27 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @Press1.started += instance.OnPress1;
+            @Press1.performed += instance.OnPress1;
+            @Press1.canceled += instance.OnPress1;
+            @Press2.started += instance.OnPress2;
+            @Press2.performed += instance.OnPress2;
+            @Press2.canceled += instance.OnPress2;
+            @Press3.started += instance.OnPress3;
+            @Press3.performed += instance.OnPress3;
+            @Press3.canceled += instance.OnPress3;
+            @Press4.started += instance.OnPress4;
+            @Press4.performed += instance.OnPress4;
+            @Press4.canceled += instance.OnPress4;
+            @Press5.started += instance.OnPress5;
+            @Press5.performed += instance.OnPress5;
+            @Press5.canceled += instance.OnPress5;
+            @Press6.started += instance.OnPress6;
+            @Press6.performed += instance.OnPress6;
+            @Press6.canceled += instance.OnPress6;
+            @Scroll.started += instance.OnScroll;
+            @Scroll.performed += instance.OnScroll;
+            @Scroll.canceled += instance.OnScroll;
         }
 
         private void UnregisterCallbacks(IMenusActions instance)
@@ -481,6 +663,27 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @Press1.started -= instance.OnPress1;
+            @Press1.performed -= instance.OnPress1;
+            @Press1.canceled -= instance.OnPress1;
+            @Press2.started -= instance.OnPress2;
+            @Press2.performed -= instance.OnPress2;
+            @Press2.canceled -= instance.OnPress2;
+            @Press3.started -= instance.OnPress3;
+            @Press3.performed -= instance.OnPress3;
+            @Press3.canceled -= instance.OnPress3;
+            @Press4.started -= instance.OnPress4;
+            @Press4.performed -= instance.OnPress4;
+            @Press4.canceled -= instance.OnPress4;
+            @Press5.started -= instance.OnPress5;
+            @Press5.performed -= instance.OnPress5;
+            @Press5.canceled -= instance.OnPress5;
+            @Press6.started -= instance.OnPress6;
+            @Press6.performed -= instance.OnPress6;
+            @Press6.canceled -= instance.OnPress6;
+            @Scroll.started -= instance.OnScroll;
+            @Scroll.performed -= instance.OnScroll;
+            @Scroll.canceled -= instance.OnScroll;
         }
 
         public void RemoveCallbacks(IMenusActions instance)
@@ -514,5 +717,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     public interface IMenusActions
     {
         void OnPause(InputAction.CallbackContext context);
+        void OnPress1(InputAction.CallbackContext context);
+        void OnPress2(InputAction.CallbackContext context);
+        void OnPress3(InputAction.CallbackContext context);
+        void OnPress4(InputAction.CallbackContext context);
+        void OnPress5(InputAction.CallbackContext context);
+        void OnPress6(InputAction.CallbackContext context);
+        void OnScroll(InputAction.CallbackContext context);
     }
 }
