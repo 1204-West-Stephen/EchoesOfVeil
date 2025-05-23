@@ -97,8 +97,7 @@ public class PlayerControls : MonoBehaviour
             }
         }
     }
-
-    private void PauseMenu()
+    public void PauseMenu()
     {
         pauseToggle = !pauseToggle;
         pauseMenu.gameObject.SetActive(pauseToggle);
@@ -115,5 +114,10 @@ public class PlayerControls : MonoBehaviour
             movement.controlUnlock();
             playerCamera.controlUnlock();
         }
+    }
+    public void ExitGame()
+    {
+        Application.Quit();
+        UnityEditor.EditorApplication.isPlaying = false;
     }
 }
