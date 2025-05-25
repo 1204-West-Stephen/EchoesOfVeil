@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float sprintSpeed = 8f;
     public float crouchSpeed = 2f;
     public float groundDrag = 5f;
+    public bool canMove;
 
     [Header("Stamina")]
     public float staminaDrainRate = 0.4f;
@@ -98,6 +99,7 @@ public class PlayerMovement : MonoBehaviour
         originalDragDistance = groundCheckDistance;
         crouchDragDistance = groundCheckDistance / 4;
 
+        canMove = true;
     }
 
     private void Update()
@@ -124,7 +126,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        MovePlayer();
+        if (canMove)
+        {
+            MovePlayer();
+        }
         SpeedControl();
         UpdateStamina();
     }
@@ -176,7 +181,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
     private void FadeStaminaBar()
     {
         float timeSinceSprint = Time.time - lastSprintTime;
@@ -206,7 +210,6 @@ public class PlayerMovement : MonoBehaviour
         Vector3 moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         float forceMultiplier = isCrouching ? 20f : 10f; // double the force for crouching
         rb.AddForce(moveDirection.normalized * currentMoveSpeed * forceMultiplier, ForceMode.Force);
-
     }
 
     private void SpeedControl()
@@ -243,7 +246,6 @@ public class PlayerMovement : MonoBehaviour
             camPos.y = isCrouching ? originalCameraY - crouchCameraYOffset : originalCameraY;
             StartCoroutine(SmoothCameraHeight(camPos));
         }
-
     }
 
     private IEnumerator SmoothCameraHeight(Vector3 targetPos)

@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 public enum InputType
@@ -17,4 +18,6 @@ public class ItemData : ScriptableObject
     public int puzzleNumber;
     public InputType typeInput;
     public Sprite sprite;
+    public bool canBeInspected;
+    public Canvas itemInspectUI;
 }

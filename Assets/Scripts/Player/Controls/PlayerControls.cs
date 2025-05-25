@@ -10,6 +10,7 @@ public class PlayerControls : MonoBehaviour
     public float interactionRange = 1f;
     public Transform interactionOrigin;
     bool interacted;
+    private bool canInteract;
 
     PlayerInput controls;
     PlayerMovement movement;
@@ -28,6 +29,8 @@ public class PlayerControls : MonoBehaviour
     public float moveDistance = 100f;
 
     bool pressedQ;
+    private bool inspectionToggle;
+    public Canvas inspectionMenu;
 
     private void Awake()
     {
@@ -62,6 +65,12 @@ public class PlayerControls : MonoBehaviour
             Debug.LogWarning("PlayerControls: interactionOrigin is not assigned. Using transform.position instead.");
             interactionOrigin = transform;
         }
+
+        canInteract = true;
+
+        inspectionToggle = false;
+
+        inspectionMenu.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -72,7 +81,7 @@ public class PlayerControls : MonoBehaviour
             pressedF = false;
         }
 
-        if (interacted)
+        if (interacted && canInteract)
         {
             Interacted();
             interacted = false;
@@ -82,6 +91,14 @@ public class PlayerControls : MonoBehaviour
         {
             PauseMenu();
             isPaused = false;
+        }
+
+        if (pressedQ)
+        {
+            Debug.Log("Q pressed");
+            inspectionToggle = !inspectionToggle;
+            InspectionMenu();
+            pressedQ = false;
         }
     }
     private IEnumerator MoveItemDownAndHide()
@@ -127,7 +144,7 @@ public class PlayerControls : MonoBehaviour
 
         if (pauseToggle)
         {
-            Time.timeScale = 0f; // Freeze game time
+            Time.timeScale = 0f;
             movement.controlLock();
             playerCamera.controlLock();
         }
@@ -136,6 +153,22 @@ public class PlayerControls : MonoBehaviour
             Time.timeScale = 1f; // Resume game time
             movement.controlUnlock();
             playerCamera.controlUnlock();
+        }
+    }
+
+    private void InspectionMenu()
+    {
+        if (inspectionToggle)
+        {
+            movement.canMove = false;
+            canInteract = false;
+            inspectionMenu.gameObject.SetActive(true);
+        }
+        else if (!inspectionToggle)
+        {
+            movement.canMove = true;
+            canInteract= true;
+            inspectionMenu.gameObject.SetActive(false);
         }
     }
     public void ExitGame()
