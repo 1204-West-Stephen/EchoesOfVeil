@@ -28,7 +28,9 @@ public class PlayerCamera : MonoBehaviour
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Cursor.visible = false; 
+        
+        Camera.main.nearClipPlane = 0.01f; // default is often 0.3
 
         Vector3 startRotation = transform.rotation.eulerAngles;
         rotateX = startRotation.x;
