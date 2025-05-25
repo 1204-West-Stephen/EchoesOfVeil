@@ -19,8 +19,13 @@ public class PlayerControls : MonoBehaviour
     public Canvas pauseMenu;
     bool pauseToggle;
 
+    [Header("Held Item")]
     bool pressedF;
     private Inventory inventory;
+    public Canvas ItemInHand;
+    public RectTransform ItemInHandTransform;
+    public float moveDuration = 0.3f;
+    public float moveDistance = 100f;
 
     bool pressedQ;
 
@@ -63,7 +68,7 @@ public class PlayerControls : MonoBehaviour
     {
         if (pressedF)
         {
-            inventory.RemoveLastItem();
+            StartCoroutine(MoveItemDownAndHide());
             pressedF = false;
         }
 
@@ -78,6 +83,24 @@ public class PlayerControls : MonoBehaviour
             PauseMenu();
             isPaused = false;
         }
+    }
+    private IEnumerator MoveItemDownAndHide()
+    {
+        Vector3 startPos = ItemInHandTransform.anchoredPosition;
+        Vector3 endPos = startPos - new Vector3(0, moveDistance, 0);
+        float elapsed = 0f;
+
+        while (elapsed < moveDuration)
+        {
+            ItemInHandTransform.anchoredPosition = Vector3.Lerp(startPos, endPos, elapsed / moveDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        ItemInHandTransform.anchoredPosition = endPos;
+        ItemInHand.gameObject.SetActive(false);
+
+        ItemInHandTransform.anchoredPosition = startPos;
     }
 
     private void Interacted()

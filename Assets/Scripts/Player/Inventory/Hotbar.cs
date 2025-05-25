@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
-
+using UnityEngine.UI;
 public class Hotbar : MonoBehaviour
 {
     public List<Cell> cells;
@@ -11,7 +11,6 @@ public class Hotbar : MonoBehaviour
     public int selectedIndex = 0;
 
     PlayerInput controls;
-
 
     [Header("Hotbar UI Fade")]
     public float fadeSpeed = 2f;
@@ -27,12 +26,13 @@ public class Hotbar : MonoBehaviour
 
     bool changeDetected;
     bool fadeOutAllowed;
-    private bool isFadingIn = false;
-    private bool isFadingOut = false;
 
     private float lastInputTime;
 
     private Coroutine fadeOutDelayCoroutine;
+
+    public Image itemInHand; 
+    public PlayerControls playerControls;
 
     private void Awake()
     {
@@ -67,11 +67,24 @@ public class Hotbar : MonoBehaviour
     {
         HandleInput();
 
-        changeDetected = inventory.itemAdded || onePressed || twoPressed || threePressed || fourPressed || fivePressed || sixPressed || scrollDelta != Vector2.zero;
+        int itemCount = inventory.inventory.Count;
+
+        bool validKeyPress =
+            (onePressed) ||
+            (twoPressed && itemCount > 1) ||
+            (threePressed && itemCount > 2) ||
+            (fourPressed && itemCount > 3) ||
+            (fivePressed && itemCount > 4) ||
+            (sixPressed && itemCount > 5);
+
+        bool validScroll = scrollDelta != Vector2.zero && itemCount > 0;
+
+        changeDetected = inventory.itemAdded || validKeyPress || validScroll;
 
         if (changeDetected)
         {
             lastInputTime = Time.time;
+            playerControls.ItemInHand.gameObject.SetActive(true);
 
             if (inventory.itemAdded)
             {
@@ -86,45 +99,65 @@ public class Hotbar : MonoBehaviour
     }
 
 
+
     private void OnEnable() => controls.Enable();
     private void OnDisable() => controls.Disable();
 
     private void HandleInput()
     {
+        int itemCount = inventory.inventory.Count;
+
+        // Prevent all input logic if inventory is empty
+        if (itemCount == 0)
+        {
+            selectedIndex = 0; // Or -1 if you prefer to mark it as invalid
+            return;
+        }
+
+        // Scroll input
         if (scrollDelta.y < 0f)
         {
-            selectedIndex = (selectedIndex + 1) % cells.Count;
+            do
+            {
+                selectedIndex = (selectedIndex + 1) % itemCount;
+            } while (inventory.inventory[selectedIndex] == null);
         }
         else if (scrollDelta.y > 0f)
         {
-            selectedIndex = (selectedIndex - 1 + cells.Count) % cells.Count;
+            do
+            {
+                selectedIndex = (selectedIndex - 1 + itemCount) % itemCount;
+            } while (inventory.inventory[selectedIndex] == null);
         }
 
+        // Number key input
         if (onePressed)
         {
             selectedIndex = 0;
         }
-        else if (twoPressed)
+        else if (twoPressed && itemCount > 1)
         {
             selectedIndex = 1;
         }
-        else if (threePressed)
+        else if (threePressed && itemCount > 2)
         {
             selectedIndex = 2;
         }
-        else if (fourPressed)
+        else if (fourPressed && itemCount > 3)
         {
             selectedIndex = 3;
         }
-        else if (fivePressed)
+        else if (fivePressed && itemCount > 4)
         {
             selectedIndex = 4;
         }
-        else if (sixPressed)
+        else if (sixPressed && itemCount > 5)
         {
             selectedIndex = 5;
         }
     }
+
+
 
     private void DisplayCells()
     {
@@ -136,12 +169,29 @@ public class Hotbar : MonoBehaviour
             cells[i].SetSelected(i == selectedIndex); // Highlight selected cell
         }
 
-        // You can also handle showing the item in hand here, like:
-        // SetItemInHand(inventory.inventory[selectedIndex] as ItemData);
+        if (inventory.inventory.Count > 0 && selectedIndex < inventory.inventory.Count)
+        {
+            SetItemInHand(inventory.inventory[selectedIndex] as ItemData);
+        }
+        else
+        {
+            SetItemInHand(null); // Hide item in hand if nothing is there
+        }
     }
 
-    // Optional: Add this to control what's in hand (e.g. a 3D model)
-    // public void SetItemInHand(ItemData item) { ... }
+    public void SetItemInHand(ItemData item)
+    {
+        if (item == null || item.sprite == null)
+        {
+            itemInHand.gameObject.SetActive(false);
+        }
+        else
+        {
+            itemInHand.sprite = item.sprite;
+            itemInHand.gameObject.SetActive(true);
+        }
+    }
+
 
     private void FadeHotbar()
     {
@@ -152,14 +202,10 @@ public class Hotbar : MonoBehaviour
         if (Time.time - lastInputTime < 3f)
         {
             targetAlpha = 1f;
-            isFadingIn = true;
-            isFadingOut = false;
         }
         else
         {
             targetAlpha = 0f;
-            isFadingIn = false;
-            isFadingOut = true;
         }
 
         foreach (var cell in cells)

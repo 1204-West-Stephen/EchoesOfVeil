@@ -120,9 +120,6 @@ public class PlayerMovement : MonoBehaviour
             ToggleCrouch();
             crouchPressed = false;
         }
-
-        Debug.Log($"Move Speed: {moveSpeed}, Crouch Speed: {crouchSpeed}, Current Speed: {currentMoveSpeed}");
-
     }
 
     private void FixedUpdate()
