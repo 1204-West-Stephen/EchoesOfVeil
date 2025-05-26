@@ -9846,8 +9846,7 @@ Transform:
   m_LocalPosition: {x: -5.85, y: 0.8, z: 1.811}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 5789707779210246755}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &1716605350 stripped
@@ -11747,87 +11746,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4dd241a5ac18c543a6febbb907b89c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &2072396050
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1702704749}
-    m_Modifications:
-    - target: {fileID: 100000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: m_Name
-      value: Flame01
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.039
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.397
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.359
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: InitialModule.rotation3D
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: InitialModule.startRotation.scalar
-      value: -0.5235988
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: InitialModule.startRotationX.scalar
-      value: -0.5235988
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-      propertyPath: InitialModule.startRotationY.scalar
-      value: -0.5235988
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
 --- !u!1001 &2082439797
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12625,11 +12543,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!4 &5789707779210246755 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400000, guid: ca44dd72d1a4b794781b8c47b8970562, type: 3}
-  m_PrefabInstance: {fileID: 2072396050}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
