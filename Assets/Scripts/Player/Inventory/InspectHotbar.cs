@@ -161,7 +161,7 @@ public class InspectHotbar : MonoBehaviour
         }
         else
         {
-            SetItemInHand(null); // Hide item in hand if nothing is there
+            SetItemInHand(null); 
         }
     }
 
