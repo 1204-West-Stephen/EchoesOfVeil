@@ -306,6 +306,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Journal"",
+                    ""type"": ""Button"",
+                    ""id"": ""6a26dfd4-8384-422a-91c0-b8af4e527b41"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -396,6 +405,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Scroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""73035917-d4c0-42a3-9f54-6f243d05a355"",
+                    ""path"": ""<Joystick>/{Back}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Journal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -424,6 +444,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Menus_Press5 = m_Menus.FindAction("Press5", throwIfNotFound: true);
         m_Menus_Press6 = m_Menus.FindAction("Press6", throwIfNotFound: true);
         m_Menus_Scroll = m_Menus.FindAction("Scroll", throwIfNotFound: true);
+        m_Menus_Journal = m_Menus.FindAction("Journal", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -611,6 +632,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Menus_Press5;
     private readonly InputAction m_Menus_Press6;
     private readonly InputAction m_Menus_Scroll;
+    private readonly InputAction m_Menus_Journal;
     public struct MenusActions
     {
         private @PlayerInput m_Wrapper;
@@ -623,6 +645,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @Press5 => m_Wrapper.m_Menus_Press5;
         public InputAction @Press6 => m_Wrapper.m_Menus_Press6;
         public InputAction @Scroll => m_Wrapper.m_Menus_Scroll;
+        public InputAction @Journal => m_Wrapper.m_Menus_Journal;
         public InputActionMap Get() { return m_Wrapper.m_Menus; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -656,6 +679,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Scroll.started += instance.OnScroll;
             @Scroll.performed += instance.OnScroll;
             @Scroll.canceled += instance.OnScroll;
+            @Journal.started += instance.OnJournal;
+            @Journal.performed += instance.OnJournal;
+            @Journal.canceled += instance.OnJournal;
         }
 
         private void UnregisterCallbacks(IMenusActions instance)
@@ -684,6 +710,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Scroll.started -= instance.OnScroll;
             @Scroll.performed -= instance.OnScroll;
             @Scroll.canceled -= instance.OnScroll;
+            @Journal.started -= instance.OnJournal;
+            @Journal.performed -= instance.OnJournal;
+            @Journal.canceled -= instance.OnJournal;
         }
 
         public void RemoveCallbacks(IMenusActions instance)
@@ -724,5 +753,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnPress5(InputAction.CallbackContext context);
         void OnPress6(InputAction.CallbackContext context);
         void OnScroll(InputAction.CallbackContext context);
+        void OnJournal(InputAction.CallbackContext context);
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -32,6 +33,10 @@ public class PlayerControls : MonoBehaviour
     private bool inspectionToggle;
     public Canvas inspectionMenu;
 
+    bool pressedJ;
+    private bool journalToggle;
+    public Canvas journalMenu;
+
     private void Awake()
     {
         movement = GetComponent<PlayerMovement>();
@@ -50,6 +55,9 @@ public class PlayerControls : MonoBehaviour
 
         controls.Movement.PressQ.performed += _ => pressedQ = true;
         controls.Movement.PressQ.canceled += _ => pressedQ = false;
+
+        controls.Menus.Journal.performed += _ => pressedJ = true;
+        controls.Menus.Journal.canceled += _ => pressedJ = false;
     }
 
     private void OnEnable() => controls.Enable();
@@ -69,8 +77,10 @@ public class PlayerControls : MonoBehaviour
         canInteract = true;
 
         inspectionToggle = false;
-
         inspectionMenu.gameObject.SetActive(false);
+
+        journalMenu.gameObject.SetActive(false);
+        journalToggle = false;
     }
 
     private void Update()
@@ -100,6 +110,14 @@ public class PlayerControls : MonoBehaviour
             InspectionMenu();
             pressedQ = false;
         }
+
+        if (pressedJ)
+        {
+            Debug.Log("j pressed");
+            journalToggle = !journalToggle;
+            JournalMenu();
+            pressedJ = false;
+        }
     }
     private IEnumerator MoveItemDownAndHide()
     {
@@ -123,20 +141,31 @@ public class PlayerControls : MonoBehaviour
     private void Interacted()
     {
         LayerMask interactableLayer = LayerMask.GetMask("Interactable");
+
+        // Use the camera or interaction origin as the starting point
         Vector3 origin = interactionOrigin != null ? interactionOrigin.position : transform.position;
+        Vector3 direction = interactionOrigin != null ? interactionOrigin.forward : transform.forward;
 
-        Collider[] hits = Physics.OverlapSphere(origin, interactionRange, interactableLayer);
+        Ray ray = new Ray(origin, direction);
+        RaycastHit hit;
 
-        foreach (Collider hit in hits)
+        float interactionRange = 1f; // You can expose this as a public variable
+
+        if (Physics.Raycast(ray, out hit, interactionRange, interactableLayer))
         {
-            i_Interactable interactable = hit.GetComponent<i_Interactable>();
+            i_Interactable interactable = hit.collider.GetComponent<i_Interactable>();
             if (interactable != null)
             {
                 interactable.Interact();
-                break;
+                Debug.DrawLine(origin, hit.point, Color.yellow, 1f); // Debug for scene view
             }
         }
+        else
+        {
+            Debug.DrawLine(origin, origin + direction * interactionRange, Color.gray, 1f); // Missed ray
+        }
     }
+
     public void PauseMenu()
     {
         pauseToggle = !pauseToggle;
@@ -169,6 +198,21 @@ public class PlayerControls : MonoBehaviour
             movement.canMove = true;
             canInteract= true;
             inspectionMenu.gameObject.SetActive(false);
+        }
+    }
+    public void JournalMenu()
+    {
+        if (journalToggle)
+        {
+            movement.canMove = false;
+            canInteract = false;
+            journalMenu.gameObject.SetActive(true);
+        }
+        else if (!journalToggle)
+        {
+            movement.canMove = true;
+            canInteract = true;
+            journalMenu.gameObject.SetActive(false);
         }
     }
     public void ExitGame()
