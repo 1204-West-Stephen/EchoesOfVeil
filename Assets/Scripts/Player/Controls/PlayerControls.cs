@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -33,14 +32,20 @@ public class PlayerControls : MonoBehaviour
     private bool inspectionToggle;
     public Canvas inspectionMenu;
 
-    bool pressedJ;
+    private bool pressedJ;
     private bool journalToggle;
     public Canvas journalMenu;
+    public Journal journal;
 
     private void Awake()
     {
         movement = GetComponent<PlayerMovement>();
         inventory = GetComponent<Inventory>();
+
+        if (journal == null)
+        {
+            Debug.LogError("PlayerControls: Journal component is missing from player.");
+        }
 
         controls = new PlayerInput();
 
@@ -79,8 +84,8 @@ public class PlayerControls : MonoBehaviour
         inspectionToggle = false;
         inspectionMenu.gameObject.SetActive(false);
 
-        journalMenu.gameObject.SetActive(false);
         journalToggle = false;
+        journalMenu.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -111,9 +116,9 @@ public class PlayerControls : MonoBehaviour
             pressedQ = false;
         }
 
-        if (pressedJ)
+        if (pressedJ && journal.journalAcquired)
         {
-            Debug.Log("j pressed");
+            Debug.Log("J pressed");
             journalToggle = !journalToggle;
             JournalMenu();
             pressedJ = false;
@@ -141,15 +146,10 @@ public class PlayerControls : MonoBehaviour
     private void Interacted()
     {
         LayerMask interactableLayer = LayerMask.GetMask("Interactable");
+        Camera cam = Camera.main;
 
-        // Use the camera or interaction origin as the starting point
-        Vector3 origin = interactionOrigin != null ? interactionOrigin.position : transform.position;
-        Vector3 direction = interactionOrigin != null ? interactionOrigin.forward : transform.forward;
-
-        Ray ray = new Ray(origin, direction);
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         RaycastHit hit;
-
-        float interactionRange = 1f; // You can expose this as a public variable
 
         if (Physics.Raycast(ray, out hit, interactionRange, interactableLayer))
         {
@@ -157,12 +157,7 @@ public class PlayerControls : MonoBehaviour
             if (interactable != null)
             {
                 interactable.Interact();
-                Debug.DrawLine(origin, hit.point, Color.yellow, 1f); // Debug for scene view
             }
-        }
-        else
-        {
-            Debug.DrawLine(origin, origin + direction * interactionRange, Color.gray, 1f); // Missed ray
         }
     }
 
@@ -189,32 +184,37 @@ public class PlayerControls : MonoBehaviour
     {
         if (inspectionToggle)
         {
-            movement.canMove = false;
+            movement.controlLock();
+            playerCamera.controlLock();
             canInteract = false;
             inspectionMenu.gameObject.SetActive(true);
         }
         else if (!inspectionToggle)
         {
-            movement.canMove = true;
-            canInteract= true;
+            movement.controlUnlock();
+            playerCamera.controlUnlock();
+            canInteract = true;
             inspectionMenu.gameObject.SetActive(false);
         }
     }
-    public void JournalMenu()
+    private void JournalMenu()
     {
         if (journalToggle)
         {
-            movement.canMove = false;
+            movement.controlLock();
+            playerCamera.controlLock();
             canInteract = false;
             journalMenu.gameObject.SetActive(true);
         }
         else if (!journalToggle)
         {
-            movement.canMove = true;
+            movement.controlUnlock();
+            playerCamera.controlUnlock();
             canInteract = true;
             journalMenu.gameObject.SetActive(false);
         }
     }
+
     public void ExitGame()
     {
         Application.Quit();

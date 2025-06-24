@@ -409,7 +409,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""73035917-d4c0-42a3-9f54-6f243d05a355"",
-                    ""path"": ""<Joystick>/{Back}"",
+                    ""path"": ""<Keyboard>/j"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

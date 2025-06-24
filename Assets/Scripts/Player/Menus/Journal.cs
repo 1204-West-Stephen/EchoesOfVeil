@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Journal : MonoBehaviour, i_Interactable
 {
+    public bool journalAcquired = false;
+
     public void Interact()
     {
         Destroy(gameObject);
+        journalAcquired = true;
     }
     public void DetectPlayer()
     {
