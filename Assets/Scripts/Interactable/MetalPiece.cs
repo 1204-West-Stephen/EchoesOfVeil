@@ -1,8 +1,10 @@
 using UnityEngine;
 
-public class Item : MonoBehaviour, i_Interactable
+public class MetalPiece : MonoBehaviour, i_Interactable
 {
-    public ScriptableObject item; // the data for the item
+    public ScriptableObject item;
+
+    public bool itemPickedUp = false;
 
     public void Interact()
     {
@@ -16,6 +18,7 @@ public class Item : MonoBehaviour, i_Interactable
                 {
                     inventory.AddItem(item);
                     Destroy(gameObject);
+                    itemPickedUp = true;
                 }
             }
             else
