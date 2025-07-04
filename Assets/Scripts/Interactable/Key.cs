@@ -5,11 +5,13 @@ using static UnityEditor.Progress;
 
 public class Key : MonoBehaviour, i_Interactable
 {
-    public ScriptableObject item;
+    public ItemData item;
     private bool itemPickedUp;
+    public int keyID;
+
     private void Start()
     {
-
+        keyID = item.keyID;
     }
 
     public void Interact()

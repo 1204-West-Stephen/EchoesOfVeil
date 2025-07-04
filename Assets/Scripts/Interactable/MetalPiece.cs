@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MetalPiece : MonoBehaviour, i_Interactable
 {
-    public ScriptableObject item;
+    public ItemData item;
 
     public bool itemPickedUp = false;
 
