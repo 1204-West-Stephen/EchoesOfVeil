@@ -2,7 +2,6 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-
 public enum InputType
 {
     None,
@@ -21,6 +20,4 @@ public class ItemData : ScriptableObject
     public Sprite sprite;
     public bool canBeInspected;
     public Canvas itemInspectUI;
-
-    [HideInInspector] public int keyID; // Only shown if typeInput == Key
 }

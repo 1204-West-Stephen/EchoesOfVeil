@@ -1,15 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class Door : MonoBehaviour, i_Interactable
 {
     private Animator animator;
 
     private bool isOpen;
-
-    public int doorID;
 
     private void Start()
     {
