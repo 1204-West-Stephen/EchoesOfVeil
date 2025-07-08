@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public List<ItemData> inventory;
+    public List<ScriptableObject> inventory;
 
     public bool itemAdded = false;
 
@@ -26,7 +26,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void AddItem(ItemData item)
+    public void AddItem(ScriptableObject item)
     {
         Debug.Log($"Item Added: {item.name}");
         inventory.Add(item);
@@ -38,7 +38,7 @@ public class Inventory : MonoBehaviour
     {
         if (inventory.Count > 0)
         {
-            ItemData removedItem = inventory[inventory.Count - 1];
+            ScriptableObject removedItem = inventory[inventory.Count - 1];
             inventory.RemoveAt(inventory.Count - 1);
             Debug.Log($"Removed Last Item: {removedItem.name}");
         }
@@ -49,7 +49,7 @@ public class Inventory : MonoBehaviour
     }
 
 
-    public void RemoveItem(ItemData item)
+    public void RemoveItem(ScriptableObject item)
     {
         Debug.Log($"Item Removed: {item.name}");
         inventory.Remove(item);

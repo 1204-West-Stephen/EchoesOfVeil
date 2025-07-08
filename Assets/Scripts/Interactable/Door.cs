@@ -1,50 +1,39 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Door : MonoBehaviour, i_Interactable
 {
     private Animator animator;
+
     private bool isOpen;
+
     public int doorID;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
+
         isOpen = false;
     }
 
     public void Interact()
     {
-        GameObject player = GameObject.FindWithTag("Player");
-        if (player != null)
-        {
-            Inventory inventory = player.GetComponent<Inventory>();
-            if (inventory != null)
-            {
-                if (UseKey(inventory))
-                {
-                    Debug.Log("Correct key used. Door unlocked.");
-                    PlayAnimation();
-                }
-                else
-                {
-                    Debug.Log("You need the correct key to open this door.");
-                }
-            }
-        }
+        Debug.Log("Interacted with Door");
+        PlayAnimation();
     }
-
-    private bool UseKey(Inventory inventory)
+    public void DetectPlayer()
     {
-        foreach (ItemData item in inventory.inventory)
-        {
-            if (item.typeInput == InputType.Key && item.keyID == doorID)
-            {
-                inventory.RemoveItem(item);
-                Debug.Log($"Key with ID {doorID} consumed and removed from inventory.");
-                return true;
-            }
-        }
-        return false;
+
+    }
+    public void ShowUI()
+    {
+
+    }
+    public void HideUI()
+    {
+
     }
 
     private void PlayAnimation()
@@ -55,13 +44,9 @@ public class Door : MonoBehaviour, i_Interactable
         {
             animator.SetTrigger("Open");
         }
-        else
+        else if (!isOpen)
         {
             animator.SetTrigger("Close");
         }
     }
-
-    public void DetectPlayer() { }
-    public void ShowUI() { }
-    public void HideUI() { }
 }
