@@ -174,7 +174,7 @@ public class PlayerControls : MonoBehaviour
         }
         else
         {
-            Time.timeScale = 1f; // Resume game time
+            Time.timeScale = 1f; 
             movement.controlUnlock();
             playerCamera.controlUnlock();
         }
@@ -205,6 +205,7 @@ public class PlayerControls : MonoBehaviour
             playerCamera.controlLock();
             canInteract = false;
             journalMenu.gameObject.SetActive(true);
+            Cursor.visible = true;
         }
         else if (!journalToggle)
         {
@@ -212,6 +213,7 @@ public class PlayerControls : MonoBehaviour
             playerCamera.controlUnlock();
             canInteract = true;
             journalMenu.gameObject.SetActive(false);
+            Cursor.visible = false;
         }
     }
 

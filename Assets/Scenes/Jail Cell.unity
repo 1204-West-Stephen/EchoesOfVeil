@@ -3728,8 +3728,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c08ce06953d4bd49bd765085acee737, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xSensitivity: 30
-  ySensitivity: 30
+  xSensitivity: 15
+  ySensitivity: 10
   orientation: {fileID: 828820079}
 --- !u!81 &347544673
 AudioListener:
@@ -7518,10 +7518,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 36
+  m_fontSize: 39
+  m_fontSizeBase: 39
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -7795,25 +7795,25 @@ MonoBehaviour:
     arts for good. If you are able to reach it, you may be able to absorb its power
     and ascend to what this war desperately need: a force of light to counter the
     darkness'
-  - This journal will serve as a guide to you. It holds more than just words-it holds
-    the knowledge gathered from legend, lore and prophecy in order to inform you
-    of the dangers that lie before you. Within this journal, you will find clues,
-    warnings, and hidden secrets that will help you progress to the Dragon's Pulse.
+  - 'This journal will serve as a guide to you. It holds more than just words-it
+    holds the knowledge gathered from legend, lore and prophecy in order to inform
+    you of the dangers that lie before you. Within this journal, you will find clues,
+    warnings, and hidden secrets that will help you progress to the Dragon''s Pulse.
     Read carefully, as these writings were meant to be deciphered by the ancient
-    ones. They were not intended for the unworthy to interpret. Trust your instincts
-    and more importantly, trust the journal. It will reveal the information you need
-    when you're ready.
-  - FInally, my friend, it is important that you beware the dangers within this ancient
-    ruin. The dungeon is segmented into ancient domains, each with its own inhabitants.
-    The ruins are known to be home of the Guardian of the Dragon's Pulse. Little
-    is known about this creature and legends seem to disagree in its power and form.
-    Some stories tell of a being made from words that is sensitive to sound while
-    others tell of a spirit of immense light that appears in the darkness. No matter
-    what it is or what it looks like, I'm sure you will know what it is when you
-    find it...or if it finds you. Regardless, the journal should be able to help
-    you will knowing more about it if you study it enough. Just... don't let it catch
-    you, or anger it, or distub it in anyway. That is all my friend. Good luck and
-    may the gods be with you.
+    ones. They were not intended for the unworthy to interpret. '
+  - 'Trust your instincts and more importantly, trust the journal. It will reveal
+    the information you need when you''re ready. Finally, my friend, it is important
+    that you beware the dangers within this ancient ruin. The dungeon is segmented
+    into ancient domains, each with its own inhabitants. The ruins are known to be
+    home of the Guardian of the Dragon''s Pulse. Little is known about this creature
+    and legends seem to disagree in its power and form. Some stories tell of a being
+    made from words that is sensitive to sound while others tell of a spirit of immense
+    light that appears in the darkness. '
+  - No matter what it is or what it looks like, I'm sure you will know what it is
+    when you find it...or if it finds you. Regardless, the journal should be able
+    to help you will knowing more about it if you study it enough. Just... don't
+    let it catch you, or anger it, or distub it in anyway. That is all my friend.
+    Good luck and may the gods be with you.
   pageIndex: 0
   leftPage: {fileID: 1695578971}
   rightPage: {fileID: 775452450}
@@ -18213,10 +18213,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 36
+  m_fontSize: 39
+  m_fontSizeBase: 39
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
