@@ -17,7 +17,7 @@ public class MetalPiece : MonoBehaviour, i_Interactable
                 if (inventory.CheckInventory())
                 {
                     inventory.AddItem(item);
-                    Destroy(gameObject);
+                    gameObject.SetActive(false);
                     itemPickedUp = true;
                 }
             }

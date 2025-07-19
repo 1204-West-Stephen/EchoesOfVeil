@@ -23,8 +23,8 @@ public class TorchPuzzle : MonoBehaviour, i_Interactable
                 if (inventory.CheckInventory())
                 {
                     inventory.AddItem(item);
-                    Destroy(gameObject);
                     itemPickedUp = true;
+                    gameObject.SetActive(false);
                 }
             }
             else

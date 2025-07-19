@@ -43,7 +43,7 @@ public class JournalMenu : MonoBehaviour
 
         if (currentIndex < pages.Count - 1)
         {
-            pageIndexes[currentPageType] = currentIndex + 1;
+            pageIndexes[currentPageType] = currentIndex + 2;
             ShowPages(currentPageType);
         }
     }
@@ -55,7 +55,7 @@ public class JournalMenu : MonoBehaviour
 
         if (currentIndex > 0)
         {
-            pageIndexes[currentPageType] = currentIndex - 1;
+            pageIndexes[currentPageType] = currentIndex - 2;
             ShowPages(currentPageType);
         }
     }
