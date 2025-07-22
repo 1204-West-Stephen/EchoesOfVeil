@@ -9,8 +9,9 @@ public class PlayerControls : MonoBehaviour
     [Header("Interactable")]
     public float interactionRange = 1f;
     public Transform interactionOrigin;
-    bool interacted;
+    private bool interacted;
     private bool canInteract;
+    private i_Interactable currentInteractable;
 
     PlayerInput controls;
     PlayerMovement movement;
@@ -37,6 +38,10 @@ public class PlayerControls : MonoBehaviour
     public Canvas journalMenu;
     public Journal journal;
 
+    [Header("Interaction UI")]
+    public Canvas interactionCanvas;
+    public Canvas internalComment;
+
     private void Awake()
     {
         movement = GetComponent<PlayerMovement>();
@@ -52,14 +57,14 @@ public class PlayerControls : MonoBehaviour
         controls.Movement.Interact.performed += _ => interacted = true;
         controls.Movement.Interact.canceled += _ => interacted = false;
 
-        controls.Menus.Pause.performed += _ => isPaused = true;
-        controls.Menus.Pause.canceled += _ => isPaused = false;
-
         controls.Movement.PressF.performed += _ => pressedF = true;
         controls.Movement.PressF.canceled += _ => pressedF = false;
 
         controls.Movement.PressQ.performed += _ => pressedQ = true;
         controls.Movement.PressQ.canceled += _ => pressedQ = false;
+
+        controls.Menus.Pause.performed += _ => isPaused = true;
+        controls.Menus.Pause.canceled += _ => isPaused = false;
 
         controls.Menus.Journal.performed += _ => pressedJ = true;
         controls.Menus.Journal.canceled += _ => pressedJ = false;
@@ -80,12 +85,13 @@ public class PlayerControls : MonoBehaviour
         }
 
         canInteract = true;
-
         inspectionToggle = false;
         inspectionMenu.gameObject.SetActive(false);
-
         journalToggle = false;
         journalMenu.gameObject.SetActive(false);
+
+        if (interactionCanvas != null)
+            interactionCanvas.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -102,6 +108,11 @@ public class PlayerControls : MonoBehaviour
             interacted = false;
         }
 
+        if (canInteract)
+        {
+            AutoDetectInteractable();
+        }
+
         if (isPaused)
         {
             PauseMenu();
@@ -110,7 +121,6 @@ public class PlayerControls : MonoBehaviour
 
         if (pressedQ)
         {
-            Debug.Log("Q pressed");
             inspectionToggle = !inspectionToggle;
             InspectionMenu();
             pressedQ = false;
@@ -118,12 +128,48 @@ public class PlayerControls : MonoBehaviour
 
         if (pressedJ && journal.journalAcquired)
         {
-            Debug.Log("J pressed");
             journalToggle = !journalToggle;
             JournalMenu();
             pressedJ = false;
         }
     }
+
+    private void AutoDetectInteractable()
+    {
+        LayerMask interactableLayer = LayerMask.GetMask("Interactable");
+        Camera cam = Camera.main;
+
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, interactionRange, interactableLayer))
+        {
+            i_Interactable interactable = hit.collider.GetComponent<i_Interactable>();
+            if (interactable != null)
+            {
+                currentInteractable = interactable;
+
+                if (interactionCanvas != null && !interactionCanvas.gameObject.activeSelf)
+                    interactionCanvas.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            currentInteractable = null;
+
+            if (interactionCanvas != null && interactionCanvas.gameObject.activeSelf)
+                interactionCanvas.gameObject.SetActive(false);
+        }
+    }
+
+    private void Interacted()
+    {
+        if (currentInteractable != null)
+        {
+            currentInteractable.Interact();
+        }
+    }
+
     private IEnumerator MoveItemDownAndHide()
     {
         Vector3 startPos = ItemInHandTransform.anchoredPosition;
@@ -143,24 +189,6 @@ public class PlayerControls : MonoBehaviour
         ItemInHandTransform.anchoredPosition = startPos;
     }
 
-    private void Interacted()
-    {
-        LayerMask interactableLayer = LayerMask.GetMask("Interactable");
-        Camera cam = Camera.main;
-
-        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, interactionRange, interactableLayer))
-        {
-            i_Interactable interactable = hit.collider.GetComponent<i_Interactable>();
-            if (interactable != null)
-            {
-                interactable.Interact();
-            }
-        }
-    }
-
     public void PauseMenu()
     {
         pauseToggle = !pauseToggle;
@@ -174,7 +202,7 @@ public class PlayerControls : MonoBehaviour
         }
         else
         {
-            Time.timeScale = 1f; 
+            Time.timeScale = 1f;
             movement.controlUnlock();
             playerCamera.controlUnlock();
         }
@@ -188,8 +216,11 @@ public class PlayerControls : MonoBehaviour
             playerCamera.controlLock();
             canInteract = false;
             inspectionMenu.gameObject.SetActive(true);
+
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
         }
-        else if (!inspectionToggle)
+        else
         {
             movement.controlUnlock();
             playerCamera.controlUnlock();
@@ -197,6 +228,7 @@ public class PlayerControls : MonoBehaviour
             inspectionMenu.gameObject.SetActive(false);
         }
     }
+
     private void JournalMenu()
     {
         if (journalToggle)
@@ -206,8 +238,11 @@ public class PlayerControls : MonoBehaviour
             canInteract = false;
             journalMenu.gameObject.SetActive(true);
             Cursor.visible = true;
+
+            if (interactionCanvas != null)
+                interactionCanvas.gameObject.SetActive(false);
         }
-        else if (!journalToggle)
+        else
         {
             movement.controlUnlock();
             playerCamera.controlUnlock();
@@ -220,6 +255,8 @@ public class PlayerControls : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
+#endif
     }
 }

@@ -7,9 +7,13 @@ public class TorchHilt : MonoBehaviour, i_Interactable
     public GameObject fire;
     public TorchPuzzle torch;
 
+    public bool puzzleComplete;
+
     private void Start()
     {
         fire.SetActive(false);
+
+        puzzleComplete = false;
     }
 
     public void Interact()
@@ -24,6 +28,7 @@ public class TorchHilt : MonoBehaviour, i_Interactable
                 {
                     fire.SetActive(true);
                     transform.rotation = Quaternion.Euler(-90, 180, -90);
+                    puzzleComplete = true;
 
                 }
                 else

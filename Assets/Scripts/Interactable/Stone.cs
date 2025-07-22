@@ -10,6 +10,7 @@ public class Stone : MonoBehaviour, i_Interactable
     public bool stoneFell = false;
 
     private MeshCollider MeshCollider;
+    public PlayerControls controls;
 
     private void Start()
     {
@@ -31,6 +32,7 @@ public class Stone : MonoBehaviour, i_Interactable
                 }
                 else
                 {
+
                     Debug.Log("Player is unable");
                 }
             }
