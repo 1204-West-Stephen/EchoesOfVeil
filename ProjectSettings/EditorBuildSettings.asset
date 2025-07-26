@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Jail Cell.unity
+    guid: 4c76c88239bfe4c46b828fa31e526ba2
+  - enabled: 1
+    path: Assets/Scenes/Hallway.unity
+    guid: 47592a35c0e375a4fa023d6ffa570a20
   m_configObjects: {}
