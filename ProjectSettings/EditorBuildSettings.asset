@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/GameManager.unity
+    guid: 19bafa9dadea84c4c82eaf0aa0e24efb
+  - enabled: 1
     path: Assets/Scenes/Jail Cell.unity
     guid: 4c76c88239bfe4c46b828fa31e526ba2
   - enabled: 1

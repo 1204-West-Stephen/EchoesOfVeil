@@ -126,7 +126,7 @@ public class PlayerControls : MonoBehaviour
             pressedQ = false;
         }
 
-        if (pressedJ && journal.journalAcquired)
+        if (pressedJ && journal != null && journal.journalAcquired)
         {
             journalToggle = !journalToggle;
             JournalMenu();
