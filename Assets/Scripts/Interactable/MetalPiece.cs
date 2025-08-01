@@ -5,6 +5,12 @@ public class MetalPiece : MonoBehaviour, i_Interactable
     public ItemData item;
 
     public bool itemPickedUp = false;
+    private PlayerControls playerManager;
+
+    private void Awake()
+    {
+        playerManager = FindObjectOfType<PlayerControls>();
+    }
 
     public void Interact()
     {
@@ -19,6 +25,11 @@ public class MetalPiece : MonoBehaviour, i_Interactable
                     inventory.AddItem(item);
                     gameObject.SetActive(false);
                     itemPickedUp = true;
+                }
+
+                if (itemPickedUp)
+                {
+                    playerManager.StartDialogue("I should be able to pry something with this...");
                 }
             }
             else

@@ -10,7 +10,12 @@ public class Stone : MonoBehaviour, i_Interactable
     public bool stoneFell = false;
 
     private MeshCollider MeshCollider;
-    public PlayerControls controls;
+    private PlayerControls controls;
+
+    private void Awake()
+    {
+        controls = FindObjectOfType<PlayerControls>();
+    }
 
     private void Start()
     {
@@ -33,7 +38,7 @@ public class Stone : MonoBehaviour, i_Interactable
                 else
                 {
 
-                    Debug.Log("Player is unable");
+                    controls.StartDialogue("This stone is a little loose. There may be something behind it");
                 }
             }
         }

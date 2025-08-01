@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -40,17 +41,15 @@ public class PlayerControls : MonoBehaviour
 
     [Header("Interaction UI")]
     public Canvas interactionCanvas;
-    public Canvas internalComment;
+    public Canvas internalDialogueCanvas;
+    public TextMeshProUGUI internalDialogue;
 
     private void Awake()
     {
         movement = GetComponent<PlayerMovement>();
         inventory = GetComponent<Inventory>();
 
-        if (journal == null)
-        {
-            Debug.LogError("PlayerControls: Journal component is missing from player.");
-        }
+        journal = GetComponent<Journal>();
 
         controls = new PlayerInput();
 
@@ -92,6 +91,16 @@ public class PlayerControls : MonoBehaviour
 
         if (interactionCanvas != null)
             interactionCanvas.gameObject.SetActive(false);
+
+        if (internalDialogueCanvas != null)
+        {
+            //internalDialogueCanvas.gameObject.SetActive(false);
+            /*
+            if (internalDialogue != null)
+            {
+                internalDialogue.text = " ";
+            }*/
+        }
     }
 
     private void Update()
@@ -132,6 +141,7 @@ public class PlayerControls : MonoBehaviour
             JournalMenu();
             pressedJ = false;
         }
+
     }
 
     private void AutoDetectInteractable()
@@ -251,6 +261,44 @@ public class PlayerControls : MonoBehaviour
             Cursor.visible = false;
         }
     }
+
+    public void StartDialogue(string message)
+    {
+        StartCoroutine(ShowDialogue(message));
+    }
+
+    private IEnumerator ShowDialogue(string message)
+    {
+        internalDialogue.text = message;
+
+        internalDialogueCanvas.gameObject.SetActive(true);
+
+        CanvasGroup canvasGroup = internalDialogueCanvas.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+            canvasGroup = internalDialogueCanvas.gameObject.AddComponent<CanvasGroup>();
+
+        canvasGroup.alpha = 1f;
+        yield return new WaitForSeconds(3f);
+
+        float fadeDuration = 1f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
+            yield return null;
+        }
+
+        canvasGroup.alpha = 0f;
+        internalDialogueCanvas.gameObject.SetActive(false);
+    }
+
+    public void OnJournalAcquired(Journal newJournal)
+    {
+        journal = newJournal;
+    }
+
 
     public void ExitGame()
     {

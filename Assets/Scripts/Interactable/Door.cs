@@ -6,6 +6,13 @@ public class Door : MonoBehaviour, i_Interactable
     private bool isOpen;
     public int doorID;
 
+    private PlayerControls playerManager;
+
+    private void Awake()
+    {
+        playerManager = FindObjectOfType<PlayerControls>();
+    }
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -27,7 +34,7 @@ public class Door : MonoBehaviour, i_Interactable
                 }
                 else
                 {
-                    Debug.Log("You need the correct key to open this door.");
+                    playerManager.StartDialogue("This door needs a key...");
                 }
             }
         }
