@@ -253,7 +253,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   piece: {fileID: 848462127}
   stoneFell: 0
-  controls: {fileID: 0}
 --- !u!64 &17927451
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -6491,7 +6490,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 375af6ebc67b1814897934253a365c35, type: 2}
   itemPickedUp: 0
-  playerManager: {fileID: 0}
 --- !u!33 &848462129
 MeshFilter:
   m_ObjectHideFlags: 0

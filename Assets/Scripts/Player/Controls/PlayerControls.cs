@@ -94,12 +94,12 @@ public class PlayerControls : MonoBehaviour
 
         if (internalDialogueCanvas != null)
         {
-            //internalDialogueCanvas.gameObject.SetActive(false);
-            /*
+            internalDialogueCanvas.gameObject.SetActive(false);
+            
             if (internalDialogue != null)
             {
                 internalDialogue.text = " ";
-            }*/
+            }
         }
     }
 
