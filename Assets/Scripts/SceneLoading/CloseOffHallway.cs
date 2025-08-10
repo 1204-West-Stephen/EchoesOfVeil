@@ -15,6 +15,8 @@ public class CloseOffHallway : MonoBehaviour
             SceneManager.UnloadSceneAsync("Jail Cell");
             door1.CloseDoor();
             door2.CloseDoor();
+
+            gameObject.SetActive(false);
         }
     }
 

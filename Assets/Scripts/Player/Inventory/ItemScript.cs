@@ -9,7 +9,8 @@ public enum InputType
     Part,
     Scroll,
     Key,
-    Book
+    Book,
+    Tablet
 }
 
 [CreateAssetMenu(fileName = "NewItemData", menuName = "Inventory/ItemData")]
@@ -22,5 +23,6 @@ public class ItemData : ScriptableObject
     public bool canBeInspected;
     public Canvas itemInspectUI;
 
-    [HideInInspector] public int keyID; // Only shown if typeInput == Key
+    [HideInInspector] public int keyID;
+    [HideInInspector] public int tabletNumber;
 }

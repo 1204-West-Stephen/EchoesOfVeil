@@ -4,33 +4,29 @@ using UnityEngine;
 
 public class Chest : MonoBehaviour, i_Interactable
 {
-    private ChestLid lid;
+    private Animator animator;
+
+    private bool isOpen;
 
     private void Start()
     {
-        lid = GetComponentInChildren<ChestLid>();
-    }
-    private void Update()
-    {
-        
+        animator = GetComponent<Animator>();
+
+        isOpen = false;
     }
 
     public void Interact()
     {
-        Debug.Log("Interacted with chest");
-
-        lid.PlayAnimation();
+        if (isOpen)
+        {
+            animator.SetTrigger("Close");
+            isOpen = false;
+        }
+        else if (!isOpen)
+        {
+            animator.SetTrigger("Open");
+            isOpen = true;
+        }
     }
-    public void DetectPlayer()
-    {
-
-    }
-    public void ShowUI()
-    {
-
-    }
-    public void HideUI()
-    {
-
-    }
+    
 }
