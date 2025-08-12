@@ -6,38 +6,58 @@ using static UnityEditor.Progress;
 public class TabletShrine : MonoBehaviour, i_Interactable
 {
     public ItemData item;
+    public GameObject tablet;
 
     public Transform stonePos;
     public int tabletShrineNum;
     public bool canPlace;
     public bool itemPickedUp;
 
+    private GameObject player;
+    private Inventory inventory;
+
     private void Start()
     {
         canPlace = true;
+
+        player = GameObject.FindWithTag("Player");
+        inventory = player.GetComponent<Inventory>();
     }
     public void Interact()
     {
         if (canPlace)
         {
-            //check if tablets are in inventory
+            if (player != null)
+            {
+                if (player != null)
+                {
+                    if (inventory != null)
+                    {
+                        if (PlaceTablet(inventory))
+                        {
+                            Debug.Log("Tablet placed");
+                        }
+                        else
+                        {
+                            Debug.Log("Tablet not placed");
+                        }
+                    }
+                }
+            }
 
-            //if tablet in inventory, place iteminhand at stonePos
             canPlace = false;
             Debug.Log(canPlace);
         }
         else if (!canPlace)
         {
-            GameObject player = GameObject.FindWithTag("Player");
             if (player != null)
             {
-                Inventory inventory = player.GetComponent<Inventory>();
                 if (inventory != null)
                 {
                     if (inventory.CheckInventory())
                     {
                         inventory.AddItem(item);
-                        gameObject.SetActive(false);
+                        tablet.gameObject.SetActive(false);
                         itemPickedUp = true;
                     }
                 }
@@ -56,10 +76,9 @@ public class TabletShrine : MonoBehaviour, i_Interactable
     {
         foreach (ItemData item in inventory.inventory)
         {
-            if (item.typeInput == InputType.Tablet)// && item.tabletNumber == tabletShrineNum)
+            if (item.typeInput == InputType.Tablet)
             {
                 inventory.RemoveItem(item);
-                //stonepos set
                 Debug.Log($"Stone with ID {tabletShrineNum} consumed and removed from inventory.");
                 return true;
             }
