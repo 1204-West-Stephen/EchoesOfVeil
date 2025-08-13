@@ -35,17 +35,8 @@ public class Key : MonoBehaviour, i_Interactable
             }
         }
     }
-
-    public void DetectPlayer()
+    public InputType GetRequiredInputType()
     {
-
-    }
-    public void ShowUI()
-    {
-
-    }
-    public void HideUI()
-    {
-
+        return InputType.None; ;
     }
 }

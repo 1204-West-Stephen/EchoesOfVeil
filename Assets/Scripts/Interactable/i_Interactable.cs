@@ -5,4 +5,5 @@ using UnityEngine;
 public interface i_Interactable
 {
     void Interact();
+    InputType GetRequiredInputType();
 }

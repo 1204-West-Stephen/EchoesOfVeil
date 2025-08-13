@@ -11,25 +11,12 @@ public class Interactable : MonoBehaviour, i_Interactable
         interactUI = GetComponent<GameObject>();
 
     }
-    private void Update()
-    {
-        
-    }
-
     public void Interact()
     {
         Debug.Log("Hey wassup im a statue");
     }
-    public void DetectPlayer()
+    public InputType GetRequiredInputType()
     {
-
-    }
-    public void ShowUI()
-    {
-
-    }
-    public void HideUI()
-    {
-
+        return InputType.None;
     }
 }

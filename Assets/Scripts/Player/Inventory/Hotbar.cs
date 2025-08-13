@@ -107,10 +107,9 @@ public class Hotbar : MonoBehaviour
     {
         int itemCount = inventory.inventory.Count;
 
-        // Prevent all input logic if inventory is empty
         if (itemCount == 0)
         {
-            selectedIndex = 0; // Or -1 if you prefer to mark it as invalid
+            selectedIndex = 0; 
             return;
         }
 
@@ -156,9 +155,6 @@ public class Hotbar : MonoBehaviour
             selectedIndex = 5;
         }
     }
-
-
-
     private void DisplayCells()
     {
         for (int i = 0; i < cells.Count; i++)
@@ -166,7 +162,7 @@ public class Hotbar : MonoBehaviour
             ItemData item = (i < inventory.inventory.Count) ? inventory.inventory[i] as ItemData : null;
             cells[i].SetItem(item);
 
-            cells[i].SetSelected(i == selectedIndex); // Highlight selected cell
+            cells[i].SetSelected(i == selectedIndex); 
         }
 
         if (inventory.inventory.Count > 0 && selectedIndex < inventory.inventory.Count)
@@ -175,7 +171,7 @@ public class Hotbar : MonoBehaviour
         }
         else
         {
-            SetItemInHand(null); // Hide item in hand if nothing is there
+            SetItemInHand(null); 
         }
     }
 
@@ -198,7 +194,6 @@ public class Hotbar : MonoBehaviour
         float currentAlpha = cells[0].GetComponentInChildren<TextMeshProUGUI>()?.color.a ?? 0f;
         float targetAlpha = 0f;
 
-        // If input was recently detected, fade in
         if (Time.time - lastInputTime < 3f)
         {
             targetAlpha = 1f;

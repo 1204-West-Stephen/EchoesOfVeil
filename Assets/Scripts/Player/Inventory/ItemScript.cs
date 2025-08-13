@@ -10,7 +10,9 @@ public enum InputType
     Scroll,
     Key,
     Book,
-    Tablet
+    Tablet,
+    MetalPiece,
+    TorchHilt
 }
 
 [CreateAssetMenu(fileName = "NewItemData", menuName = "Inventory/ItemData")]
@@ -21,7 +23,7 @@ public class ItemData : ScriptableObject
     public InputType typeInput;
     public Sprite sprite;
     public bool canBeInspected;
-    public Canvas itemInspectUI;
+    public Canvas itemInspectUI; 
 
     [HideInInspector] public int keyID;
     [HideInInspector] public int tabletNumber;

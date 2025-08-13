@@ -150,7 +150,6 @@ public class PlayerMovement : MonoBehaviour
         if (sprintInput)
             lastSprintTime = Time.time;
 
-        // Only allow sprinting if NOT crouching
         bool canActuallySprint = moved && sprintInput && stamina > 0f && !isCrouching;
 
         if (canActuallySprint)

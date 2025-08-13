@@ -27,6 +27,7 @@ public class PlayerControls : MonoBehaviour
     private Inventory inventory;
     public Canvas ItemInHand;
     public RectTransform ItemInHandTransform;
+    public Hotbar hotbar;
     public float moveDuration = 0.3f;
     public float moveDistance = 100f;
 
@@ -174,9 +175,24 @@ public class PlayerControls : MonoBehaviour
 
     private void Interacted()
     {
-        if (currentInteractable != null)
+        if (currentInteractable == null || hotbar == null)
+            return;
+
+        ItemData selectedItem = null;
+
+        if (hotbar.selectedIndex >= 0 && hotbar.selectedIndex < hotbar.inventory.inventory.Count)
+            selectedItem = hotbar.inventory.inventory[hotbar.selectedIndex];
+
+        InputType requiredType = currentInteractable.GetRequiredInputType();
+
+        if (requiredType == InputType.None ||
+            (selectedItem != null && selectedItem.typeInput == requiredType))
         {
             currentInteractable.Interact();
+        }
+        else
+        {
+            Debug.Log($"You need a {requiredType} to interact with this.");
         }
     }
 

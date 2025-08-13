@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Sharp Metal Piece
   puzzleNumber: 0
-  typeInput: 0
+  typeInput: 6
   sprite: {fileID: 21300000, guid: ba2b8d3f0a86c25488cdd244d15fa6d7, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
+  keyID: 0
+  tabletNumber: 0

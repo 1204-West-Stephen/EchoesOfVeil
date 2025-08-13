@@ -28,5 +28,10 @@ public class Chest : MonoBehaviour, i_Interactable
             isOpen = true;
         }
     }
-    
+
+    public InputType GetRequiredInputType()
+    {
+        return InputType.None;
+    }
+
 }

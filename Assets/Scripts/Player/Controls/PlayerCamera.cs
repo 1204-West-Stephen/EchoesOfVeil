@@ -18,7 +18,6 @@ public class PlayerCamera : MonoBehaviour
     {
         controls = new PlayerInput();
 
-        // Hook up the Look input
         controls.Movement.Look.performed += ctx => mouseDelta = ctx.ReadValue<Vector2>();
         controls.Movement.Look.canceled += ctx => mouseDelta = Vector2.zero;
     }
@@ -69,20 +68,5 @@ public class PlayerCamera : MonoBehaviour
         Camera cam = Camera.main;
         Vector3 origin = cam.transform.position;
         Vector3 direction = cam.transform.forward;
-
-        Ray ray = new Ray(origin, direction);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 100f)) // 100 units max distance
-        {
-            Debug.Log("Hit: " + hit.collider.name);
-            // Optional: Draw line in Scene view
-            Debug.DrawLine(origin, hit.point, Color.red);
-        }
-        else
-        {
-            Debug.DrawLine(origin, origin + direction * 100f, Color.green);
-        }
     }
-
 }

@@ -43,22 +43,6 @@ public class Stone : MonoBehaviour, i_Interactable
             }
         }
     }
-
-    public void DetectPlayer()
-    {
-
-    }
-
-    public void ShowUI()
-    {
-
-    }
-
-    public void HideUI()
-    {
-
-    }
-
     private bool UsePiece(Inventory inventory)
     {
         foreach (ItemData item in inventory.inventory)
@@ -71,6 +55,10 @@ public class Stone : MonoBehaviour, i_Interactable
             }
         }
             return false;
+    }
+    public InputType GetRequiredInputType()
+    {
+        return InputType.MetalPiece;
     }
 }
 

@@ -38,9 +38,9 @@ public class MetalPiece : MonoBehaviour, i_Interactable
             }
         }
     }
-
-    public void DetectPlayer() { }
-    public void ShowUI() { }
-    public void HideUI() { }
+    public InputType GetRequiredInputType()
+    {
+        return InputType.None;
+    }
 }
 
