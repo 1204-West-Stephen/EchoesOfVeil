@@ -47,7 +47,7 @@ public class Stone : MonoBehaviour, i_Interactable
     {
         foreach (ItemData item in inventory.inventory)
         {
-            if (item.typeInput == InputType.None && item.itemName == "Sharp Metal Piece")
+            if (item.typeInput == InputType.MetalPiece && item.itemName == "Sharp Metal Piece")
             {
                 inventory.RemoveItem(item);
                 Debug.Log($"Metal Piece consumed and removed from inventory.");
@@ -55,10 +55,6 @@ public class Stone : MonoBehaviour, i_Interactable
             }
         }
             return false;
-    }
-    public InputType GetRequiredInputType()
-    {
-        return InputType.MetalPiece;
     }
 }
 

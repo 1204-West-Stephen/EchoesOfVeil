@@ -175,24 +175,9 @@ public class PlayerControls : MonoBehaviour
 
     private void Interacted()
     {
-        if (currentInteractable == null || hotbar == null)
-            return;
-
-        ItemData selectedItem = null;
-
-        if (hotbar.selectedIndex >= 0 && hotbar.selectedIndex < hotbar.inventory.inventory.Count)
-            selectedItem = hotbar.inventory.inventory[hotbar.selectedIndex];
-
-        InputType requiredType = currentInteractable.GetRequiredInputType();
-
-        if (requiredType == InputType.None ||
-            (selectedItem != null && selectedItem.typeInput == requiredType))
-        {
+        if (currentInteractable != null)
+        { 
             currentInteractable.Interact();
-        }
-        else
-        {
-            Debug.Log($"You need a {requiredType} to interact with this.");
         }
     }
 

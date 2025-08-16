@@ -7,19 +7,10 @@ public class Door : MonoBehaviour, i_Interactable
     public int doorID;
 
     private PlayerControls playerManager;
-    private Inventory inventory;
-    private Hotbar hotbar;
 
     private void Awake()
     {
         playerManager = FindObjectOfType<PlayerControls>();
-
-        GameObject player = GameObject.FindWithTag("Player");
-        if (player != null)
-        {
-            inventory = player.GetComponent<Inventory>();
-            hotbar = player.GetComponent<Hotbar>();
-        }
     }
 
     private void Start()
@@ -30,37 +21,34 @@ public class Door : MonoBehaviour, i_Interactable
 
     public void Interact()
     {
-        if (inventory == null || hotbar == null)
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
         {
-            Debug.LogWarning("Inventory or Hotbar not found on player.");
-            return;
-        }
-
-        if (UseSelectedKey())
-        {
-            Debug.Log("Correct key used. Door unlocked.");
-            PlayAnimation();
-        }
-        else
-        {
-            playerManager?.StartDialogue("This door needs a key...");
+            Inventory inventory = player.GetComponent<Inventory>();
+            if (inventory != null)
+            {
+                if (UseKey(inventory))
+                {
+                    Debug.Log("Correct key used. Door unlocked.");
+                    PlayAnimation();
+                }
+                else
+                {
+                    playerManager.StartDialogue("This door needs a key...");
+                }
+            }
         }
     }
-
-    private bool UseSelectedKey()
+    private bool UseKey(Inventory inventory)
     {
-        int selectedIndex = hotbar.selectedIndex;
-
-        if (selectedIndex < 0 || selectedIndex >= inventory.inventory.Count)
-            return false;
-
-        ItemData selectedItem = inventory.inventory[selectedIndex];
-
-        if (selectedItem != null && selectedItem.typeInput == InputType.Key && selectedItem.keyID == doorID)
+        foreach (ItemData item in inventory.inventory)
         {
-            inventory.RemoveItem(selectedItem);
-            Debug.Log($"Key with ID {doorID} consumed and removed from inventory.");
-            return true;
+            if (item.typeInput == InputType.Key && item.keyID == doorID)
+            {
+                inventory.RemoveItem(item);
+                Debug.Log($"Key with ID {doorID} consumed and removed from inventory.");
+                return true;
+            }
         }
 
         return false;
@@ -78,11 +66,6 @@ public class Door : MonoBehaviour, i_Interactable
         {
             animator.SetTrigger("Close");
         }
-    }
-
-    public InputType GetRequiredInputType()
-    {
-        return InputType.Key;
     }
 }
 

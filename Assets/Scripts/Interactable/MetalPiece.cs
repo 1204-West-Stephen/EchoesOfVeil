@@ -38,9 +38,5 @@ public class MetalPiece : MonoBehaviour, i_Interactable
             }
         }
     }
-    public InputType GetRequiredInputType()
-    {
-        return InputType.None;
-    }
 }
 

@@ -42,7 +42,7 @@ public class TorchHilt : MonoBehaviour, i_Interactable
     {
         foreach (ItemData item in inventory.inventory)
         {
-            if (item.typeInput == InputType.None && item.itemName == "Torch")
+            if (item.typeInput == InputType.TorchHilt && item.itemName == "Torch")
             {
                 inventory.RemoveItem(item);
                 Debug.Log($"Torch consumed and removed from inventory.");
