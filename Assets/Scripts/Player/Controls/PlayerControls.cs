@@ -179,10 +179,6 @@ public class PlayerControls : MonoBehaviour
         { 
             currentInteractable.Interact();
         }
-        if (currentInteractable == null)
-            return;
-
-        currentInteractable.Interact();
     }
 
     private IEnumerator MoveItemDownAndHide()
