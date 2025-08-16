@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Tablet of Awakening
   puzzleNumber: 0
   typeInput: 5
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 06b696bd88eb9ac4e98c96c83706dedd, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0

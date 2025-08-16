@@ -175,10 +175,17 @@ public class PlayerControls : MonoBehaviour
 
     private void Interacted()
     {
+<<<<<<< Updated upstream
         if (currentInteractable != null)
         { 
             currentInteractable.Interact();
         }
+=======
+        if (currentInteractable == null)
+            return;
+
+        currentInteractable.Interact();
+>>>>>>> Stashed changes
     }
 
     private IEnumerator MoveItemDownAndHide()

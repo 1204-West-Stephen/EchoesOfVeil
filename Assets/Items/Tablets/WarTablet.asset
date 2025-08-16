@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: 'Tablet of War '
   puzzleNumber: 0
   typeInput: 5
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 4d2521d0e2785c24891350dbaee4478f, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0

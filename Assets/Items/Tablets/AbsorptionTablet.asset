@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Tablet of Absorption
   puzzleNumber: 0
   typeInput: 5
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 85889d82ecff3944eb72659ee7d05c40, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0

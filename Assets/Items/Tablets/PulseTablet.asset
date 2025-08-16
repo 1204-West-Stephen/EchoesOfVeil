@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Tablet of Pulse
   puzzleNumber: 0
   typeInput: 5
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: aa318ce4d42d431438a11faa4a1b364d, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0
