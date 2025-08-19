@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc513b4af99458438e47bdd56d9648e, type: 3}
   m_Name: WarTablet
   m_EditorClassIdentifier: 
+  prefab: {fileID: 4700036282072699186, guid: 93c9008fb20ea244fba3a0499b530636, type: 3}
   itemName: 'Tablet of War '
   puzzleNumber: 0
   typeInput: 5

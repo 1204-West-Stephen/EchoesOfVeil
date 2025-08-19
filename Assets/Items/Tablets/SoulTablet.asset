@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc513b4af99458438e47bdd56d9648e, type: 3}
   m_Name: SoulTablet
   m_EditorClassIdentifier: 
+  prefab: {fileID: 692157644641720183, guid: ca92898afe5b1bf48a40bcf916f7ed00, type: 3}
   itemName: Tablet of the soul
   puzzleNumber: 0
   typeInput: 5

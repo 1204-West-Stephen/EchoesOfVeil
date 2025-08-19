@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc513b4af99458438e47bdd56d9648e, type: 3}
   m_Name: PulseTablet
   m_EditorClassIdentifier: 
+  prefab: {fileID: 5748134840890871888, guid: 31baadeca8b83b34e92a926f8dfff618, type: 3}
   itemName: Tablet of Pulse
   puzzleNumber: 0
   typeInput: 5

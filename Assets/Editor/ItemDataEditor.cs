@@ -8,6 +8,7 @@ public class ItemDataEditor : Editor
     {
         serializedObject.Update();
 
+        SerializedProperty prefab = serializedObject.FindProperty("prefab");
         SerializedProperty itemName = serializedObject.FindProperty("itemName");
         SerializedProperty puzzleNumber = serializedObject.FindProperty("puzzleNumber");
         SerializedProperty typeInput = serializedObject.FindProperty("typeInput");
@@ -17,6 +18,7 @@ public class ItemDataEditor : Editor
         SerializedProperty keyID = serializedObject.FindProperty("keyID");
         SerializedProperty tabletNumber = serializedObject.FindProperty("tabletNumber");
 
+        EditorGUILayout.PropertyField(prefab);
         EditorGUILayout.PropertyField(itemName);
         EditorGUILayout.PropertyField(puzzleNumber);
         EditorGUILayout.PropertyField(typeInput);

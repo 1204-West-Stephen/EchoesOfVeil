@@ -38,7 +38,6 @@ public class TabletShrine : MonoBehaviour, i_Interactable
         }
     }
 
-
     public void Interact()
     {
         if (canPlace)

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc513b4af99458438e47bdd56d9648e, type: 3}
   m_Name: DeceitTablet
   m_EditorClassIdentifier: 
+  prefab: {fileID: 7145306982861108215, guid: 5cb61d1ee30c4bf4db2c09f942331275, type: 3}
   itemName: Tablet of Deceit
   puzzleNumber: 0
   typeInput: 5
