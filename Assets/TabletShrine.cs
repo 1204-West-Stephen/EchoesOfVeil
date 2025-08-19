@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class TabletShrine : MonoBehaviour, i_Interactable
 {
-    public ItemData item;
-    public GameObject tablet;
-
-    public Transform stonePos;
+    public Transform stonePos; // Where the tablet should appear
     public int tabletShrineNum;
     public int currentTabletNum = -1;
+
+    [Header("Starting State")]
+    public ItemData startingTablet;
 
     public bool canPlace;
     public bool itemPickedUp;
@@ -17,15 +17,27 @@ public class TabletShrine : MonoBehaviour, i_Interactable
     private GameObject player;
     private Inventory inventory;
 
+    private ItemData placedTablet;
+    private GameObject currentTabletInstance; // reference to the tablet GameObject
+
     private void Start()
     {
-        canPlace = false;
-
         player = GameObject.FindWithTag("Player");
         inventory = player.GetComponent<Inventory>();
 
-        tablet.transform.position = stonePos.position;
+        if (startingTablet != null && startingTablet.prefab != null)
+        {
+            placedTablet = startingTablet;
+            currentTabletInstance = startingTablet.prefab.gameObject;
+            MoveTabletToShrine(currentTabletInstance);
+            canPlace = false;
+        }
+        else
+        {
+            canPlace = true;
+        }
     }
+
 
     public void Interact()
     {
@@ -33,34 +45,17 @@ public class TabletShrine : MonoBehaviour, i_Interactable
         {
             if (PlaceTablet())
             {
-                tablet.gameObject.SetActive(true);
-                tablet.transform.position = stonePos.position;
                 Debug.Log("Tablet placed");
+                canPlace = false;
             }
             else
             {
-                Debug.Log("Tablet not placed - selected item invalid or none");
+                Debug.Log("Tablet not placed - no valid tablet in inventory");
             }
-
-            canPlace = false;
-            Debug.Log($"canPlace = {canPlace}");
         }
         else
         {
-            if (inventory.CheckInventory())
-            { 
-                inventory.AddItem(item);
-                tablet.gameObject.SetActive(false);
-                itemPickedUp = true;
-                currentTabletNum = -1; 
-            }
-            else
-            {
-                Debug.LogWarning("Player or Inventory component missing.");
-            }
-
-            canPlace = true;
-            Debug.Log($"canPlace = {canPlace}");
+            PickUpTablet();
         }
 
         FindObjectOfType<TabletShrineManager>()?.CheckIfSolved();
@@ -68,14 +63,71 @@ public class TabletShrine : MonoBehaviour, i_Interactable
 
     private bool PlaceTablet()
     {
-        if (item != null && item.typeInput == InputType.Tablet)
+        if (inventory == null || inventory.inventory.Count == 0)
+            return false;
+
+        ItemData tabletToPlace = null;
+        foreach (var item in inventory.inventory)
         {
-            currentTabletNum = item.tabletNumber;
-            inventory.RemoveItem(item);
+            if (item != null && item.typeInput == InputType.Tablet)
+            {
+                tabletToPlace = item;
+                break;
+            }
+        }
+
+        if (tabletToPlace != null)
+        {
+            placedTablet = tabletToPlace;
+            currentTabletNum = tabletToPlace.tabletNumber;
+
+            inventory.RemoveItem(tabletToPlace);
+
+            currentTabletInstance = tabletToPlace.prefab.gameObject;
+            MoveTabletToShrine(currentTabletInstance);
+
             Debug.Log($"Tablet {currentTabletNum} placed in shrine {tabletShrineNum}");
             return true;
         }
 
         return false;
+    }
+
+    private void PickUpTablet()
+    {
+        if (placedTablet != null && inventory != null && inventory.CheckInventory())
+        {
+            inventory.AddItem(placedTablet);
+
+            if (currentTabletInstance != null)
+            {
+                currentTabletInstance.SetActive(false); // hide instead of destroy
+            }
+
+            placedTablet = null;
+            currentTabletNum = -1;
+            itemPickedUp = true;
+            canPlace = true;
+
+            Debug.Log("Tablet picked up from shrine " + tabletShrineNum);
+        }
+        else
+        {
+            Debug.LogWarning("Cannot pick up tablet: inventory full or missing tablet.");
+        }
+    }
+
+    private void MoveTabletToShrine(GameObject tablet)
+    {
+        if (tablet != null)
+        {
+            tablet.transform.position = stonePos.position;
+            tablet.transform.rotation = Quaternion.identity;
+            tablet.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("Tablet GameObject is null, cannot move to shrine!");
+        }
     }
 }

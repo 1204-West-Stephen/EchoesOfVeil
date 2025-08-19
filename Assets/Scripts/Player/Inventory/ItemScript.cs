@@ -18,12 +18,13 @@ public enum InputType
 [CreateAssetMenu(fileName = "NewItemData", menuName = "Inventory/ItemData")]
 public class ItemData : ScriptableObject
 {
+    public GameObject prefab;       // assign your 3D/2D object here
     public string itemName;
     public int puzzleNumber;
     public InputType typeInput;
     public Sprite sprite;
     public bool canBeInspected;
-    public Canvas itemInspectUI; 
+    public Canvas itemInspectUI;
 
     [HideInInspector] public int keyID;
     [HideInInspector] public int tabletNumber;

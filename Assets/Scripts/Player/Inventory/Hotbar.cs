@@ -3,6 +3,7 @@ using TMPro;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 public class Hotbar : MonoBehaviour
 {
     public List<Cell> cells;
@@ -98,8 +99,6 @@ public class Hotbar : MonoBehaviour
         scrollDelta = Vector2.zero;
     }
 
-
-
     private void OnEnable() => controls.Enable();
     private void OnDisable() => controls.Disable();
 
@@ -113,7 +112,6 @@ public class Hotbar : MonoBehaviour
             return;
         }
 
-        // Scroll input
         if (scrollDelta.y < 0f)
         {
             do
@@ -129,7 +127,6 @@ public class Hotbar : MonoBehaviour
             } while (inventory.inventory[selectedIndex] == null);
         }
 
-        // Number key input
         if (onePressed)
         {
             selectedIndex = 0;
@@ -214,4 +211,17 @@ public class Hotbar : MonoBehaviour
             }
         }
     }
+    public ItemData GetCurrentItemInHand()
+    {
+        if (inventory == null || inventory.inventory.Count == 0)
+            return null;
+
+        // Clamp selectedIndex to valid range
+        selectedIndex = Mathf.Clamp(selectedIndex, 0, inventory.inventory.Count - 1);
+
+        ItemData current = inventory.inventory[selectedIndex] as ItemData;
+        Debug.Log($"Current item: {current}");
+        return current;
+    }
+
 }
