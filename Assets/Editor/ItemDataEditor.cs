@@ -18,7 +18,6 @@ public class ItemDataEditor : Editor
         SerializedProperty keyID = serializedObject.FindProperty("keyID");
         SerializedProperty tabletNumber = serializedObject.FindProperty("tabletNumber");
 
-        EditorGUILayout.PropertyField(prefab);
         EditorGUILayout.PropertyField(itemName);
         EditorGUILayout.PropertyField(puzzleNumber);
         EditorGUILayout.PropertyField(typeInput);
@@ -34,6 +33,11 @@ public class ItemDataEditor : Editor
         if ((InputType)typeInput.enumValueIndex == InputType.Tablet)
         {
             EditorGUILayout.PropertyField(tabletNumber);
+        }
+
+        if ((InputType)typeInput.enumValueIndex == InputType.Tablet)
+        {
+            EditorGUILayout.PropertyField(prefab);
         }
 
         serializedObject.ApplyModifiedProperties();

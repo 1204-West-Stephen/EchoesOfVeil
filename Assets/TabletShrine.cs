@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TabletShrine : MonoBehaviour, i_Interactable
 {
-    public Transform stonePos; // Where the tablet should appear
+    public Transform stonePos;
     public int tabletShrineNum;
     public int currentTabletNum = -1;
 
@@ -18,7 +18,7 @@ public class TabletShrine : MonoBehaviour, i_Interactable
     private Inventory inventory;
 
     private ItemData placedTablet;
-    private GameObject currentTabletInstance; // reference to the tablet GameObject
+    private GameObject placedTabletObject;
 
     private void Start()
     {
@@ -28,14 +28,11 @@ public class TabletShrine : MonoBehaviour, i_Interactable
         if (startingTablet != null && startingTablet.prefab != null)
         {
             placedTablet = startingTablet;
-            currentTabletInstance = startingTablet.prefab.gameObject;
-            MoveTabletToShrine(currentTabletInstance);
-            canPlace = false;
+            MoveTabletToShrine(startingTablet.prefab);
+            currentTabletNum = startingTablet.tabletNumber;
         }
-        else
-        {
-            canPlace = true;
-        }
+
+        canPlace = false;
     }
 
     public void Interact()
@@ -82,8 +79,7 @@ public class TabletShrine : MonoBehaviour, i_Interactable
 
             inventory.RemoveItem(tabletToPlace);
 
-            currentTabletInstance = tabletToPlace.prefab.gameObject;
-            MoveTabletToShrine(currentTabletInstance);
+            MoveTabletToShrine(tabletToPlace.prefab);
 
             Debug.Log($"Tablet {currentTabletNum} placed in shrine {tabletShrineNum}");
             return true;
@@ -98,9 +94,10 @@ public class TabletShrine : MonoBehaviour, i_Interactable
         {
             inventory.AddItem(placedTablet);
 
-            if (currentTabletInstance != null)
+            if (placedTabletObject != null)
             {
-                currentTabletInstance.SetActive(false); // hide instead of destroy
+                Destroy(placedTabletObject); 
+                placedTabletObject = null;
             }
 
             placedTablet = null;
@@ -116,17 +113,26 @@ public class TabletShrine : MonoBehaviour, i_Interactable
         }
     }
 
-    private void MoveTabletToShrine(GameObject tablet)
+    private void MoveTabletToShrine(GameObject tabletPrefab)
     {
-        if (tablet != null)
+        if (tabletPrefab != null)
         {
-            tablet.transform.position = stonePos.position;
-            tablet.transform.rotation = Quaternion.identity;
-            tablet.SetActive(true);
+            if (placedTabletObject != null)
+            {
+                Destroy(placedTabletObject);
+            }
+
+            placedTabletObject = Instantiate(
+                tabletPrefab,
+                stonePos.position,
+                Quaternion.Euler(0, 90, 0)
+            );
+
+            placedTabletObject.SetActive(true);
         }
         else
         {
-            Debug.LogWarning("Tablet GameObject is null, cannot move to shrine!");
+            Debug.LogWarning("Tablet prefab is null, cannot move to shrine!");
         }
     }
 }
