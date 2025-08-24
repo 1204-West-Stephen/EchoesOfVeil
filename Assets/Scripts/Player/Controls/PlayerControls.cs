@@ -240,15 +240,20 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
+    public void DisableControls()
+    {
+        movement.controlLock();
+        playerCamera.controlLock();
+        canInteract = false;
+        Cursor.visible = true;
+    }
+
     private void JournalMenu()
     {
         if (journalToggle)
         {
-            movement.controlLock();
-            playerCamera.controlLock();
-            canInteract = false;
+            DisableControls();
             journalMenu.gameObject.SetActive(true);
-            Cursor.visible = true;
 
             if (interactionCanvas != null)
                 interactionCanvas.gameObject.SetActive(false);

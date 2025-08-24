@@ -191,6 +191,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 6440342363358989386, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+      propertyPath: hotbar
+      value: 
+      objectReference: {fileID: 1987825691}
+    - target: {fileID: 6440342363358989386, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: internalComment
       value: 
       objectReference: {fileID: 1001192552}
@@ -304,6 +308,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1987825691 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5910883020010021492, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+  m_PrefabInstance: {fileID: 1001192551}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fb40aa2a43a9e242ba22091e89a508f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
