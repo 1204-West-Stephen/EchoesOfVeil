@@ -12,7 +12,8 @@ public enum InputType
     Book,
     Tablet,
     MetalPiece,
-    TorchHilt
+    TorchHilt,
+    NumberStone
 }
 
 [CreateAssetMenu(fileName = "NewItemData", menuName = "Inventory/ItemData")]
@@ -28,4 +29,5 @@ public class ItemData : ScriptableObject
     [HideInInspector] public int keyID;
     [HideInInspector] public int tabletNumber;
     [HideInInspector] public GameObject prefab;
+    [HideInInspector] public int stoneValue;
 }
