@@ -1,72 +1,66 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
-public class BalancePuzzle : MonoBehaviour, i_Interactable
+public class BalancePuzzle : MonoBehaviour
 {
     private int weightBalance;
-    public TextMeshProUGUI weightNum;
-
-    public NumberStone numberStone;
+    public GameObject weightGem;
+    public List<NumberStone> numberStones;  // references to stones in the scene
+    public List<Transform> gemLocations;    // gem marker positions (-5..+5)
 
     private void Start()
     {
-        weightBalance = 5;
-        UpdateWeightUI();
+        weightBalance = 0;
+        UpdateGemPosition();
     }
 
-    public void Interact()
+    public void ApplyStoneIncrease(ItemData item)
     {
-        
-    }
+        weightBalance += item.stoneValue;
 
-    public void IncreaseBalance()
-    {
-        if (weightBalance <= 5)
-        {
-            
-        }
-        else
+        if (weightBalance > 5)
         {
             ResetPuzzle();
         }
-
-        UpdateWeightUI();
-    }
-
-    public void DecreaseBalance()
-    {
-        if (weightBalance >= -5)
-        {
-
-        }
         else
+        {
+            UpdateGemPosition();
+        }
+    }
+    public void ApplyStoneDecrease(ItemData item)
+    {
+        weightBalance += item.stoneValue;
+
+        if (weightBalance < -5)
         {
             ResetPuzzle();
         }
-
-        UpdateWeightUI();
+        else
+        {
+            UpdateGemPosition();
+        }
     }
 
-    private void ConsumeSelectedNumber()
+    private void UpdateGemPosition()
     {
-        CheckPuzzleCompletion();
-    }
-
-    private void CheckPuzzleCompletion()
-    {
-        
+        int index = weightBalance + 5; 
+        if (index >= 0 && index < gemLocations.Count)
+        {
+            weightGem.transform.position = gemLocations[index].position;
+        }
     }
 
     public void ResetPuzzle()
     {
-        
-    }
+        Debug.Log("Puzzle failed - resetting!");
 
+        weightBalance = 0;
+        UpdateGemPosition();
 
-    private void UpdateWeightUI()
-    {
-        if (weightNum != null)
-            weightNum.text = " " + weightBalance;
+        // Respawn stones
+        for (int i = 0; i < numberStones.Count; i++)
+        {
+            numberStones[i].Respawn(numberStones[i].transform.position);
+        }
     }
 }
