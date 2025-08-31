@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class DarkShrine : MonoBehaviour, i_Interactable
 {
@@ -8,21 +9,32 @@ public class DarkShrine : MonoBehaviour, i_Interactable
     private GameObject player;
     private Inventory inventory;
 
+    [Header("Beam Settings")]
+    public float growAmount = 0.16f;
+    public float growDuration = 1f;
+    public float fadeDuration = 5f;
+
+    private Coroutine beamCoroutine;
+
+    private Vector3 baseScale;
+
     private void Start()
     {
         player = GameObject.FindWithTag("Player");
         inventory = player.GetComponent<Inventory>();
 
-        Vector3 lightScale = lightBeam.transform.localScale;
-        lightScale.y = 0.0f;
-
-        lightBeam.transform.localScale = lightScale;
+        if (lightBeam != null)
+        {
+            baseScale = lightBeam.transform.localScale;
+            baseScale.y = 0f;
+            lightBeam.transform.localScale = baseScale;
+            lightBeam.SetActive(false);
+        }
     }
 
     public void Interact()
     {
         ItemData stoneToPlace = null;
-
         foreach (var item in inventory.inventory)
         {
             if (item != null && item.typeInput == InputType.NumberStone)
@@ -44,18 +56,64 @@ public class DarkShrine : MonoBehaviour, i_Interactable
         }
     }
 
-    private void ShineLight()
+    public void ShineLight()
     {
-        if (lightBeam != null)
+        if (lightBeam == null) return;
+
+        lightBeam.SetActive(true);
+
+        // Stop any running coroutine
+        if (beamCoroutine != null)
+            StopCoroutine(beamCoroutine);
+
+        // Reset scale and alpha for a fresh start
+        lightBeam.transform.localScale = baseScale;
+
+        Renderer r = lightBeam.GetComponent<Renderer>();
+        if (r != null && r.material.HasProperty("_TintColor"))
         {
-            for (float i = 0; i < 0.16f; i += 0.01f)
-            {
-                Vector3 lightscale = lightBeam.transform.localScale;
-
-                lightscale.y += i;
-
-                lightBeam.transform.localScale = lightscale;
-            }
+            Color color = r.material.GetColor("_TintColor");
+            color.a = 1f; // reset alpha
+            r.material.SetColor("_TintColor", color);
         }
+
+        beamCoroutine = StartCoroutine(ShineThenFade());
+    }
+
+    private IEnumerator ShineThenFade()
+    {
+        Renderer r = lightBeam.GetComponent<Renderer>();
+        if (r == null || !r.material.HasProperty("_TintColor"))
+        {
+            yield break;
+        }
+
+        // --- Scale Up ---
+        Vector3 initialScale = lightBeam.transform.localScale;
+        Vector3 targetScale = initialScale + new Vector3(0, growAmount, 0);
+
+        float t = 0f;
+        while (t < growDuration)
+        {
+            t += Time.deltaTime;
+            float lerp = Mathf.Clamp01(t / growDuration);
+            lightBeam.transform.localScale = Vector3.Lerp(initialScale, targetScale, lerp);
+            yield return null;
+        }
+
+        // --- Fade Out ---
+        Color startColor = r.material.GetColor("_TintColor");
+        Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
+
+        t = 0f;
+        while (t < fadeDuration)
+        {
+            t += Time.deltaTime;
+            float lerp = Mathf.Clamp01(t / fadeDuration);
+            r.material.SetColor("_TintColor", Color.Lerp(startColor, endColor, lerp));
+            yield return null;
+        }
+
+        lightBeam.SetActive(false);
     }
 }
