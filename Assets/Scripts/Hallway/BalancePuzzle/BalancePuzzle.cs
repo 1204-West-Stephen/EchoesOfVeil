@@ -5,12 +5,12 @@ public class BalancePuzzle : MonoBehaviour
 {
     private int weightBalance;
     public GameObject weightGem;
-    public List<NumberStone> numberStones;  // references to stones in the scene
-    public List<Transform> gemLocations;    // gem marker positions (-5..+5)
+    public List<NumberStone> numberStones;
+    public List<Transform> gemLocations;
 
     private void Start()
     {
-        weightBalance = 0;
+        weightBalance = 5;
         UpdateGemPosition();
     }
 
@@ -27,9 +27,10 @@ public class BalancePuzzle : MonoBehaviour
             UpdateGemPosition();
         }
     }
+
     public void ApplyStoneDecrease(ItemData item)
     {
-        weightBalance += item.stoneValue;
+        weightBalance -= item.stoneValue;
 
         if (weightBalance < -5)
         {
@@ -43,21 +44,60 @@ public class BalancePuzzle : MonoBehaviour
 
     private void UpdateGemPosition()
     {
-        int index = weightBalance + 5; 
-        if (index >= 0 && index < gemLocations.Count)
+        foreach (var location in gemLocations)
         {
-            weightGem.transform.position = gemLocations[index].position;
+            ScaleValue sv = location.GetComponent<ScaleValue>();
+            if (sv == null)
+            {
+                Debug.LogWarning(location.name + " is missing a ScaleValue component!");
+                continue;
+            }
+
+            int scale = sv.returnScaleValue();
+
+            if (scale == weightBalance)
+            {
+                weightGem.transform.position = location.position;
+
+                // Check puzzle solved condition
+                if (weightBalance == 0 && AllStonesUsed())
+                {
+                    Debug.Log("Puzzle is solved!");
+                    OnPuzzleSolved();
+                }
+
+                return; // stop once we matched
+            }
         }
+
+        Debug.LogWarning("No gem location matches weightBalance: " + weightBalance);
     }
+
+    private bool AllStonesUsed()
+    {
+        foreach (var stone in numberStones)
+        {
+            if (stone.gameObject.activeSelf) // still active in scene
+                return false;
+        }
+        return true;
+    }
+
+    private void OnPuzzleSolved()
+    {
+        // TODO: Put whatever should happen here
+        // e.g. open a door, spawn reward, disable puzzle interaction
+        Debug.Log("Performing puzzle solved actions!");
+    }
+
 
     public void ResetPuzzle()
     {
         Debug.Log("Puzzle failed - resetting!");
 
-        weightBalance = 0;
+        weightBalance = 5;
         UpdateGemPosition();
 
-        // Respawn stones
         for (int i = 0; i < numberStones.Count; i++)
         {
             numberStones[i].Respawn(numberStones[i].transform.position);
