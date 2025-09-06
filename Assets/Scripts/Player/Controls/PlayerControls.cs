@@ -10,8 +10,8 @@ public class PlayerControls : MonoBehaviour
     [Header("Interactable")]
     public float interactionRange = 1f;
     public Transform interactionOrigin;
-    private bool interacted;
-    private bool canInteract;
+    public bool interacted;
+    public bool canInteract;
     private i_Interactable currentInteractable;
 
     PlayerInput controls;
@@ -44,6 +44,7 @@ public class PlayerControls : MonoBehaviour
     public Canvas interactionCanvas;
     public Canvas internalDialogueCanvas;
     public TextMeshProUGUI internalDialogue;
+    public GameObject crosshair;
 
     private void Awake()
     {
@@ -208,14 +209,12 @@ public class PlayerControls : MonoBehaviour
         if (pauseToggle)
         {
             Time.timeScale = 0f;
-            movement.controlLock();
-            playerCamera.controlLock();
+            DisableControls();
         }
         else
         {
             Time.timeScale = 1f;
-            movement.controlUnlock();
-            playerCamera.controlUnlock();
+            EnableControls();
         }
     }
 
@@ -223,9 +222,7 @@ public class PlayerControls : MonoBehaviour
     {
         if (inspectionToggle)
         {
-            movement.controlLock();
-            playerCamera.controlLock();
-            canInteract = false;
+            DisableControls();
             inspectionMenu.gameObject.SetActive(true);
 
             if (interactionCanvas != null)
@@ -233,9 +230,7 @@ public class PlayerControls : MonoBehaviour
         }
         else
         {
-            movement.controlUnlock();
-            playerCamera.controlUnlock();
-            canInteract = true;
+            EnableControls();
             inspectionMenu.gameObject.SetActive(false);
         }
     }
@@ -246,6 +241,14 @@ public class PlayerControls : MonoBehaviour
         playerCamera.controlLock();
         canInteract = false;
         Cursor.visible = true;
+    }
+
+    public void EnableControls()
+    {
+        movement.controlUnlock();
+        playerCamera.controlUnlock();
+        canInteract = true;
+        Cursor.visible = false;
     }
 
     private void JournalMenu()
@@ -260,11 +263,9 @@ public class PlayerControls : MonoBehaviour
         }
         else
         {
-            movement.controlUnlock();
-            playerCamera.controlUnlock();
-            canInteract = true;
+            EnableControls();
             journalMenu.gameObject.SetActive(false);
-            Cursor.visible = false;
+            
         }
     }
 

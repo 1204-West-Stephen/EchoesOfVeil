@@ -116,6 +116,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Esc"",
+                    ""type"": ""Button"",
+                    ""id"": ""4ee91535-d7ac-47f6-843c-10a337675e20"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -226,6 +235,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""PressQ"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a874a57b-515b-423c-a676-cdeae8bf946d"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Esc"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -434,6 +454,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Movement_PressF = m_Movement.FindAction("PressF", throwIfNotFound: true);
         m_Movement_Crouch = m_Movement.FindAction("Crouch", throwIfNotFound: true);
         m_Movement_PressQ = m_Movement.FindAction("PressQ", throwIfNotFound: true);
+        m_Movement_Esc = m_Movement.FindAction("Esc", throwIfNotFound: true);
         // Menus
         m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
         m_Menus_Pause = m_Menus.FindAction("Pause", throwIfNotFound: true);
@@ -516,6 +537,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_PressF;
     private readonly InputAction m_Movement_Crouch;
     private readonly InputAction m_Movement_PressQ;
+    private readonly InputAction m_Movement_Esc;
     public struct MovementActions
     {
         private @PlayerInput m_Wrapper;
@@ -530,6 +552,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @PressF => m_Wrapper.m_Movement_PressF;
         public InputAction @Crouch => m_Wrapper.m_Movement_Crouch;
         public InputAction @PressQ => m_Wrapper.m_Movement_PressQ;
+        public InputAction @Esc => m_Wrapper.m_Movement_Esc;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -569,6 +592,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @PressQ.started += instance.OnPressQ;
             @PressQ.performed += instance.OnPressQ;
             @PressQ.canceled += instance.OnPressQ;
+            @Esc.started += instance.OnEsc;
+            @Esc.performed += instance.OnEsc;
+            @Esc.canceled += instance.OnEsc;
         }
 
         private void UnregisterCallbacks(IMovementActions instance)
@@ -603,6 +629,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @PressQ.started -= instance.OnPressQ;
             @PressQ.performed -= instance.OnPressQ;
             @PressQ.canceled -= instance.OnPressQ;
+            @Esc.started -= instance.OnEsc;
+            @Esc.performed -= instance.OnEsc;
+            @Esc.canceled -= instance.OnEsc;
         }
 
         public void RemoveCallbacks(IMovementActions instance)
@@ -742,6 +771,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnPressF(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnPressQ(InputAction.CallbackContext context);
+        void OnEsc(InputAction.CallbackContext context);
     }
     public interface IMenusActions
     {

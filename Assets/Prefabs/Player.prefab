@@ -330,10 +330,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionRange: 1
   interactionOrigin: {fileID: 6826110542695512450}
+  interacted: 0
   playerCamera: {fileID: 2078542722826478393}
   pauseMenu: {fileID: 5657441475000869684}
   ItemInHand: {fileID: 5876411139439804743}
   ItemInHandTransform: {fileID: 7715527742146956219}
+  hotbar: {fileID: 0}
   moveDuration: 0.3
   moveDistance: 100
   inspectionMenu: {fileID: 1949993696741156423}
@@ -342,6 +344,7 @@ MonoBehaviour:
   interactionCanvas: {fileID: 8810398328599900648}
   internalDialogueCanvas: {fileID: 347172323615290102}
   internalDialogue: {fileID: 706513908844102281}
+  crosshair: {fileID: 6616985411537934683}
 --- !u!136 &4150330509103652566
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -601,6 +604,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &6616985411537934683 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2476301834383830965, guid: 31c68d8d57e20ec4d8b97f17e84a452b, type: 3}
+  m_PrefabInstance: {fileID: 8757766561863939822}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6855594537294237693 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2786075196119431443, guid: 31c68d8d57e20ec4d8b97f17e84a452b, type: 3}
