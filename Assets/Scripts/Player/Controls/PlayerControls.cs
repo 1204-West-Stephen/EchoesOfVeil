@@ -14,7 +14,7 @@ public class PlayerControls : MonoBehaviour
     public bool canInteract;
     private i_Interactable currentInteractable;
 
-    PlayerInput controls;
+    public PlayerInput controls;
     PlayerMovement movement;
     public PlayerCamera playerCamera;
 

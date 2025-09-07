@@ -10,7 +10,7 @@ public class DarkShrine : MonoBehaviour, i_Interactable
     private Inventory inventory;
 
     [Header("Beam Settings")]
-    public float growAmount = 0.16f;
+    public float growAmount = 0.37f;
     public float growDuration = 1f;
     public float fadeDuration = 5f;
 
