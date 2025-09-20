@@ -23,7 +23,17 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
     {
         player = GameObject.FindWithTag("Player");
         inventory = player.GetComponent<Inventory>();
-        canPlace = false;
+    }
+    private void Update()
+    {
+        if (placedObject = null)
+        {
+            canPlace = true;
+        }
+        else
+        {
+            canPlace = false;
+        }
     }
 
     public void Interact()
@@ -32,7 +42,6 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
         {
             if (PlaceObject())
             {
-                Debug.Log("Object placed");
                 canPlace = false;
             }
             else
@@ -56,7 +65,7 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
         ItemData objectToPlace = null;
         foreach (var item in inventory.inventory)
         {
-            if (item != null && item.typeInput == InputType.Tablet)
+            if (item != null && item.typeInput == InputType.GuardianItem)
             {
                 objectToPlace = item;
                 break;

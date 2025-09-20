@@ -13,7 +13,8 @@ public enum InputType
     Tablet,
     MetalPiece,
     TorchHilt,
-    NumberStone
+    NumberStone,
+    GuardianItem
 }
 
 [CreateAssetMenu(fileName = "NewItemData", menuName = "Inventory/ItemData")]
