@@ -5,16 +5,18 @@ using UnityEngine;
 public class MoveMonster : MonoBehaviour
 {
     private Animator animator;
+    public float speed;
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        speed = speed / 10000f;
     }
 
     void Update()
     {
         Vector3 pos = transform.position;
-        pos.z -= 0.0001f;
+        pos.z -= speed;
         transform.position = pos;
     }
 

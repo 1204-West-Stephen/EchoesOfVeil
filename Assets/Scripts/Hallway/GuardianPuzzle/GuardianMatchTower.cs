@@ -26,7 +26,7 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
     }
     private void Update()
     {
-        if (placedObject = null)
+        if (placedObject == null)
         {
             canPlace = true;
         }
