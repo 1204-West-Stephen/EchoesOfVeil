@@ -8,6 +8,8 @@ public class BalancePuzzle : MonoBehaviour
     public List<NumberStone> numberStones;
     public List<Transform> gemLocations;
 
+    public bool puzzleSolved = false;
+
     private void Start()
     {
         weightBalance = 5;
@@ -85,9 +87,8 @@ public class BalancePuzzle : MonoBehaviour
 
     private void OnPuzzleSolved()
     {
-        // TODO: Put whatever should happen here
-        // e.g. open a door, spawn reward, disable puzzle interaction
-        Debug.Log("Performing puzzle solved actions!");
+        puzzleSolved = true;
+        FindObjectOfType<HallwayGameManager>()?.CheckHallwayPuzzles();
     }
 
 

@@ -19,6 +19,8 @@ public class GuardianPuzzleManager : MonoBehaviour
         }
 
         puzzleSolved = true;
+
+        FindObjectOfType<HallwayGameManager>()?.CheckHallwayPuzzles();
         Debug.Log("All towers are correct! Puzzle solved!");
     }
 }

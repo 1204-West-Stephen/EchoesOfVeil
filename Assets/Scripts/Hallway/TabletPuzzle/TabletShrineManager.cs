@@ -19,6 +19,7 @@ public class TabletShrineManager : MonoBehaviour
         }
 
         puzzleSolved = true;
+        FindObjectOfType<HallwayGameManager>()?.CheckHallwayPuzzles();
         Debug.Log("All shrines matched! Puzzle solved!");
     }
 }
