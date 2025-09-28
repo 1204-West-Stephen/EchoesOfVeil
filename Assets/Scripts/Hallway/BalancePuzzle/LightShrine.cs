@@ -5,6 +5,7 @@ public class LightShrine : MonoBehaviour, i_Interactable
 {
     public BalancePuzzle puzzle;
     public GameObject lightBeam;
+    public Light beam;
 
     private GameObject player;
     private Inventory inventory;
@@ -13,6 +14,7 @@ public class LightShrine : MonoBehaviour, i_Interactable
     public float growAmount = 0.37f;
     public float growDuration = 1f;
     public float fadeDuration = 5f;
+    public float beamIntensity = 2.5f;
 
     private Coroutine beamCoroutine;
 
@@ -30,6 +32,8 @@ public class LightShrine : MonoBehaviour, i_Interactable
             lightBeam.transform.localScale = baseScale;
             lightBeam.SetActive(false);
         }
+
+        beam.intensity = 0;
     }
 
     public void Interact()
@@ -83,26 +87,29 @@ public class LightShrine : MonoBehaviour, i_Interactable
     private IEnumerator ShineThenFade()
     {
         Renderer r = lightBeam.GetComponent<Renderer>();
-        if (r == null || !r.material.HasProperty("_TintColor"))
-        {
-            yield break;
-        }
+        string colorProperty = r != null && r.material.HasProperty("_Color") ? "_Color" : "_TintColor";
 
         // --- Scale Up ---
-        Vector3 initialScale = lightBeam.transform.localScale;
-        Vector3 targetScale = initialScale + new Vector3(0, growAmount, 0);
+        Vector3 startScale = lightBeam.transform.localScale; // should be (baseScale.x, 0, baseScale.z)
+        Vector3 targetScale = new Vector3(baseScale.x, baseScale.y + growAmount, baseScale.z);
 
         float t = 0f;
         while (t < growDuration)
         {
             t += Time.deltaTime;
             float lerp = Mathf.Clamp01(t / growDuration);
-            lightBeam.transform.localScale = Vector3.Lerp(initialScale, targetScale, lerp);
+
+            // Scale
+            lightBeam.transform.localScale = Vector3.Lerp(startScale, targetScale, lerp);
+
+            // Light intensity
+            beam.intensity = Mathf.Lerp(0f, beamIntensity, lerp);
+
             yield return null;
         }
 
         // --- Fade Out ---
-        Color startColor = r.material.GetColor("_TintColor");
+        Color startColor = r.material.GetColor(colorProperty);
         Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
 
         t = 0f;
@@ -110,10 +117,18 @@ public class LightShrine : MonoBehaviour, i_Interactable
         {
             t += Time.deltaTime;
             float lerp = Mathf.Clamp01(t / fadeDuration);
-            r.material.SetColor("_TintColor", Color.Lerp(startColor, endColor, lerp));
+
+            // Fade color
+            r.material.SetColor(colorProperty, Color.Lerp(startColor, endColor, lerp));
+
+            // Light intensity fade
+            beam.intensity = Mathf.Lerp(beamIntensity, 0f, lerp);
+
             yield return null;
         }
 
-        lightBeam.SetActive(false);
+        // Optionally disable at end
+        // lightBeam.SetActive(false);
     }
+
 }

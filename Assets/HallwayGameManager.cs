@@ -13,6 +13,7 @@ public class HallwayGameManager : MonoBehaviour
     public List<Light> lights;
     public float fadeDuration = 5f;
     private bool[] puzzleCompleted;
+    public float lightIntensity = 6f;
 
     private Animator animator;
 
@@ -70,7 +71,7 @@ public class HallwayGameManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         float t = 0f;
-        while (t < fadeDuration && light.intensity <= 6f)
+        while (t < fadeDuration && light.intensity <= lightIntensity)
         {
             t += Time.deltaTime;
             float lerp = Mathf.Clamp01(t / fadeDuration);
