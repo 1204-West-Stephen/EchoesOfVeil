@@ -236,11 +236,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6069302028000675985, guid: 505f7b43c20d3604ea88e052b5bf1084, type: 3}
   m_PrefabInstance: {fileID: 1597947558304624631}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &37880792 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6069302028000974001, guid: 505f7b43c20d3604ea88e052b5bf1084, type: 3}
-  m_PrefabInstance: {fileID: 1597947558304624631}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &41052515 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 972047495986914007, guid: b9755032f59afbd4f9a1a39a0f1945e5, type: 3}
@@ -763,11 +758,6 @@ Transform:
 --- !u!4 &122877098 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5695676375191085596, guid: 687b5e8d119f0ce428c6a6d5f67cb117, type: 3}
-  m_PrefabInstance: {fileID: 731255833567421880}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &122877099 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5695676375191453244, guid: 687b5e8d119f0ce428c6a6d5f67cb117, type: 3}
   m_PrefabInstance: {fileID: 731255833567421880}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &136126252
@@ -1652,8 +1642,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerName: Skeleton Tower
   placedObject: {fileID: 0}
-  answerObject: {fileID: 37880792}
   floatPos: {fileID: 450373883}
+  correctAnswerData: {fileID: 11400000, guid: cda7b4e5f74cf2d4b9a11fdc490a6e04, type: 2}
+  placedObjectData: {fileID: 0}
   canPlace: 0
   itemPickedUp: 0
 --- !u!1001 &247862024
@@ -3573,8 +3564,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerName: Light Tower
   placedObject: {fileID: 0}
-  answerObject: {fileID: 1526692455}
   floatPos: {fileID: 33209758}
+  correctAnswerData: {fileID: 11400000, guid: 78a0d58ab7b6e384f96ede95d92e7fd6, type: 2}
+  placedObjectData: {fileID: 0}
   canPlace: 0
   itemPickedUp: 0
 --- !u!1001 &445675164
@@ -4656,11 +4648,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4963482747227741275, guid: 30ea27f3268ef4c46be6ae9df5e653a5, type: 3}
   m_PrefabInstance: {fileID: 279508635124760791}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &556456648 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4963482747227963515, guid: 30ea27f3268ef4c46be6ae9df5e653a5, type: 3}
-  m_PrefabInstance: {fileID: 279508635124760791}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &561308363
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4793,8 +4780,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerName: Book Tower
   placedObject: {fileID: 0}
-  answerObject: {fileID: 1413775358}
   floatPos: {fileID: 2030374647}
+  correctAnswerData: {fileID: 11400000, guid: 54e1cf701d724c74689dd1c02ad91780, type: 2}
+  placedObjectData: {fileID: 0}
   canPlace: 0
   itemPickedUp: 0
 --- !u!1001 &563433962
@@ -5069,11 +5057,6 @@ Transform:
 --- !u!4 &600800682 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6122134602950044817, guid: 41313be695508174fa0d50affb9416f1, type: 3}
-  m_PrefabInstance: {fileID: 6466855498752303850}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &600800683 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6122134602949685425, guid: 41313be695508174fa0d50affb9416f1, type: 3}
   m_PrefabInstance: {fileID: 6466855498752303850}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &612266464
@@ -5364,8 +5347,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerName: Crystal Tower
   placedObject: {fileID: 0}
-  answerObject: {fileID: 600800683}
   floatPos: {fileID: 1586405071}
+  correctAnswerData: {fileID: 11400000, guid: c0ad4b9327fbd944f8635d6f48e84fc0, type: 2}
+  placedObjectData: {fileID: 0}
   canPlace: 0
   itemPickedUp: 0
 --- !u!1 &631201726
@@ -6193,8 +6177,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerName: Serpent Tower
   placedObject: {fileID: 0}
-  answerObject: {fileID: 122877099}
   floatPos: {fileID: 546813221}
+  correctAnswerData: {fileID: 11400000, guid: 88a9166dbb3c78540b8cf4a355b663bd, type: 2}
+  placedObjectData: {fileID: 0}
   canPlace: 0
   itemPickedUp: 0
 --- !u!1001 &760575592
@@ -10047,8 +10032,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerName: Statue Tower
   placedObject: {fileID: 0}
-  answerObject: {fileID: 556456648}
   floatPos: {fileID: 2128576474}
+  correctAnswerData: {fileID: 11400000, guid: bbb7c3ce2117feb4b80fefb0c102d6ea, type: 2}
+  placedObjectData: {fileID: 0}
   canPlace: 0
   itemPickedUp: 0
 --- !u!1001 &1169700306
@@ -11595,6 +11581,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1382363741}
   - component: {fileID: 1382363742}
+  - component: {fileID: 1382363743}
   m_Layer: 7
   m_Name: DoorToLibrary
   m_TagString: Untagged
@@ -11643,6 +11630,27 @@ MonoBehaviour:
   - {fileID: 138692597}
   fadeDuration: 3
   lightIntensity: 6
+--- !u!95 &1382363743
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382363740}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9ba2c6b6c7df42e45a5c97ac7177b4fc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1386288088
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11945,11 +11953,6 @@ Transform:
 --- !u!4 &1413775357 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6968415000501250672, guid: e296955a908f7da45b9dee12e17ea7bc, type: 3}
-  m_PrefabInstance: {fileID: 4354905581280903042}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1413775358 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6968415000501614160, guid: e296955a908f7da45b9dee12e17ea7bc, type: 3}
   m_PrefabInstance: {fileID: 4354905581280903042}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1420209226
@@ -13017,11 +13020,6 @@ Transform:
 --- !u!4 &1526692454 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8489646253590485089, guid: c53651555eec7d246b772e3506306ade, type: 3}
-  m_PrefabInstance: {fileID: 666574366598966279}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1526692455 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8489646253590381633, guid: c53651555eec7d246b772e3506306ade, type: 3}
   m_PrefabInstance: {fileID: 666574366598966279}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1528210282

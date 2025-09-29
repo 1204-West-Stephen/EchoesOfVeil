@@ -7,14 +7,14 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
     public string towerName;
 
     public GameObject placedObject;
-    public GameObject answerObject;
-
     public Transform floatPos;
 
     private GameObject player;
     private Inventory inventory;
 
-    private ItemData placedObjectData;
+    [Header("Answer Setup")]
+    public ItemData correctAnswerData;   // Assign the correct item in inspector
+    [HideInInspector] public ItemData placedObjectData; // What the player placed
 
     public bool canPlace;
     public bool itemPickedUp;
@@ -24,16 +24,10 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
         player = GameObject.FindWithTag("Player");
         inventory = player.GetComponent<Inventory>();
     }
+
     private void Update()
     {
-        if (placedObject == null)
-        {
-            canPlace = true;
-        }
-        else
-        {
-            canPlace = false;
-        }
+        canPlace = placedObject == null;
     }
 
     public void Interact()
@@ -93,13 +87,10 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
         {
             inventory.AddItem(placedObjectData);
 
-            if (placedObject != null)
-            {
-                Destroy(placedObject);
-                placedObject = null;
-            }
-
+            Destroy(placedObject);
             placedObject = null;
+
+            placedObjectData = null; // reset when picked back up
             itemPickedUp = true;
             canPlace = true;
 

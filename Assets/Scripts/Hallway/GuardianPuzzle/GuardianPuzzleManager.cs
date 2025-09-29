@@ -11,7 +11,8 @@ public class GuardianPuzzleManager : MonoBehaviour
     {
         foreach (GuardianMatchTower tower in towers)
         {
-            if (tower.placedObject != tower.answerObject)
+            // Fail if nothing is placed OR the wrong item is placed
+            if (tower.placedObjectData == null || tower.placedObjectData != tower.correctAnswerData)
             {
                 puzzleSolved = false;
                 return;
