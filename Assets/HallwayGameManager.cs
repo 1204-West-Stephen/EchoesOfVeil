@@ -11,16 +11,19 @@ public class HallwayGameManager : MonoBehaviour
     public TotemManager tm;
     public TabletShrineManager tbm;
 
+    private bool isLoaded = false;
+    public string LibrarySceneName = "Library";
+
     public List<Light> lights;
     public float fadeDuration = 5f;
-    private bool[] puzzleCompleted;
+    public bool[] puzzleCompleted;
     public float lightIntensity = 6f;
 
     private Animator animator;
 
     private void Start()
     {
-        puzzleCompleted = new bool[3];
+        puzzleCompleted = new bool[4];
 
         for (int i = 0; i < puzzleCompleted.Length; i++)
         {
@@ -63,7 +66,7 @@ public class HallwayGameManager : MonoBehaviour
 
         if (puzzleCompleted.All(p => p))
         {
-            SceneManager.LoadSceneAsync("Library");
+            StartCoroutine(LoadLibrary());
             OpenDoors();
         }
     }
@@ -85,5 +88,25 @@ public class HallwayGameManager : MonoBehaviour
     private void OpenDoors()
     {
         animator.SetTrigger("Open");
+    }
+
+    private IEnumerator  LoadLibrary()
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(LibrarySceneName, LoadSceneMode.Additive);
+        asyncLoad.allowSceneActivation = false;
+
+        // Wait until loading is complete
+        while (!asyncLoad.isDone)
+        {
+            // Unity considers scene ready when progress hits 0.9
+            if (asyncLoad.progress >= 0.9f)
+            {
+                asyncLoad.allowSceneActivation = true;
+            }
+
+            yield return null;
+        }
+
+        isLoaded = true;
     }
 }

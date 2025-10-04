@@ -9,6 +9,7 @@ public class BalancePuzzle : MonoBehaviour
     public List<Transform> gemLocations;
 
     public bool puzzleSolved = false;
+    private bool isResetting = false;
 
     private void Start()
     {
@@ -61,14 +62,20 @@ public class BalancePuzzle : MonoBehaviour
             {
                 weightGem.transform.position = location.position;
 
-                // Check puzzle solved condition
-                if (weightBalance == 0 && AllStonesUsed())
+                if (!isResetting) // only check puzzle state if not resetting
                 {
-                    Debug.Log("Puzzle is solved!");
-                    OnPuzzleSolved();
+                    if (weightBalance == 0 && AllStonesUsed())
+                    {
+                        Debug.Log("Puzzle is solved!");
+                        OnPuzzleSolved();
+                    }
+                    else if (weightBalance != 0 && AllStonesUsed())
+                    {
+                        ResetPuzzle();
+                    }
                 }
 
-                return; // stop once we matched
+                return;
             }
         }
 
@@ -96,6 +103,8 @@ public class BalancePuzzle : MonoBehaviour
     {
         Debug.Log("Puzzle failed - resetting!");
 
+        isResetting = true;
+
         weightBalance = 5;
         UpdateGemPosition();
 
@@ -103,5 +112,7 @@ public class BalancePuzzle : MonoBehaviour
         {
             numberStones[i].Respawn(numberStones[i].transform.position);
         }
+
+        isResetting = false;
     }
 }
