@@ -14,7 +14,8 @@ public enum InputType
     MetalPiece,
     TorchHilt,
     NumberStone,
-    GuardianItem
+    GuardianItem,
+    SeasonItem
 }
 
 [CreateAssetMenu(fileName = "NewItemData", menuName = "Inventory/ItemData")]

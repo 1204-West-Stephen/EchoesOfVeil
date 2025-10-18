@@ -36,7 +36,7 @@ public class ItemDataEditor : Editor
             EditorGUILayout.PropertyField(tabletNumber);
         }
 
-        if ((InputType)typeInput.enumValueIndex == InputType.Tablet || (InputType)typeInput.enumValueIndex == InputType.GuardianItem)
+        if ((InputType)typeInput.enumValueIndex == InputType.Tablet || (InputType)typeInput.enumValueIndex == InputType.GuardianItem || (InputType)typeInput.enumValueIndex == InputType.SeasonItem)
         {
             EditorGUILayout.PropertyField(prefab);
         }
