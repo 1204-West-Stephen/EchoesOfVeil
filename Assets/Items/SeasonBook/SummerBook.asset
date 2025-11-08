@@ -10,9 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7dc513b4af99458438e47bdd56d9648e, type: 3}
-  m_Name: Coin
+  m_Name: SummerBook
   m_EditorClassIdentifier: 
-  itemName: Coins
+  itemName: Book of Summer
   puzzleNumber: 0
-  typeInput: 0
-  sprite: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  typeInput: 10
+  sprite: {fileID: 0}
+  canBeInspected: 0
+  itemInspectUI: {fileID: 0}
+  keyID: 0
+  tabletNumber: 0
+  prefab: {fileID: 0}
+  stoneValue: 0
