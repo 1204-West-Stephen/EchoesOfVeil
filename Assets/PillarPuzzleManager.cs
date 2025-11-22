@@ -20,5 +20,8 @@ public class PillarPuzzleManager : MonoBehaviour
         }
 
         puzzleSolved = true;
+
+        FindObjectOfType<ShrineWall>()?.CheckPuzzle();
+        Debug.Log("All towers are correct! Puzzle solved!");
     }
 }

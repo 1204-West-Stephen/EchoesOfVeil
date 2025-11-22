@@ -90,11 +90,11 @@ public class ElementalPillar : MonoBehaviour, i_Interactable
             Destroy(placedObject);
             placedObject = null;
 
-            placedObjectData = null; // reset when picked back up
+            placedObjectData = null;
             itemPickedUp = true;
             canPlace = true;
 
-            Debug.Log("Tablet picked up from tower " + towerName);
+            Debug.Log("Book picked up from tower " + towerName);
         }
         else
         {
@@ -121,7 +121,7 @@ public class ElementalPillar : MonoBehaviour, i_Interactable
         }
         else
         {
-            Debug.LogWarning("Tablet prefab is null, cannot move to shrine!");
+            Debug.LogWarning("Book prefab is null, cannot move to shrine!");
         }
     }
 }

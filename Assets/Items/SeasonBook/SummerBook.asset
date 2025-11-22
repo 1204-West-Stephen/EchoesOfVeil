@@ -20,5 +20,5 @@ MonoBehaviour:
   itemInspectUI: {fileID: 0}
   keyID: 0
   tabletNumber: 0
-  prefab: {fileID: 0}
+  prefab: {fileID: 100000, guid: f9ec2f5b43ac0204199acdb66395048b, type: 3}
   stoneValue: 0

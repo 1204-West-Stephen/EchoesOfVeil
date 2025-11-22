@@ -10,7 +10,8 @@ public class HallwayGameManager : MonoBehaviour
     public GuardianPuzzleManager gpm;
     public TotemManager tm;
     public TabletShrineManager tbm;
-
+    
+    public bool gameMaster = false;
     private bool isLoaded = false;
     public string LibrarySceneName = "Library";
 
@@ -36,6 +37,11 @@ public class HallwayGameManager : MonoBehaviour
         }
 
         animator = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        CheckHallwayPuzzles();
     }
 
     public void CheckHallwayPuzzles()
@@ -64,10 +70,11 @@ public class HallwayGameManager : MonoBehaviour
             puzzleCompleted[3] = true;
         }
 
-        if (puzzleCompleted.All(p => p))
+        if (puzzleCompleted.All(p => p) || gameMaster)
         {
             StartCoroutine(LoadLibrary());
             OpenDoors();
+            gameMaster = false;
         }
     }
 
@@ -90,7 +97,7 @@ public class HallwayGameManager : MonoBehaviour
         animator.SetTrigger("Open");
     }
 
-    private IEnumerator  LoadLibrary()
+    private IEnumerator LoadLibrary()
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(LibrarySceneName, LoadSceneMode.Additive);
         asyncLoad.allowSceneActivation = false;
