@@ -3,8 +3,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public float xSensitivity = 10f;
-    public float ySensitivity = 10f;
+    public float xSensitivity = 100f;
+    public float ySensitivity = 100f;
 
     public Transform orientation;
 
@@ -12,24 +12,19 @@ public class PlayerCamera : MonoBehaviour
     float rotateY;
 
     PlayerInput controls;
-    Vector2 mouseDelta;
 
     private void Awake()
     {
         controls = new PlayerInput();
-
-        controls.Movement.Look.performed += ctx => mouseDelta = ctx.ReadValue<Vector2>();
-        controls.Movement.Look.canceled += ctx => mouseDelta = Vector2.zero;
     }
+
     private void OnEnable() => controls.Enable();
     private void OnDisable() => controls.Disable();
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false; 
-        
-        Camera.main.nearClipPlane = 0.01f; // default is often 0.3
+        Cursor.visible = false;
 
         Vector3 startRotation = transform.rotation.eulerAngles;
         rotateX = startRotation.x;
@@ -38,9 +33,10 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
-        // Existing camera control logic
-        float mouseX = mouseDelta.x * Time.deltaTime * xSensitivity;
-        float mouseY = mouseDelta.y * Time.deltaTime * ySensitivity;
+        Vector2 mouseDelta = controls.Movement.Look.ReadValue<Vector2>();
+
+        float mouseX = mouseDelta.x * xSensitivity * 0.01f;
+        float mouseY = mouseDelta.y * ySensitivity * 0.01f;
 
         rotateX -= mouseY;
         rotateY += mouseX;
@@ -49,18 +45,7 @@ public class PlayerCamera : MonoBehaviour
         transform.rotation = Quaternion.Euler(rotateX, rotateY, 0);
         orientation.rotation = Quaternion.Euler(0, rotateY, 0);
 
-        // Call raycast here
         RaycastFromCamera();
-    }
-
-    public void controlLock()
-    {
-        controls.Disable();
-    }
-
-    public void controlUnlock()
-    {
-        controls.Enable();
     }
 
     public void RaycastFromCamera()
@@ -69,4 +54,7 @@ public class PlayerCamera : MonoBehaviour
         Vector3 origin = cam.transform.position;
         Vector3 direction = cam.transform.forward;
     }
+
+    public void controlLock() { controls.Disable(); }
+    public void controlUnlock() { controls.Enable(); }
 }

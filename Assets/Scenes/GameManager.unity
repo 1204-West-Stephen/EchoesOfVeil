@@ -188,11 +188,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2078542722826478393, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: xSensitivity
-      value: 10
+      value: 7.5
       objectReference: {fileID: 0}
     - target: {fileID: 2078542722826478393, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: ySensitivity
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3113305152562575663, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: m_AnchorMax.y
