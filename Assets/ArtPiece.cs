@@ -6,58 +6,48 @@ public class ArtPiece : MonoBehaviour, i_Interactable
 {
     public GameObject parent;
     public GameObject piece;
-    private GameObject tempPiece;
-    private GameObject tempParent;
+    public bool isMovable = true; // false for anchor pieces
 
     public ArtPuzzleManager puzzleManager;
 
-    public bool interacted = false;
-    public Image sprite1; //first selected sprite
-    public Image correctImage;
-    private Image sprite2; //second selected sprite 
-    private Image tempSprite; //temporarily save a sprite so that sprites can be swapped
+    public float moveDistance = 0.1f;
+    public float moveDuration = 0.1f;
 
-    public float moveDistance = 0.1f; // how far the piece moves when selected
-    public float moveDuration = 0.1f; // time in seconds for smooth move
+    private bool interacted = false;
+
+    public Image pieceImage; // the UI sprite reference (optional)
 
     public void Interact()
     {
-        if (!interacted)
-        {
-            // Smoothly move piece forward
-            StartCoroutine(MovePiece(transform, moveDistance, moveDuration));
+        if (!isMovable)
+            return; // ignore clicks on anchors
 
-            tempPiece = piece;
-            tempParent = parent;
-            puzzleManager.activeSprite = sprite1;
+        if (puzzleManager.activePiece == null)
+        {
+            // Select this piece
+            puzzleManager.activePiece = this;
+            StartCoroutine(MovePiece(transform, moveDistance, moveDuration));
             interacted = true;
+        }
+        else if (puzzleManager.activePiece == this)
+        {
+            // Deselect
+            StartCoroutine(MovePiece(transform, -moveDistance, moveDuration));
+            puzzleManager.activePiece = null;
+            interacted = false;
         }
         else
         {
-            if (tempPiece == piece && tempParent == parent)
-            {
-                // Smoothly move piece back
-                StartCoroutine(MovePiece(transform, -moveDistance, moveDuration));
-
-                tempPiece = null;
-                tempParent = null;
-                interacted = false;
-            }
-            else
-            {
-                // Swap sprites
-                tempSprite = puzzleManager.activeSprite;
-                sprite2 = sprite1;
-                sprite1 = tempSprite;
-                tempSprite = null;
-            }
+            // Swap with active piece
+            StartCoroutine(puzzleManager.SwapPiecesCoroutine(puzzleManager.activePiece, this));
+            puzzleManager.activePiece = null;
         }
     }
 
-    private IEnumerator MovePiece(Transform target, float distance, float duration)
+    public IEnumerator MovePiece(Transform target, float distance, float duration)
     {
         Vector3 start = target.position;
-        Vector3 end = start + new Vector3(distance, 0, 0); // move along x-axis
+        Vector3 end = start + new Vector3(distance, 0, 0);
         float elapsed = 0f;
 
         while (elapsed < duration)
