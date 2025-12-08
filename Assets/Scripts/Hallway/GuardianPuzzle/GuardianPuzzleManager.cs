@@ -5,6 +5,7 @@ using UnityEngine;
 public class GuardianPuzzleManager : MonoBehaviour
 {
     public GuardianMatchTower[] towers;
+    public GuardianRiddleStone[] stones;
     public bool puzzleSolved;
 
     public void CheckIfSolved()
@@ -23,5 +24,19 @@ public class GuardianPuzzleManager : MonoBehaviour
 
         FindObjectOfType<HallwayGameManager>()?.CheckHallwayPuzzles();
         Debug.Log("All towers are correct! Puzzle solved!");
+    }
+
+    public bool CheckInteractions()
+    {
+        foreach (GuardianRiddleStone stone in stones)
+        {
+            if (stone.interacting)
+            {
+                return false;
+            }
+        }
+
+        return true;
+
     }
 }
