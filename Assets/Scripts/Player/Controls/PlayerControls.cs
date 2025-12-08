@@ -41,6 +41,8 @@ public class PlayerControls : MonoBehaviour
     public Journal journal;
 
     [Header("Interaction UI")]
+    private Queue<string> dialogueQueue = new Queue<string>();
+    private bool dialogueRunning = false;
     public Canvas interactionCanvas;
     public Canvas internalDialogueCanvas;
     public TextMeshProUGUI internalDialogue;
@@ -271,13 +273,29 @@ public class PlayerControls : MonoBehaviour
 
     public void StartDialogue(string message)
     {
-        StartCoroutine(ShowDialogue(message));
+        dialogueQueue.Enqueue(message);
+
+        if (!dialogueRunning)
+            StartCoroutine(ProcessDialogueQueue());
+    }
+
+    private IEnumerator ProcessDialogueQueue()
+    {
+        dialogueRunning = true;
+
+        while (dialogueQueue.Count > 0)
+        {
+            string nextMessage = dialogueQueue.Dequeue();
+            yield return StartCoroutine(ShowDialogue(nextMessage));
+        }
+
+        internalDialogueCanvas.gameObject.SetActive(false);
+        dialogueRunning = false;
     }
 
     private IEnumerator ShowDialogue(string message)
     {
         internalDialogue.text = message;
-
         internalDialogueCanvas.gameObject.SetActive(true);
 
         CanvasGroup canvasGroup = internalDialogueCanvas.GetComponent<CanvasGroup>();
@@ -285,20 +303,22 @@ public class PlayerControls : MonoBehaviour
             canvasGroup = internalDialogueCanvas.gameObject.AddComponent<CanvasGroup>();
 
         canvasGroup.alpha = 1f;
+
+        // Stay on screen
         yield return new WaitForSeconds(3f);
 
+        // Fade Out
         float fadeDuration = 1f;
-        float elapsedTime = 0f;
+        float elapsed = 0f;
 
-        while (elapsedTime < fadeDuration)
+        while (elapsed < fadeDuration)
         {
-            elapsedTime += Time.deltaTime;
-            canvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
+            elapsed += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
             yield return null;
         }
 
         canvasGroup.alpha = 0f;
-        internalDialogueCanvas.gameObject.SetActive(false);
     }
 
     public void OnJournalAcquired(Journal newJournal)
