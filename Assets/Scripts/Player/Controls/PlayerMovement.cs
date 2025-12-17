@@ -105,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         grounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, Ground);
-        rb.drag = grounded ? (isCrouching ? 1.0f : groundDrag) : 0f;
+        rb.linearDamping = grounded ? (isCrouching ? 1.0f : groundDrag) : 0f;
 
         HandleStamina();
 
@@ -139,7 +139,7 @@ public class PlayerMovement : MonoBehaviour
         if (transform.position.y < -20f)
         {
             transform.position = new Vector3(0, 5, 0);
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
         }
     }
 
@@ -213,13 +213,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void SpeedControl()
     {
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         float maxSpeed = currentMoveSpeed;
 
         if (flatVel.magnitude > maxSpeed)
         {
             Vector3 limitedVel = flatVel.normalized * maxSpeed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
         }
     }
 

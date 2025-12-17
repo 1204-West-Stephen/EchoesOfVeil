@@ -29,7 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5695676375191085596}
+  m_Father: {fileID: 5224635167978692471}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5695676375191484572
 PrefabInstance:
@@ -103,37 +103,40 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
+      propertyPath: m_Name
+      value: Dragon
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 400000, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6545882961206943527}
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 100000, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3674108042222302883}
-    - targetCorrespondingSourceObject: {fileID: 100000, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
+      addedObject: {fileID: 2076667173762058118}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8879777457612354991}
+      addedObject: {fileID: 6160774949029428736}
   m_SourcePrefab: {fileID: 100100000, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
---- !u!4 &5695676375191085596 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400000, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
-  m_PrefabInstance: {fileID: 5695676375191484572}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5695676375191453244 stripped
+--- !u!1 &4884842835856213453 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
   m_PrefabInstance: {fileID: 5695676375191484572}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &3674108042222302883
+--- !u!64 &2076667173762058118
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5695676375191453244}
+  m_GameObject: {fileID: 4884842835856213453}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -148,18 +151,23 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
---- !u!114 &8879777457612354991
+  m_Mesh: {fileID: -1835232020293262703, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
+--- !u!114 &6160774949029428736
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5695676375191453244}
+  m_GameObject: {fileID: 4884842835856213453}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf342d851912f36499fbbe2c9b3fb015, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuardianItem
   item: {fileID: 11400000, guid: 88a9166dbb3c78540b8cf4a355b663bd, type: 2}
   itemPickedUp: 0
+--- !u!4 &5224635167978692471 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4fad621d829d361418d3f7c38df4c753, type: 3}
+  m_PrefabInstance: {fileID: 5695676375191484572}
+  m_PrefabAsset: {fileID: 0}

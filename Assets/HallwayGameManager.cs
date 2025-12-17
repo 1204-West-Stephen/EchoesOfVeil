@@ -72,9 +72,11 @@ public class HallwayGameManager : MonoBehaviour
 
         if (puzzleCompleted.All(p => p) || gameMaster)
         {
-            StartCoroutine(LoadLibrary());
-            OpenDoors();
-            gameMaster = false;
+            if (!isLoaded) { 
+                StartCoroutine(LoadLibrary());
+                OpenDoors();
+                gameMaster = false;
+            }
         }
     }
 
