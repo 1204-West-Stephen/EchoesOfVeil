@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Helmet
   puzzleNumber: 0
   typeInput: 9
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 4bcfbdf7369c5504f8a03fda38c1af62, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Stone 6
   puzzleNumber: 0
   typeInput: 8
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: f07fe05bcce8a1f49b735d499f3c0dae, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0

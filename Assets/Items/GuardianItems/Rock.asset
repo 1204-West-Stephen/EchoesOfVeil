@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Rock
   puzzleNumber: 0
   typeInput: 9
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 7e5eac28eb5d419448461853cdf04934, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0

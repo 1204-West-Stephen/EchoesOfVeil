@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Bread
   puzzleNumber: 0
   typeInput: 9
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: b9e7f1b248258ad40bc852ed8c194a93, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0

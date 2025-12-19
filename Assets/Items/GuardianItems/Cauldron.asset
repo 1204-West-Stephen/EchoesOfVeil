@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Cauldron
   puzzleNumber: 0
   typeInput: 9
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: d7bebf41f8916cf4383a9010dea927bf, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0

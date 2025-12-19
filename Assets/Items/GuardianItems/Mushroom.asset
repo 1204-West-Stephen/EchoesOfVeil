@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Mushroom
   puzzleNumber: 0
   typeInput: 9
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: a29bd3cfc250c144ca9a522700836c62, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0

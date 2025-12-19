@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Potion
   puzzleNumber: 0
   typeInput: 9
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 00372b4aedc66c048bbaf1bbd50b53c2, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Hammer
   puzzleNumber: 0
   typeInput: 9
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 739578c153679fa439f76274d2bdd764, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0

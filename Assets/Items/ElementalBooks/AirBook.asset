@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: The Book of Air
   puzzleNumber: 0
   typeInput: 12
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: c47f084c1cfaf1a469bf7d6df57af1b0, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0

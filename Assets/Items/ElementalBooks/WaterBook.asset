@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: The Book of Water
   puzzleNumber: 0
   typeInput: 12
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 40d5af09076b7194f94351b2baec64bd, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
   keyID: 0
