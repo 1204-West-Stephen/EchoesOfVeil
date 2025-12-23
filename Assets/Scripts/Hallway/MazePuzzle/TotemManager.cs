@@ -19,7 +19,7 @@ public class TotemManager : MonoBehaviour
         }
 
         puzzleSolved = true;
-        FindObjectOfType<HallwayGameManager>()?.CheckHallwayPuzzles();
+        FindFirstObjectByType<HallwayGameManager>()?.CheckHallwayPuzzles();
         Debug.Log("All totems are correct! Puzzle solved!");
     }
 }

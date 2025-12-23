@@ -9,7 +9,7 @@ public class MetalPiece : MonoBehaviour, i_Interactable
 
     private void Awake()
     {
-        playerManager = FindObjectOfType<PlayerControls>();
+        playerManager = FindFirstObjectByType<PlayerControls>();
     }
 
     public void Interact()

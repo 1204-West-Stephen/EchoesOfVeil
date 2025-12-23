@@ -48,7 +48,7 @@ public class ElementalPillar : MonoBehaviour, i_Interactable
             PickUpObject();
         }
 
-        FindObjectOfType<PillarPuzzleManager>()?.CheckIfSolved();
+        FindFirstObjectByType<PillarPuzzleManager>()?.CheckIfSolved();
     }
 
     private bool PlaceObject()

@@ -48,7 +48,7 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
             PickUpObject();
         }
 
-        FindObjectOfType<GuardianPuzzleManager>()?.CheckIfSolved();
+        FindFirstObjectByType<GuardianPuzzleManager>()?.CheckIfSolved();
     }
 
     private bool PlaceObject()

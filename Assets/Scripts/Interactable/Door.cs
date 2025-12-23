@@ -10,7 +10,7 @@ public class Door : MonoBehaviour, i_Interactable
 
     private void Awake()
     {
-        playerManager = FindObjectOfType<PlayerControls>();
+        playerManager = FindFirstObjectByType<PlayerControls>();
     }
 
     private void Start()

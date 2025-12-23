@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PillarPuzzleManager : MonoBehaviour
+public class SeasonShrineManager : MonoBehaviour
 {
-    public ElementalPillar[] pillars;
+    public SeasonShrine[] shrines;
     public bool puzzleSolved;
 
     public void CheckIfSolved()
     {
-        foreach (ElementalPillar pillar in pillars)
+        foreach (SeasonShrine shrine in shrines)
         {
             // Fail if nothing is placed OR the wrong item is placed
-            if (pillar.placedObjectData == null || pillar.placedObjectData != pillar.correctAnswerData)
+            if (shrine.placedObjectData == null || shrine.placedObjectData != shrine.correctAnswerData)
             {
                 puzzleSolved = false;
                 return;
@@ -21,7 +21,7 @@ public class PillarPuzzleManager : MonoBehaviour
 
         puzzleSolved = true;
 
-        FindObjectOfType<ShrineWall>()?.CheckPuzzle();
+        FindFirstObjectByType<DragonPartProtector>()?.CheckShrinePuzzle();
         Debug.Log("All towers are correct! Puzzle solved!");
     }
 }

@@ -12,7 +12,7 @@ public class ArtPieceOne : MonoBehaviour, i_Interactable
 
     private void Awake()
     {
-        controls = FindObjectOfType<PlayerControls>();
+        controls = FindFirstObjectByType<PlayerControls>();
     }
 
     public void Interact()

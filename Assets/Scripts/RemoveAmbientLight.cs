@@ -11,7 +11,7 @@ public class RemoveAmbientLight : MonoBehaviour
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
         RenderSettings.ambientLight = Color.black;
         RenderSettings.defaultReflectionMode = UnityEngine.Rendering.DefaultReflectionMode.Custom;
-        RenderSettings.customReflection = null;
+        RenderSettings.customReflectionTexture = null;
         RenderSettings.fog = false;
     }
 

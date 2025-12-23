@@ -54,7 +54,7 @@ public class TabletShrine : MonoBehaviour, i_Interactable
             PickUpTablet();
         }
 
-        FindObjectOfType<TabletShrineManager>()?.CheckIfSolved();
+        FindFirstObjectByType<TabletShrineManager>()?.CheckIfSolved();
     }
 
     private bool PlaceTablet()

@@ -37,8 +37,8 @@ public class MazePuzzle : MonoBehaviour, i_Interactable
     {
         if (player == null)
         {
-            player = FindObjectOfType<PlayerControls>();
-            playerMovement = FindObjectOfType<PlayerMovement>();
+            player = FindFirstObjectByType<PlayerControls>();
+            playerMovement = FindFirstObjectByType<PlayerMovement>();
             mainCamera = Camera.main;
             if (player != null) playerCamController = player.playerCamera; // assumes your PlayerControls has this reference
         }

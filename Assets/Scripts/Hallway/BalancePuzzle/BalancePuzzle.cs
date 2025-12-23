@@ -95,7 +95,7 @@ public class BalancePuzzle : MonoBehaviour
     private void OnPuzzleSolved()
     {
         puzzleSolved = true;
-        FindObjectOfType<HallwayGameManager>()?.CheckHallwayPuzzles();
+        FindFirstObjectByType<HallwayGameManager>()?.CheckHallwayPuzzles();
     }
 
 

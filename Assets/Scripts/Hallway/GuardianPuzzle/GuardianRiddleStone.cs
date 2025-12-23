@@ -16,7 +16,7 @@ public class GuardianRiddleStone : MonoBehaviour, i_Interactable
         if (manager.CheckInteractions()) { 
 
             if (playerControls == null)
-                playerControls = FindObjectOfType<PlayerControls>();
+                playerControls = FindFirstObjectByType<PlayerControls>();
 
             StartCoroutine(Dialogue(TotemInformation));
         }

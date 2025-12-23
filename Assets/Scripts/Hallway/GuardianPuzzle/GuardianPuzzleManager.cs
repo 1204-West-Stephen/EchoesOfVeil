@@ -22,7 +22,7 @@ public class GuardianPuzzleManager : MonoBehaviour
 
         puzzleSolved = true;
 
-        FindObjectOfType<HallwayGameManager>()?.CheckHallwayPuzzles();
+        FindFirstObjectByType<HallwayGameManager>()?.CheckHallwayPuzzles();
         Debug.Log("All towers are correct! Puzzle solved!");
     }
 

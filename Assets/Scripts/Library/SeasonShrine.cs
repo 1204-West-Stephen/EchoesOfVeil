@@ -48,7 +48,7 @@ public class SeasonShrine : MonoBehaviour, i_Interactable
             PickUpObject();
         }
 
-        FindObjectOfType<SeasonShrineManager>()?.CheckIfSolved();
+        FindFirstObjectByType<SeasonShrineManager>()?.CheckIfSolved();
     }
 
     private bool PlaceObject()

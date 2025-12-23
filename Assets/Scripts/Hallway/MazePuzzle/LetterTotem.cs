@@ -31,7 +31,7 @@ public class LetterTotem : MonoBehaviour, i_Interactable
 
         currentSprite.sprite = letterSprites[index];
 
-        FindObjectOfType<TotemManager>()?.CheckIfSolved();
+        FindFirstObjectByType<TotemManager>()?.CheckIfSolved();
     }
 
 }

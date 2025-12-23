@@ -5,7 +5,6 @@ using UnityEngine;
 public class Key : MonoBehaviour, i_Interactable
 {
     public ItemData item;
-    private bool itemPickedUp;
     public int keyID;
 
     private void Start()
@@ -25,7 +24,6 @@ public class Key : MonoBehaviour, i_Interactable
                 {
                     inventory.AddItem(item);
                     Destroy(gameObject);
-                    itemPickedUp = true;
                 }
             }
             else

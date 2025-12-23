@@ -11,7 +11,7 @@ public class Journal : MonoBehaviour, i_Interactable
 
     private void Awake()
     {
-        playerControls = FindObjectOfType<PlayerControls>();
+        playerControls = FindFirstObjectByType<PlayerControls>();
     }
 
     public void Interact()
