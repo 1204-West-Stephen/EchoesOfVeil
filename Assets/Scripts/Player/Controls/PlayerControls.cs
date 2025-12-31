@@ -150,8 +150,10 @@ public class PlayerControls : MonoBehaviour
 
     private void AutoDetectInteractable()
     {
-        LayerMask interactableLayer = LayerMask.GetMask("Interactable");
         Camera cam = Camera.main;
+        if (cam == null) return;
+
+        LayerMask interactableLayer = LayerMask.GetMask("Interactable");
 
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         RaycastHit hit;
@@ -162,19 +164,18 @@ public class PlayerControls : MonoBehaviour
             if (interactable != null)
             {
                 currentInteractable = interactable;
-
-                if (interactionCanvas != null && !interactionCanvas.gameObject.activeSelf)
+                if (interactionCanvas && !interactionCanvas.gameObject.activeSelf)
                     interactionCanvas.gameObject.SetActive(true);
             }
         }
         else
         {
             currentInteractable = null;
-
-            if (interactionCanvas != null && interactionCanvas.gameObject.activeSelf)
+            if (interactionCanvas && interactionCanvas.gameObject.activeSelf)
                 interactionCanvas.gameObject.SetActive(false);
         }
     }
+
 
     private void Interacted()
     {

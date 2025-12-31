@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class EnemyAI : MonoBehaviour
@@ -9,9 +8,13 @@ public class EnemyAI : MonoBehaviour
     public EnemyState currentState;
 
     [Header("References")]
-    public NavMeshAgent agent;
-    public Animator animator;
-    public Transform player;
+    private NavMeshAgent agent;
+    private Animator animator;
+    private Transform player;
+
+    [Header("Cameras")]
+    private Camera mainCamera;
+    public Camera jumpscareCamera;
 
     [Header("Detection")]
     public float hearingRadius = 15f;
@@ -30,8 +33,9 @@ public class EnemyAI : MonoBehaviour
     public float chaseExtension = 2f;
 
     [Header("Jumpscare")]
-    public string jumpscareSceneName = "JumpscareScene";
-    public string currentSceneName = "Library";
+    public float jumpscareDistance = 1.5f;
+    public float jumpscareDuration = 2.3f;
+    public Transform respawnPoint;
 
     float chaseTimer;
     bool screamPlayed;
@@ -41,7 +45,30 @@ public class EnemyAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (!playerObj)
+        {
+            Debug.LogError("Player object not found!");
+            enabled = false;
+            return;
+        }
+
+        player = playerObj.transform;
+
+        // Player IS the camera in your setup
+        mainCamera = playerObj.GetComponent<Camera>();
+        if (!mainCamera)
+        {
+            mainCamera = Camera.main;
+        }
+
+        if (!mainCamera)
+        {
+            Debug.LogError("Main camera not found!");
+        }
+
+        jumpscareCamera.enabled = false;
 
         currentState = EnemyState.Wander;
         StartCoroutine(WanderRoutine());
@@ -59,6 +86,7 @@ public class EnemyAI : MonoBehaviour
 
             case EnemyState.Chase:
                 ChasePlayer();
+                CheckJumpscareDistance();
                 break;
         }
     }
@@ -72,12 +100,10 @@ public class EnemyAI : MonoBehaviour
         Vector3 direction = (player.position - transform.position).normalized;
         float angle = Vector3.Angle(transform.forward, direction);
 
-        if (angle < viewAngle / 2f)
+        if (angle < viewAngle / 2f &&
+            !Physics.Raycast(transform.position + Vector3.up, direction, distance, obstacleMask))
         {
-            if (!Physics.Raycast(transform.position + Vector3.up, direction, distance, obstacleMask))
-            {
-                StartChase();
-            }
+            StartChase();
         }
     }
 
@@ -86,9 +112,7 @@ public class EnemyAI : MonoBehaviour
     {
         while (currentState == EnemyState.Wander)
         {
-            Vector3 randomDir = Random.insideUnitSphere * wanderRadius;
-            randomDir += transform.position;
-
+            Vector3 randomDir = Random.insideUnitSphere * wanderRadius + transform.position;
             Vector3 biasedDir = Vector3.Lerp(randomDir, player.position, playerBias);
 
             if (NavMesh.SamplePosition(biasedDir, out NavMeshHit hit, wanderRadius, NavMesh.AllAreas))
@@ -97,11 +121,6 @@ public class EnemyAI : MonoBehaviour
                 agent.SetDestination(hit.position);
                 animator.SetBool("isWalking", true);
                 animator.SetBool("isRunning", false);
-            }
-
-            if (Random.value < 0.2f)
-            {
-                animator.SetTrigger("Lurk");
             }
 
             yield return new WaitForSeconds(wanderDelay);
@@ -137,13 +156,18 @@ public class EnemyAI : MonoBehaviour
         chaseTimer -= Time.deltaTime;
 
         if (CanSeePlayer() && chaseTimer <= 0f)
-        {
             chaseTimer += chaseExtension;
-        }
 
         if (chaseTimer <= 0f && !CanSeePlayer())
-        {
             ReturnToWander();
+    }
+
+    void CheckJumpscareDistance()
+    {
+        float distance = Vector3.Distance(transform.position, player.position);
+        if (distance <= jumpscareDistance)
+        {
+            StartCoroutine(JumpscareRoutine());
         }
     }
 
@@ -155,14 +179,8 @@ public class EnemyAI : MonoBehaviour
         Vector3 direction = (player.position - transform.position).normalized;
         float angle = Vector3.Angle(transform.forward, direction);
 
-        if (angle < viewAngle / 2f)
-        {
-            if (!Physics.Raycast(transform.position + Vector3.up, direction, distance, obstacleMask))
-            {
-                return true;
-            }
-        }
-        return false;
+        return angle < viewAngle / 2f &&
+               !Physics.Raycast(transform.position + Vector3.up, direction, distance, obstacleMask);
     }
 
     void ReturnToWander()
@@ -174,23 +192,39 @@ public class EnemyAI : MonoBehaviour
     }
 
     // -------------------- JUMPSCARE --------------------
-    void OnCollisionEnter(Collision collision)
+    IEnumerator JumpscareRoutine()
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            TriggerJumpscare();
-        }
-    }
-
-    void TriggerJumpscare()
-    {
-        if (isJumpscareActive) return;
+        if (isJumpscareActive) yield break;
 
         isJumpscareActive = true;
         currentState = EnemyState.Jumpscare;
-        agent.isStopped = true;
 
-        SceneManager.LoadSceneAsync(jumpscareSceneName, LoadSceneMode.Additive);
-        SceneManager.UnloadSceneAsync(currentSceneName, UnloadSceneOptions.None);
+        agent.isStopped = true;
+        animator.SetTrigger("Jumpscare");
+
+        // LOCK PLAYER INPUT, NOT CAMERA
+        PlayerControls pc = player.GetComponent<PlayerControls>();
+        PlayerCamera cam = player.GetComponent<PlayerCamera>();
+
+        if (pc) pc.DisableControls();
+        if (cam) cam.controlLock();
+
+        jumpscareCamera.enabled = true;
+
+        yield return new WaitForSeconds(jumpscareDuration);
+
+        if (respawnPoint)
+            player.position = respawnPoint.position;
+
+        jumpscareCamera.enabled = false;
+
+        if (pc) pc.EnableControls();
+        if (cam) cam.controlUnlock();
+
+        agent.isStopped = false;
+
+        isJumpscareActive = false;
+        ReturnToWander();
     }
+
 }

@@ -51,7 +51,10 @@ public class PlayerCamera : MonoBehaviour
     public void RaycastFromCamera()
     {
         Camera cam = Camera.main;
+        if (cam == null) return;
+
         Vector3 origin = cam.transform.position;
+
         Vector3 direction = cam.transform.forward;
     }
 
