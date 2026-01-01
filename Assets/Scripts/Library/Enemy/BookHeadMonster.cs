@@ -17,18 +17,18 @@ public class EnemyAI : MonoBehaviour
     public Camera jumpscareCamera;
 
     [Header("Detection")]
-    public float hearingRadius = 15f;
-    public float viewAngle = 90f;
+    public float hearingRadius = 8f;
+    public float viewAngle = 50f;
     public LayerMask obstacleMask;
 
     [Header("Wandering")]
-    public float wanderRadius = 20f;
-    public float wanderDelay = 3f;
-    public float playerBias = 0.4f;
+    public float wanderRadius = 40f;
+    public float wanderDelay = 5f;
+    public float playerBias = 0.3f;
 
     [Header("Chase")]
-    public float chaseSpeed = 6f;
-    public float wanderSpeed = 2f;
+    public float chaseSpeed = 2f;
+    public float wanderSpeed = 0.8f;
     public float initialChaseTime = 5f;
     public float chaseExtension = 2f;
 
@@ -37,9 +37,10 @@ public class EnemyAI : MonoBehaviour
     public float jumpscareDuration = 2.3f;
     public Transform respawnPoint;
 
-    float chaseTimer;
-    bool screamPlayed;
-    bool isJumpscareActive;
+    private float chaseTimer;
+    private bool screamPlayed;
+    private bool isJumpscareActive;
+    private Coroutine wanderCoroutine;
 
     void Start()
     {
@@ -56,7 +57,6 @@ public class EnemyAI : MonoBehaviour
 
         player = playerObj.transform;
 
-        // Player IS the camera in your setup
         mainCamera = playerObj.GetComponent<Camera>();
         if (!mainCamera)
         {
@@ -71,7 +71,7 @@ public class EnemyAI : MonoBehaviour
         jumpscareCamera.enabled = false;
 
         currentState = EnemyState.Wander;
-        StartCoroutine(WanderRoutine());
+        wanderCoroutine = StartCoroutine(WanderRoutine());
     }
 
     void Update()
@@ -137,7 +137,9 @@ public class EnemyAI : MonoBehaviour
         screamPlayed = false;
 
         agent.speed = chaseSpeed;
-        StopAllCoroutines();
+
+        if (wanderCoroutine != null)
+            StopCoroutine(wanderCoroutine); // Only stop wander coroutine
     }
 
     void ChasePlayer()
@@ -188,7 +190,7 @@ public class EnemyAI : MonoBehaviour
         currentState = EnemyState.Wander;
         agent.speed = wanderSpeed;
         animator.SetBool("isRunning", false);
-        StartCoroutine(WanderRoutine());
+        wanderCoroutine = StartCoroutine(WanderRoutine());
     }
 
     // -------------------- JUMPSCARE --------------------
@@ -202,7 +204,6 @@ public class EnemyAI : MonoBehaviour
         agent.isStopped = true;
         animator.SetTrigger("Jumpscare");
 
-        // LOCK PLAYER INPUT, NOT CAMERA
         PlayerControls pc = player.GetComponent<PlayerControls>();
         PlayerCamera cam = player.GetComponent<PlayerCamera>();
 
@@ -224,7 +225,14 @@ public class EnemyAI : MonoBehaviour
         agent.isStopped = false;
 
         isJumpscareActive = false;
-        ReturnToWander();
-    }
 
+        // Reset chase variables so enemy can attack again
+        chaseTimer = initialChaseTime;
+        screamPlayed = false;
+
+        ReturnToWander();
+
+        // Optional: force immediate detection after respawn
+        DetectPlayer();
+    }
 }
