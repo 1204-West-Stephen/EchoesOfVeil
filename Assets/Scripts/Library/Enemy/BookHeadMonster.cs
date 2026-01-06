@@ -37,9 +37,14 @@ public class EnemyAI : MonoBehaviour
     public float jumpscareDuration = 2.3f;
     public Transform respawnPoint;
 
+    [Header("Reset & Cooldown")]
+    public Transform enemyResetPoint;
+    public float postRespawnGraceTime = 1.2f;
+
     private float chaseTimer;
     private bool screamPlayed;
     private bool isJumpscareActive;
+    private bool canJumpscare = true;
     private Coroutine wanderCoroutine;
 
     void Start()
@@ -59,14 +64,7 @@ public class EnemyAI : MonoBehaviour
 
         mainCamera = playerObj.GetComponent<Camera>();
         if (!mainCamera)
-        {
             mainCamera = Camera.main;
-        }
-
-        if (!mainCamera)
-        {
-            Debug.LogError("Main camera not found!");
-        }
 
         jumpscareCamera.enabled = false;
 
@@ -139,7 +137,7 @@ public class EnemyAI : MonoBehaviour
         agent.speed = chaseSpeed;
 
         if (wanderCoroutine != null)
-            StopCoroutine(wanderCoroutine); // Only stop wander coroutine
+            StopCoroutine(wanderCoroutine);
     }
 
     void ChasePlayer()
@@ -166,6 +164,8 @@ public class EnemyAI : MonoBehaviour
 
     void CheckJumpscareDistance()
     {
+        if (!canJumpscare) return;
+
         float distance = Vector3.Distance(transform.position, player.position);
         if (distance <= jumpscareDistance)
         {
@@ -190,6 +190,12 @@ public class EnemyAI : MonoBehaviour
         currentState = EnemyState.Wander;
         agent.speed = wanderSpeed;
         animator.SetBool("isRunning", false);
+
+        agent.ResetPath();
+
+        if (wanderCoroutine != null)
+            StopCoroutine(wanderCoroutine);
+
         wanderCoroutine = StartCoroutine(WanderRoutine());
     }
 
@@ -199,9 +205,12 @@ public class EnemyAI : MonoBehaviour
         if (isJumpscareActive) yield break;
 
         isJumpscareActive = true;
+        canJumpscare = false;
         currentState = EnemyState.Jumpscare;
 
         agent.isStopped = true;
+        agent.ResetPath();
+
         animator.SetTrigger("Jumpscare");
 
         PlayerControls pc = player.GetComponent<PlayerControls>();
@@ -214,8 +223,13 @@ public class EnemyAI : MonoBehaviour
 
         yield return new WaitForSeconds(jumpscareDuration);
 
+        // --- PLAYER RESPAWN ---
         if (respawnPoint)
             player.position = respawnPoint.position;
+
+        // --- ENEMY RESET ---
+        if (enemyResetPoint)
+            agent.Warp(enemyResetPoint.position);
 
         jumpscareCamera.enabled = false;
 
@@ -224,15 +238,16 @@ public class EnemyAI : MonoBehaviour
 
         agent.isStopped = false;
 
-        isJumpscareActive = false;
-
-        // Reset chase variables so enemy can attack again
         chaseTimer = initialChaseTime;
         screamPlayed = false;
 
-        ReturnToWander();
+        currentState = EnemyState.Wander;
+        isJumpscareActive = false;
 
-        // Optional: force immediate detection after respawn
-        DetectPlayer();
+        wanderCoroutine = StartCoroutine(WanderRoutine());
+
+        // Grace period before enemy can kill again
+        yield return new WaitForSeconds(postRespawnGraceTime);
+        canJumpscare = true;
     }
 }
