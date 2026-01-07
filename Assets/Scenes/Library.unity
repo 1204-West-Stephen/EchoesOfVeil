@@ -31839,9 +31839,12 @@ MonoBehaviour:
   wanderSpeed: 0.8
   initialChaseTime: 5
   chaseExtension: 2
+  screamStopTime: 1
   jumpscareDistance: 1.5
   jumpscareDuration: 2.3
   respawnPoint: {fileID: 1543948702}
+  enemyResetPoint: {fileID: 348827416}
+  postRespawnGraceTime: 1.2
 --- !u!54 &270491441
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -38362,6 +38365,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400020, guid: 64c6d34afdb90024ebe5f9a2dbc1704e, type: 3}
   m_PrefabInstance: {fileID: 348762143}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &348827415
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 348827416}
+  m_Layer: 0
+  m_Name: EnemyRespawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &348827416
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348827415}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -70.07, y: 0.008, z: 11.66}
+  m_LocalScale: {x: 0.6800001, y: 0.68, z: 0.6800001}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &348911419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -198323,6 +198357,7 @@ SceneRoots:
   - {fileID: 1065861743}
   - {fileID: 901387315}
   - {fileID: 1384405336}
+  - {fileID: 348827416}
   - {fileID: 270491433}
   - {fileID: 1186148273}
   - {fileID: 812184221}

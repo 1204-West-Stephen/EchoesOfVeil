@@ -11,9 +11,9 @@ public class EnemyAI : MonoBehaviour
     private NavMeshAgent agent;
     private Animator animator;
     private Transform player;
+    private PlayerControls playerControls;
 
     [Header("Cameras")]
-    private Camera mainCamera;
     public Camera jumpscareCamera;
 
     [Header("Detection")]
@@ -32,18 +32,22 @@ public class EnemyAI : MonoBehaviour
     public float initialChaseTime = 5f;
     public float chaseExtension = 2f;
 
+    [Header("Scream")]
+    public float screamStopTime = 1.0f;
+
     [Header("Jumpscare")]
     public float jumpscareDistance = 1.5f;
     public float jumpscareDuration = 2.3f;
     public Transform respawnPoint;
 
-    [Header("Reset & Cooldown")]
+    [Header("Reset")]
     public Transform enemyResetPoint;
     public float postRespawnGraceTime = 1.2f;
 
     private float chaseTimer;
     private bool screamPlayed;
     private bool isJumpscareActive;
+    private bool isFrozen;
     private bool canJumpscare = true;
     private Coroutine wanderCoroutine;
 
@@ -53,18 +57,8 @@ public class EnemyAI : MonoBehaviour
         animator = GetComponent<Animator>();
 
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        if (!playerObj)
-        {
-            Debug.LogError("Player object not found!");
-            enabled = false;
-            return;
-        }
-
         player = playerObj.transform;
-
-        mainCamera = playerObj.GetComponent<Camera>();
-        if (!mainCamera)
-            mainCamera = Camera.main;
+        playerControls = playerObj.GetComponent<PlayerControls>();
 
         jumpscareCamera.enabled = false;
 
@@ -74,7 +68,7 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        if (isJumpscareActive) return;
+        if (isFrozen || isJumpscareActive) return;
 
         switch (currentState)
         {
@@ -95,11 +89,11 @@ public class EnemyAI : MonoBehaviour
         float distance = Vector3.Distance(transform.position, player.position);
         if (distance > hearingRadius) return;
 
-        Vector3 direction = (player.position - transform.position).normalized;
-        float angle = Vector3.Angle(transform.forward, direction);
+        Vector3 dir = (player.position - transform.position).normalized;
+        float angle = Vector3.Angle(transform.forward, dir);
 
         if (angle < viewAngle / 2f &&
-            !Physics.Raycast(transform.position + Vector3.up, direction, distance, obstacleMask))
+            !Physics.Raycast(transform.position + Vector3.up, dir, distance, obstacleMask))
         {
             StartChase();
         }
@@ -110,13 +104,12 @@ public class EnemyAI : MonoBehaviour
     {
         while (currentState == EnemyState.Wander)
         {
-            Vector3 randomDir = Random.insideUnitSphere * wanderRadius + transform.position;
-            Vector3 biasedDir = Vector3.Lerp(randomDir, player.position, playerBias);
-
-            if (NavMesh.SamplePosition(biasedDir, out NavMeshHit hit, wanderRadius, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(Random.insideUnitSphere * wanderRadius + transform.position,
+                out NavMeshHit hit, wanderRadius, NavMesh.AllAreas))
             {
                 agent.speed = wanderSpeed;
                 agent.SetDestination(hit.position);
+
                 animator.SetBool("isWalking", true);
                 animator.SetBool("isRunning", false);
             }
@@ -142,11 +135,13 @@ public class EnemyAI : MonoBehaviour
 
     void ChasePlayer()
     {
+        if (isFrozen) return;
+
         agent.SetDestination(player.position);
 
         if (!screamPlayed)
         {
-            animator.SetTrigger("Scream");
+            StartCoroutine(ScreamRoutine());
             screamPlayed = true;
         }
 
@@ -162,36 +157,41 @@ public class EnemyAI : MonoBehaviour
             ReturnToWander();
     }
 
+    // -------------------- SCREAM --------------------
+    IEnumerator ScreamRoutine()
+    {
+        FreezeEnemy();
+
+        animator.SetTrigger("Scream");
+
+        yield return new WaitForSeconds(screamStopTime);
+
+        UnfreezeEnemy();
+    }
+
     void CheckJumpscareDistance()
     {
-        if (!canJumpscare) return;
+        if (!canJumpscare || isFrozen) return;
 
-        float distance = Vector3.Distance(transform.position, player.position);
-        if (distance <= jumpscareDistance)
-        {
+        if (Vector3.Distance(transform.position, player.position) <= jumpscareDistance)
             StartCoroutine(JumpscareRoutine());
-        }
     }
 
     bool CanSeePlayer()
     {
-        float distance = Vector3.Distance(transform.position, player.position);
-        if (distance > hearingRadius) return false;
+        float dist = Vector3.Distance(transform.position, player.position);
+        if (dist > hearingRadius) return false;
 
-        Vector3 direction = (player.position - transform.position).normalized;
-        float angle = Vector3.Angle(transform.forward, direction);
+        Vector3 dir = (player.position - transform.position).normalized;
+        float angle = Vector3.Angle(transform.forward, dir);
 
         return angle < viewAngle / 2f &&
-               !Physics.Raycast(transform.position + Vector3.up, direction, distance, obstacleMask);
+               !Physics.Raycast(transform.position + Vector3.up, dir, dist, obstacleMask);
     }
 
     void ReturnToWander()
     {
         currentState = EnemyState.Wander;
-        agent.speed = wanderSpeed;
-        animator.SetBool("isRunning", false);
-
-        agent.ResetPath();
 
         if (wanderCoroutine != null)
             StopCoroutine(wanderCoroutine);
@@ -199,7 +199,7 @@ public class EnemyAI : MonoBehaviour
         wanderCoroutine = StartCoroutine(WanderRoutine());
     }
 
-    // -------------------- JUMPSCARE --------------------
+    // -------------------- JUMPSCARE / KILL --------------------
     IEnumerator JumpscareRoutine()
     {
         if (isJumpscareActive) yield break;
@@ -208,46 +208,60 @@ public class EnemyAI : MonoBehaviour
         canJumpscare = false;
         currentState = EnemyState.Jumpscare;
 
-        agent.isStopped = true;
-        agent.ResetPath();
+        FreezeEnemy();
+
+        if (playerControls != null)
+            playerControls.DisableControls();
 
         animator.SetTrigger("Jumpscare");
-
-        PlayerControls pc = player.GetComponent<PlayerControls>();
-        PlayerCamera cam = player.GetComponent<PlayerCamera>();
-
-        if (pc) pc.DisableControls();
-        if (cam) cam.controlLock();
-
         jumpscareCamera.enabled = true;
 
         yield return new WaitForSeconds(jumpscareDuration);
 
-        // --- PLAYER RESPAWN ---
         if (respawnPoint)
             player.position = respawnPoint.position;
 
-        // --- ENEMY RESET ---
         if (enemyResetPoint)
             agent.Warp(enemyResetPoint.position);
 
         jumpscareCamera.enabled = false;
 
-        if (pc) pc.EnableControls();
-        if (cam) cam.controlUnlock();
+        if (playerControls != null)
+            playerControls.EnableControls();
 
-        agent.isStopped = false;
-
-        chaseTimer = initialChaseTime;
-        screamPlayed = false;
+        UnfreezeEnemy();
 
         currentState = EnemyState.Wander;
         isJumpscareActive = false;
 
         wanderCoroutine = StartCoroutine(WanderRoutine());
 
-        // Grace period before enemy can kill again
         yield return new WaitForSeconds(postRespawnGraceTime);
         canJumpscare = true;
+    }
+
+    // -------------------- FREEZE HELPERS --------------------
+    void FreezeEnemy()
+    {
+        isFrozen = true;
+
+        agent.isStopped = true;
+        agent.velocity = Vector3.zero;
+        agent.updatePosition = false;
+        agent.updateRotation = false;
+
+        animator.speed = 0f;
+    }
+
+    void UnfreezeEnemy()
+    {
+        agent.updatePosition = true;
+        agent.updateRotation = true;
+        agent.isStopped = false;
+
+        animator.speed = 1f;
+
+        agent.ResetPath();
+        isFrozen = false;
     }
 }
