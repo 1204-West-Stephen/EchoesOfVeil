@@ -10,11 +10,13 @@ public class EnemyAI : MonoBehaviour
     [Header("References")]
     private NavMeshAgent agent;
     private Animator animator;
+    public Animator jumpscareAnimator;
     private Transform player;
     private PlayerControls playerControls;
 
     [Header("Cameras")]
     public Camera jumpscareCamera;
+    private Camera playerCamera;
 
     [Header("Detection")]
     public float hearingRadius = 8f;
@@ -60,10 +62,16 @@ public class EnemyAI : MonoBehaviour
         player = playerObj.transform;
         playerControls = playerObj.GetComponent<PlayerControls>();
 
-        jumpscareCamera.enabled = false;
+        playerCamera = playerObj.GetComponentInChildren<Camera>();
 
         currentState = EnemyState.Wander;
         wanderCoroutine = StartCoroutine(WanderRoutine());
+    }
+
+    void Awake()
+    {
+        if (jumpscareCamera)
+            jumpscareCamera.gameObject.SetActive(false);
     }
 
     void Update()
@@ -107,7 +115,14 @@ public class EnemyAI : MonoBehaviour
             if (NavMesh.SamplePosition(Random.insideUnitSphere * wanderRadius + transform.position,
                 out NavMeshHit hit, wanderRadius, NavMesh.AllAreas))
             {
+                if (!agent.isOnNavMesh || agent.isStopped)
+                    yield return null;
+
                 agent.speed = wanderSpeed;
+
+                if (agent.isOnNavMesh)
+                    agent.SetDestination(hit.position);
+
                 agent.SetDestination(hit.position);
 
                 animator.SetBool("isWalking", true);
@@ -137,6 +152,8 @@ public class EnemyAI : MonoBehaviour
     {
         if (isFrozen) return;
 
+        if (!agent.isOnNavMesh || agent.isStopped) return;
+       
         agent.SetDestination(player.position);
 
         if (!screamPlayed)
@@ -202,29 +219,53 @@ public class EnemyAI : MonoBehaviour
     // -------------------- JUMPSCARE / KILL --------------------
     IEnumerator JumpscareRoutine()
     {
+        if (wanderCoroutine != null)
+        {
+            StopCoroutine(wanderCoroutine);
+            wanderCoroutine = null;
+        }
+
         if (isJumpscareActive) yield break;
 
         isJumpscareActive = true;
         canJumpscare = false;
         currentState = EnemyState.Jumpscare;
 
+        jumpscareAnimator.Play("JumpScare", 0, 0f);
+        jumpscareAnimator.Update(0f); // forces pose update THIS frame
+
+        yield return null;
+
+        jumpscareCamera.gameObject.SetActive(true);
+        playerCamera.gameObject.SetActive(false);
+
+
         FreezeEnemy();
 
         if (playerControls != null)
             playerControls.DisableControls();
 
-        animator.SetTrigger("Jumpscare");
-        jumpscareCamera.enabled = true;
+        jumpscareCamera.gameObject.SetActive(true);
+        playerCamera.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(jumpscareDuration);
 
         if (respawnPoint)
             player.position = respawnPoint.position;
 
-        if (enemyResetPoint)
-            agent.Warp(enemyResetPoint.position);
+        if (enemyResetPoint) { 
+            if (NavMesh.SamplePosition(enemyResetPoint.position, out NavMeshHit hit, 2f, NavMesh.AllAreas))
+            {
+                agent.Warp(hit.position);
+            }
+            else
+            {
+                Debug.LogError("Enemy reset point is NOT on NavMesh!");
+            }
+        }
 
-        jumpscareCamera.enabled = false;
+        playerCamera.gameObject.SetActive(true);
+        jumpscareCamera.gameObject.SetActive(false);
 
         if (playerControls != null)
             playerControls.EnableControls();
