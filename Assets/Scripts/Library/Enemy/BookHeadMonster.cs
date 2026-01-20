@@ -58,6 +58,8 @@ public class EnemyAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
+        animator.applyRootMotion = false;
+
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         player = playerObj.transform;
         playerControls = playerObj.GetComponent<PlayerControls>();
