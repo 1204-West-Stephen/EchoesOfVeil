@@ -4,7 +4,7 @@ using System.Collections;
 
 public class EnemyAI : MonoBehaviour
 {
-    public enum EnemyState { Wander, Chase, Jumpscare }
+    public enum EnemyState { Wander, Chase, Jumpscare, Lurk, Scream }
     public EnemyState currentState;
 
     [Header("References")]
@@ -42,6 +42,14 @@ public class EnemyAI : MonoBehaviour
     public float jumpscareDuration = 2.3f;
     public Transform respawnPoint;
 
+    [Header("Lurk")]
+    public float lurkCooldown = 6f;
+    public float lurkChance = 0.6f;
+    public float lurkDuration = 8.833f;
+
+    private float lastLurkTime;
+    private bool isLurking;
+
     [Header("Reset")]
     public Transform enemyResetPoint;
     public float postRespawnGraceTime = 1.2f;
@@ -69,13 +77,11 @@ public class EnemyAI : MonoBehaviour
         currentState = EnemyState.Wander;
         wanderCoroutine = StartCoroutine(WanderRoutine());
     }
-
     void Awake()
     {
         if (jumpscareCamera)
             jumpscareCamera.gameObject.SetActive(false);
     }
-
     void Update()
     {
         if (isFrozen || isJumpscareActive) return;
@@ -90,6 +96,8 @@ public class EnemyAI : MonoBehaviour
                 ChasePlayer();
                 CheckJumpscareDistance();
                 break;
+            case EnemyState.Lurk:
+                break;
         }
     }
 
@@ -102,13 +110,61 @@ public class EnemyAI : MonoBehaviour
         Vector3 dir = (player.position - transform.position).normalized;
         float angle = Vector3.Angle(transform.forward, dir);
 
-        if (angle < viewAngle / 2f &&
-            !Physics.Raycast(transform.position + Vector3.up, dir, distance, obstacleMask))
+        if (angle < viewAngle / 2f && !Physics.Raycast(transform.position + Vector3.up, dir, distance, obstacleMask))
         {
             StartChase();
         }
     }
+    void DetectHearing()
+    {
+        if (Time.time < lastLurkTime + lurkCooldown) return;
 
+        float distance = Vector3.Distance(transform.position, player.position);
+        if (distance > hearingRadius) return;
+
+        if (CanSeePlayer()) return;
+
+        if (Random.value > lurkChance) return;
+
+        StartLurk();
+    }
+    // -------------------- LURK --------------------
+    void StartLurk()
+    {
+        if (currentState != EnemyState.Wander) return;
+
+        currentState = EnemyState.Lurk;
+        lastLurkTime = Time.time;
+        isLurking = true;
+
+        if (wanderCoroutine != null)
+            StopCoroutine(wanderCoroutine);
+
+        agent.isStopped = true;
+        agent.ResetPath();
+
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isRunning", false);
+        animator.SetTrigger("Lurk");
+
+        StartCoroutine(LurkRoutine());
+    }
+    IEnumerator LurkRoutine()
+    {
+        yield return new WaitForSeconds(lurkDuration);
+
+        isLurking = false;
+
+        if (CanSeePlayer())
+        {
+            animator.SetBool("isRunning", true);
+            animator.SetBool("isWalking", false);
+            StartChase();
+            yield break;
+        }
+
+        ReturnToWander();
+    }
     // -------------------- WANDER --------------------
     IEnumerator WanderRoutine()
     {
@@ -134,7 +190,6 @@ public class EnemyAI : MonoBehaviour
             yield return new WaitForSeconds(wanderDelay);
         }
     }
-
     // -------------------- CHASE --------------------
     void StartChase()
     {
@@ -149,7 +204,6 @@ public class EnemyAI : MonoBehaviour
         if (wanderCoroutine != null)
             StopCoroutine(wanderCoroutine);
     }
-
     void ChasePlayer()
     {
         if (isFrozen) return;
@@ -175,7 +229,6 @@ public class EnemyAI : MonoBehaviour
         if (chaseTimer <= 0f && !CanSeePlayer())
             ReturnToWander();
     }
-
     // -------------------- SCREAM --------------------
     IEnumerator ScreamRoutine()
     {
@@ -187,7 +240,6 @@ public class EnemyAI : MonoBehaviour
 
         UnfreezeEnemy();
     }
-
     void CheckJumpscareDistance()
     {
         if (!canJumpscare || isFrozen) return;
@@ -195,7 +247,6 @@ public class EnemyAI : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) <= jumpscareDistance)
             StartCoroutine(JumpscareRoutine());
     }
-
     bool CanSeePlayer()
     {
         float dist = Vector3.Distance(transform.position, player.position);
@@ -207,17 +258,20 @@ public class EnemyAI : MonoBehaviour
         return angle < viewAngle / 2f &&
                !Physics.Raycast(transform.position + Vector3.up, dir, dist, obstacleMask);
     }
-
     void ReturnToWander()
     {
         currentState = EnemyState.Wander;
+
+        agent.isStopped = false;
+
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isWalking", true);
 
         if (wanderCoroutine != null)
             StopCoroutine(wanderCoroutine);
 
         wanderCoroutine = StartCoroutine(WanderRoutine());
     }
-
     // -------------------- JUMPSCARE / KILL --------------------
     IEnumerator JumpscareRoutine()
     {
@@ -295,7 +349,6 @@ public class EnemyAI : MonoBehaviour
 
         animator.speed = 0f;
     }
-
     void UnfreezeEnemy()
     {
         agent.updatePosition = true;
