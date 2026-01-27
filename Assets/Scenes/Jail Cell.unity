@@ -13527,8 +13527,70 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7123664439150694030, guid: 3f1230f4d8436e542a27cb343b75d9a1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1743787176}
+    - targetCorrespondingSourceObject: {fileID: 7123664439150694030, guid: 3f1230f4d8436e542a27cb343b75d9a1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1743787175}
+    - targetCorrespondingSourceObject: {fileID: 7123664439150694030, guid: 3f1230f4d8436e542a27cb343b75d9a1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1743787177}
   m_SourcePrefab: {fileID: 100100000, guid: 3f1230f4d8436e542a27cb343b75d9a1, type: 3}
+--- !u!1 &1743787174 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7123664439150694030, guid: 3f1230f4d8436e542a27cb343b75d9a1, type: 3}
+  m_PrefabInstance: {fileID: 1743787173}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1743787175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743787174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 258bf13b6083f484ebef671a90ae2722, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Journal
+  journalAcquired: 0
+--- !u!64 &1743787176
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743787174}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
+--- !u!114 &1743787177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743787174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 303f0b23b7e70924dbf07cde43d47196, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::animation_book
+  automatic: 0
 --- !u!1001 &1744474739
 PrefabInstance:
   m_ObjectHideFlags: 0
