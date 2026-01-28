@@ -274,6 +274,10 @@ PrefabInstance:
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
       objectReference: {fileID: 0}
+    - target: {fileID: 1336861230384778276, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+      propertyPath: 'overviewPages.Array.data[4]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2078542722826478393, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: xSensitivity
       value: 7.5
@@ -371,9 +375,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1987825691}
     - target: {fileID: 6440342363358989386, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+      propertyPath: journalPrefab
+      value: 
+      objectReference: {fileID: 8753331329841989598, guid: baf650e58ff2c634898fb649f23371ad, type: 3}
+    - target: {fileID: 6440342363358989386, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: internalComment
       value: 
       objectReference: {fileID: 1001192552}
+    - target: {fileID: 6440342363358989386, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+      propertyPath: journalSpawnPoint
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6732532308795397282, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: m_SizeDelta.x
       value: 1350.829
@@ -471,7 +483,8 @@ PrefabInstance:
       value: 1801810542
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8360021449906681609, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5512570483476180915, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       insertIndex: -1

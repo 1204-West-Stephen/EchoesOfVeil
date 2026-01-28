@@ -7,46 +7,53 @@ using UnityEngine.UI;
 
 public class PlayerControls : MonoBehaviour
 {
-    [Header("Interactable")]
-    public float interactionRange = 1f;
-    public Transform interactionOrigin;
-    public bool interacted;
-    public bool canInteract;
-    private i_Interactable currentInteractable;
-
-    public PlayerInput controls;
-    PlayerMovement movement;
+    [Header("Interactable")] 
+    public float interactionRange = 1f; 
+    public Transform interactionOrigin; 
+    public bool interacted; 
+    public bool canInteract; 
+    private i_Interactable currentInteractable; 
+    
+    [Header("Player Controls")] 
+    public PlayerInput controls; 
     public PlayerCamera playerCamera;
+    private PlayerMovement movement;
 
-    bool isPaused;
-    public Canvas pauseMenu;
-    bool pauseToggle;
+    [Header("Pause Menu")] 
+    public Canvas pauseMenu; 
+    private bool pauseToggle;
+    private bool isPaused;
 
-    [Header("Held Item")]
-    bool pressedF;
-    private Inventory inventory;
-    public Canvas ItemInHand;
-    public RectTransform ItemInHandTransform;
+    [Header("Held Item")] 
+    public Canvas ItemInHand; 
+    public RectTransform ItemInHandTransform; 
     public Hotbar hotbar;
-    public float moveDuration = 0.3f;
-    public float moveDistance = 100f;
+    private bool pressedF;
+    private Inventory inventory;
 
-    bool pressedQ;
-    private bool inspectionToggle;
+    [Header("Movement")]
+    public float moveDuration = 0.3f; 
+    public float moveDistance = 100f; 
+    
+    [Header("Inspection Menu")] 
     public Canvas inspectionMenu;
+    private bool pressedQ;
+    private bool inspectionToggle;
 
-    private bool pressedJ;
-    private bool journalToggle;
-    public Canvas journalMenu;
-    public Journal journal;
-
-    [Header("Interaction UI")]
+    [Header("Interaction UI")] 
+    public Canvas interactionCanvas; 
+    public Canvas internalDialogueCanvas; 
+    public TextMeshProUGUI internalDialogue; 
+    public GameObject crosshair;
     private Queue<string> dialogueQueue = new Queue<string>();
     private bool dialogueRunning = false;
-    public Canvas interactionCanvas;
-    public Canvas internalDialogueCanvas;
-    public TextMeshProUGUI internalDialogue;
-    public GameObject crosshair;
+
+    [Header("Journal")] 
+    public bool hasJournal; 
+    public GameObject journalPrefab; 
+    public Journal journal;
+    private JournalViewer activeJournal;
+    private bool pressedJ;
 
     private void Awake()
     {
@@ -72,10 +79,8 @@ public class PlayerControls : MonoBehaviour
         controls.Menus.Journal.performed += _ => pressedJ = true;
         controls.Menus.Journal.canceled += _ => pressedJ = false;
     }
-
     private void OnEnable() => controls.Enable();
     private void OnDisable() => controls.Disable();
-
     private void Start()
     {
         pauseMenu.gameObject.SetActive(false);
@@ -90,8 +95,6 @@ public class PlayerControls : MonoBehaviour
         canInteract = true;
         inspectionToggle = false;
         inspectionMenu.gameObject.SetActive(false);
-        journalToggle = false;
-        journalMenu.gameObject.SetActive(false);
 
         if (interactionCanvas != null)
             interactionCanvas.gameObject.SetActive(false);
@@ -106,7 +109,6 @@ public class PlayerControls : MonoBehaviour
             }
         }
     }
-
     private void Update()
     {
         if (pressedF)
@@ -139,15 +141,19 @@ public class PlayerControls : MonoBehaviour
             pressedQ = false;
         }
 
-        if (pressedJ && journal != null && journal.journalAcquired)
+        if (pressedJ && hasJournal)
         {
-            journalToggle = !journalToggle;
-            JournalMenu();
+            if (activeJournal == null)
+                OpenJournal();
+            else
+                activeJournal.Close();
+
             pressedJ = false;
         }
 
     }
 
+    // ========== INTERACTION ========== \\
     private void AutoDetectInteractable()
     {
         Camera cam = Camera.main;
@@ -175,8 +181,6 @@ public class PlayerControls : MonoBehaviour
                 interactionCanvas.gameObject.SetActive(false);
         }
     }
-
-
     private void Interacted()
     {
         if (currentInteractable != null)
@@ -185,6 +189,7 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
+    // ========== MENUS ========== \\
     private IEnumerator MoveItemDownAndHide()
     {
         Vector3 startPos = ItemInHandTransform.anchoredPosition;
@@ -203,7 +208,6 @@ public class PlayerControls : MonoBehaviour
 
         ItemInHandTransform.anchoredPosition = startPos;
     }
-
     public void PauseMenu()
     {
         pauseToggle = !pauseToggle;
@@ -220,7 +224,6 @@ public class PlayerControls : MonoBehaviour
             EnableControls();
         }
     }
-
     private void InspectionMenu()
     {
         if (inspectionToggle)
@@ -238,6 +241,7 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
+    // ========== CONTROL LOCKS ========== \\
     public void DisableControls()
     {
         movement.controlLock();
@@ -245,7 +249,6 @@ public class PlayerControls : MonoBehaviour
         canInteract = false;
         Cursor.visible = true;
     }
-
     public void EnableControls()
     {
         movement.controlUnlock();
@@ -254,24 +257,36 @@ public class PlayerControls : MonoBehaviour
         Cursor.visible = false;
     }
 
-    private void JournalMenu()
+    // ========== JOURNAL ========== \\
+    public void AcquireJournal()
     {
-        if (journalToggle)
-        {
-            DisableControls();
-            journalMenu.gameObject.SetActive(true);
+        hasJournal = true;
+    }
+    private void OpenJournal()
+    {
+        Camera cam = Camera.main;
 
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
-        }
-        else
-        {
-            EnableControls();
-            journalMenu.gameObject.SetActive(false);
-            
-        }
+        Vector3 spawnPos =
+            cam.transform.position +
+            cam.transform.forward * 0.6f; // distance from camera
+
+        Quaternion spawnRot =
+            Quaternion.LookRotation(cam.transform.forward, cam.transform.up);
+
+        GameObject journalGO = Instantiate(journalPrefab, spawnPos, spawnRot);
+
+        // Parent AFTER spawning so position stays correct
+        journalGO.transform.SetParent(cam.transform, true);
+
+        activeJournal = journalGO.GetComponent<JournalViewer>();
+        activeJournal.Init(this, cam);
+    }
+    public void OnJournalAcquired(Journal newJournal)
+    {
+        journal = newJournal;
     }
 
+    // ========== DIALOGUE ========== \\
     public void StartDialogue(string message)
     {
         dialogueQueue.Enqueue(message);
@@ -279,7 +294,6 @@ public class PlayerControls : MonoBehaviour
         if (!dialogueRunning)
             StartCoroutine(ProcessDialogueQueue());
     }
-
     private IEnumerator ProcessDialogueQueue()
     {
         dialogueRunning = true;
@@ -293,7 +307,6 @@ public class PlayerControls : MonoBehaviour
         internalDialogueCanvas.gameObject.SetActive(false);
         dialogueRunning = false;
     }
-
     private IEnumerator ShowDialogue(string message)
     {
         internalDialogue.text = message;
@@ -322,12 +335,7 @@ public class PlayerControls : MonoBehaviour
         canvasGroup.alpha = 0f;
     }
 
-    public void OnJournalAcquired(Journal newJournal)
-    {
-        journal = newJournal;
-    }
-
-
+    // ========== EXIT ========== \\
     public void ExitGame()
     {
         Application.Quit();
