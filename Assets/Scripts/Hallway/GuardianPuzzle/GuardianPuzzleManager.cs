@@ -7,6 +7,7 @@ public class GuardianPuzzleManager : MonoBehaviour
     public GuardianMatchTower[] towers;
     public GuardianRiddleStone[] stones;
     public bool puzzleSolved;
+    public bool first = true;
 
     public void CheckIfSolved()
     {
@@ -33,6 +34,11 @@ public class GuardianPuzzleManager : MonoBehaviour
             if (stone.interacting)
             {
                 return false;
+            }
+
+            if (!stone.firstInteract)
+            {
+                first = false;
             }
         }
 

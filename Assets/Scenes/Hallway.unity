@@ -438,6 +438,7 @@ MonoBehaviour:
   - {fileID: 2044453220}
   - {fileID: 1450035588}
   puzzleSolved: 0
+  first: 1
 --- !u!4 &44594033
 Transform:
   m_ObjectHideFlags: 0
@@ -1423,6 +1424,7 @@ MonoBehaviour:
   TotemInformation: "Where the scaled coil waits, offer the small effi\u2013\u2013
     of the ancient wingless dra\u2013\u2013. The shapes must mirror"
   manager: {fileID: 44594032}
+  firstInteract: 1
   interacting: 0
 --- !u!1001 &190328937
 PrefabInstance:
@@ -2948,7 +2950,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4132962946472436, guid: c97bb854328dd9c4883d35e568588fd2, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.51
+      value: 0.67182297
       objectReference: {fileID: 0}
     - target: {fileID: 4132962946472436, guid: c97bb854328dd9c4883d35e568588fd2, type: 3}
       propertyPath: m_LocalScale.z
@@ -4430,6 +4432,7 @@ MonoBehaviour:
   TotemInformation: "The creature of facet and gleam calls for the tru\u2013\u2013
     shard. Match like with like: the clear sto\u2013\u2013 to the clear one."
   manager: {fileID: 44594032}
+  firstInteract: 1
   interacting: 0
 --- !u!1001 &487822040
 PrefabInstance:
@@ -5425,7 +5428,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4132962946472436, guid: c97bb854328dd9c4883d35e568588fd2, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.51
+      value: 0.67182297
       objectReference: {fileID: 0}
     - target: {fileID: 4132962946472436, guid: c97bb854328dd9c4883d35e568588fd2, type: 3}
       propertyPath: m_LocalScale.z
@@ -9565,7 +9568,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.4, y: -1.53, z: 14.01}
-  m_LocalScale: {x: 1, y: 1.21, z: 1}
+  m_LocalScale: {x: 1, y: 1.27, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1887110967}
@@ -14336,6 +14339,7 @@ MonoBehaviour:
   TotemInformation: "The guardian of sto\u2013\u2013 answers only to its own like.
     Place the carved war\u2013\u2013 form beside the silent giant"
   manager: {fileID: 44594032}
+  firstInteract: 1
   interacting: 0
 --- !u!1 &1456825893
 GameObject:
@@ -17309,6 +17313,7 @@ MonoBehaviour:
   TotemInformation: "The shambling page-bearer hungers for the dea\u2013\u2013 tome.
     Return the\u2013\u2013 book to the one marked by it"
   manager: {fileID: 44594032}
+  firstInteract: 1
   interacting: 0
 --- !u!1001 &1815655622
 PrefabInstance:
@@ -20501,6 +20506,7 @@ MonoBehaviour:
   TotemInformation: "The one of rattling limbs seeks the empty head it lost. Only
     the bon\u2013\u2013 crown restores its forgotten shape."
   manager: {fileID: 44594032}
+  firstInteract: 1
   interacting: 0
 --- !u!1001 &2049250941
 PrefabInstance:
@@ -20899,7 +20905,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4121544916346514, guid: 77218940c66857f47885b45c10e08f0d, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.6564
       objectReference: {fileID: 0}
     - target: {fileID: 4121544916346514, guid: 77218940c66857f47885b45c10e08f0d, type: 3}
       propertyPath: m_LocalScale.z
@@ -21442,6 +21448,7 @@ MonoBehaviour:
   TotemInformation: "The radiant being seeks the lum\u2013\u2013 fragment cut from
     the same pure glow. Only light answers to li\u2013\u2013"
   manager: {fileID: 44594032}
+  firstInteract: 1
   interacting: 0
 --- !u!1001 &2109682466
 PrefabInstance:

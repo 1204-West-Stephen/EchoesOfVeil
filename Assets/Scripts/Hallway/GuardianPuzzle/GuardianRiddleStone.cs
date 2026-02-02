@@ -9,7 +9,7 @@ public class GuardianRiddleStone : MonoBehaviour, i_Interactable
     public GuardianPuzzleManager manager;
     private PlayerControls playerControls;
 
-    private bool firstInteract = true;
+    public bool firstInteract = true;
     public bool interacting = false;
     public void Interact()
     {
@@ -30,7 +30,7 @@ public class GuardianRiddleStone : MonoBehaviour, i_Interactable
 
         yield return new WaitForSeconds(4f);
 
-        if (firstInteract)
+        if (manager.first)
         {
             playerControls.StartDialogue("The tablets are so worn, I can only decipher\nsome of the words");
             firstInteract = false;

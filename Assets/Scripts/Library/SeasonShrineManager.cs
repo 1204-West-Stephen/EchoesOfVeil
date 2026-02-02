@@ -21,6 +21,7 @@ public class SeasonShrineManager : MonoBehaviour
 
         puzzleSolved = true;
 
+        FindFirstObjectByType<DragonCamera>()?.StartCamera();
         FindFirstObjectByType<DragonPartProtector>()?.CheckShrinePuzzle();
         Debug.Log("All towers are correct! Puzzle solved!");
     }

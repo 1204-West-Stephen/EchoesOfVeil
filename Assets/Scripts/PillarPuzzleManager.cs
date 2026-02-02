@@ -21,6 +21,7 @@ public class PillarPuzzleManager : MonoBehaviour
 
         puzzleSolved = true;
 
+        FindFirstObjectByType<SeasonCamera>()?.StartCamera();
         FindFirstObjectByType<ShrineWall>()?.CheckPuzzle();
         Debug.Log("All towers are correct! Puzzle solved!");
     }
