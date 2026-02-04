@@ -5,11 +5,12 @@ public class DragonCamera : MonoBehaviour
 {
     private PlayerControls controls;
     private PlayerMovement move;
+    public GameObject dragonCam;
 
     private void Start()
     {
         controls = FindFirstObjectByType<PlayerControls>();
-        gameObject.SetActive(false);
+        dragonCam.gameObject.SetActive(false);
     }
 
     public void StartCamera()
@@ -21,11 +22,11 @@ public class DragonCamera : MonoBehaviour
     {
         move.controlLock();
         controls.canInteract = false;
-        gameObject.SetActive(true);
+        dragonCam.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(2.5f);
 
-        gameObject.SetActive(false);
+        dragonCam.gameObject.SetActive(false);
         controls.canInteract = true;
         move.controlUnlock();
 

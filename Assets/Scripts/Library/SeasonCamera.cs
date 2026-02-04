@@ -5,11 +5,12 @@ public class SeasonCamera : MonoBehaviour
 {
     private PlayerControls controls;
     private PlayerMovement move;
+    public GameObject seasonCam;
 
     private void Start()
     {
         controls = FindFirstObjectByType<PlayerControls>();
-        gameObject.SetActive(false);
+        seasonCam.gameObject.SetActive(false);
     }
 
     public void StartCamera()
@@ -21,11 +22,11 @@ public class SeasonCamera : MonoBehaviour
     {
         move.controlLock();
         controls.canInteract = false;
-        gameObject.SetActive(true);
+        seasonCam.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(2.5f);
 
-        gameObject.SetActive(false);
+        seasonCam.gameObject.SetActive(false);
         controls.canInteract = true;
         move.controlUnlock();
 
