@@ -1,39 +1,36 @@
 using System.Collections;
 using UnityEngine;
 
-public class JournalViewer : MonoBehaviour
+public class BookViewer : MonoBehaviour
 {
-    private Animator animator;
-
-    [Header("Slide Settings")]
     public Vector3 hiddenOffset = new Vector3(0f, -0.35f, 0f);
     public float slideDuration = 0.35f;
-
-    [Header("Spawn Settings")]
-    public float spawnDistance = 0.25f;
     public Vector3 spawnRotationEuler = Vector3.zero;
     public Vector3 spawnScale = Vector3.one;
 
+    private Animator animator;
     private PlayerControls player;
-    public GameObject journalUI;
     private Vector3 shownLocalPos;
     private bool isOpen;
     private bool isClosing;
 
-    private void Start()
+    public void Init(PlayerControls owner, Camera cam)
     {
-        player = FindAnyObjectByType<PlayerControls>();
+        player = owner;
         animator = GetComponent<Animator>();
-    }
 
-    public void pageLeft()
-    {
-        animator.SetTrigger("go_back");
-    }
+        Vector3 spawnPos = cam.transform.position + cam.transform.forward * 0.25f;
+        transform.position = spawnPos;
+        transform.SetParent(cam.transform, true);
 
-    public void pageRight()
-    {
-        animator.SetTrigger("go_ahead");
+        transform.localEulerAngles = spawnRotationEuler;
+        transform.localScale = spawnScale;
+
+        shownLocalPos = transform.localPosition;
+        transform.localPosition += hiddenOffset;
+
+        player.DisableControls();
+        StartCoroutine(SlideIn());
     }
 
     private IEnumerator SlideIn()
@@ -55,8 +52,6 @@ public class JournalViewer : MonoBehaviour
             animator.SetTrigger("go_ahead");
 
         isOpen = true;
-
-        journalUI.gameObject.SetActive(isOpen);
     }
 
     public void Close()
@@ -70,8 +65,6 @@ public class JournalViewer : MonoBehaviour
     {
         if (animator != null)
             animator.SetTrigger("go_back");
-
-        journalUI.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(1.1f);
 
@@ -87,31 +80,7 @@ public class JournalViewer : MonoBehaviour
         }
 
         transform.localPosition = end;
-
         player.EnableControls();
         Destroy(gameObject);
     }
-
-    public void Init(PlayerControls owner, Camera cam)
-    {
-        player = owner;
-        journalUI.SetActive(false); 
-        PositionInFrontOfCamera(cam);
-
-        transform.localEulerAngles = spawnRotationEuler;
-        transform.localScale = spawnScale;
-
-        shownLocalPos = transform.localPosition;
-        transform.localPosition += hiddenOffset;
-
-        player.DisableControls();
-        StartCoroutine(SlideIn());
-    }
-    public void PositionInFrontOfCamera(Camera cam)
-    {
-        Vector3 spawnPos = cam.transform.position + cam.transform.forward * spawnDistance;
-        transform.position = spawnPos;
-        transform.SetParent(cam.transform, true);
-    }
-
 }

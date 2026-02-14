@@ -37,7 +37,7 @@ public class ArtPieceThree : MonoBehaviour, i_Interactable
 
         yield return new WaitForSeconds(3.5f);
 
-        controls.StartDialogue("and the soul's energy will absorped by thee.\"");
+        controls.StartDialogue("and the soul's energy will be absorbed by thee.\"");
 
         yield return new WaitForSeconds(3.5f);
 
