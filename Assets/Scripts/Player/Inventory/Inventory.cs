@@ -5,33 +5,64 @@ public class Inventory : MonoBehaviour
 {
     public List<ItemData> inventory;
 
+    public int selectedIndex = 0;
+    public int maxSlots = 6;
     public bool itemAdded = false;
 
-
-    private void Start()
+    private void Awake()
     {
+        inventory = new List<ItemData>(maxSlots);
 
+        for (int i = 0; i < maxSlots; i++)
+        {
+            inventory.Add(null);
+        }
+    }
+
+    public ItemData GetSelectedItem()
+    {
+        if (inventory.Count == 0) return null;
+
+        if (selectedIndex < 0 || selectedIndex >= inventory.Count) return null;
+
+        return inventory[selectedIndex];
+    }
+
+    public void RemoveSelectedItem()
+    {
+        if (selectedIndex < 0 || selectedIndex >= inventory.Count) return;
+
+        if (inventory[selectedIndex] != null)
+        {
+            Debug.Log($"Removed: {inventory[selectedIndex].name}");
+            inventory[selectedIndex] = null;
+        }
     }
 
     public bool CheckInventory()
     {
-        if (inventory.Count >= 6)
+        foreach (var item in inventory)
         {
-            Debug.Log("Cannot add item: Inventory full.");
-            return false;
+            if (item == null) return true;
         }
-        else
-        {
-            return true;
-        }
+
+        return false;
     }
 
     public void AddItem(ItemData item)
     {
-        Debug.Log($"Item Added: {item.name}");
-        inventory.Add(item);
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[i] == null)
+            {
+                inventory[i] = item;
+                Debug.Log($"Item Added: {item.name}");
+                itemAdded = true;
+                return;
+            }
+        }
 
-        itemAdded = true;
+        Debug.Log("COuld not add. Inventory Full.");
     }
 
     public void RemoveLastItem()

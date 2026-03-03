@@ -19,6 +19,10 @@ public class TotemManager : MonoBehaviour
         }
 
         puzzleSolved = true;
+        foreach (LetterTotem totem in totems)
+        {
+            totem.canInteract = false;
+        }
         FindFirstObjectByType<HallwayGameManager>()?.CheckHallwayPuzzles();
         Debug.Log("All totems are correct! Puzzle solved!");
     }

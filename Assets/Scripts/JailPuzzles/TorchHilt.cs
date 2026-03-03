@@ -40,15 +40,17 @@ public class TorchHilt : MonoBehaviour, i_Interactable
     }
     private bool UsePiece(Inventory inventory)
     {
-        foreach (ItemData item in inventory.inventory)
+        ItemData selectedItem = inventory.GetSelectedItem();
+
+        if (selectedItem == null) return false;
+
+        if (selectedItem.typeInput == GetRequiredInputType() && selectedItem.itemName == "Torch")
         {
-            if (item.typeInput == InputType.TorchHilt && item.itemName == "Torch")
-            {
-                inventory.RemoveItem(item);
-                Debug.Log($"Torch consumed and removed from inventory.");
-                return true;
-            }
+            inventory.RemoveSelectedItem();
+            Debug.Log("Torch consumed.");
+            return true;
         }
+
         return false;
     }
     public InputType GetRequiredInputType()

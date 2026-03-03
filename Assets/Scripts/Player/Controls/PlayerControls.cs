@@ -285,6 +285,10 @@ public class PlayerControls : MonoBehaviour
     {
         journal = newJournal;
     }
+    public void NotifyJournalClosed()
+    {
+        activeJournal = null;
+    }
 
     // ========== DIALOGUE ========== \\
     public void StartDialogue(string message)

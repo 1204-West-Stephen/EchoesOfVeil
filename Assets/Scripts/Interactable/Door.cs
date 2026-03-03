@@ -27,6 +27,11 @@ public class Door : MonoBehaviour, i_Interactable
             Inventory inventory = player.GetComponent<Inventory>();
             if (inventory != null)
             {
+                if (isOpen)
+                {
+                    return;
+                }
+
                 if (UseKey(inventory))
                 {
                     Debug.Log("Correct key used. Door unlocked.");
@@ -41,14 +46,15 @@ public class Door : MonoBehaviour, i_Interactable
     }
     private bool UseKey(Inventory inventory)
     {
-        foreach (ItemData item in inventory.inventory)
+        ItemData selectedItem = inventory.GetSelectedItem();
+
+        if (selectedItem == null) return false;
+
+        if (selectedItem.typeInput == GetRequiredInputType() && selectedItem.keyID == doorID)
         {
-            if (item.typeInput == InputType.Key && item.keyID == doorID)
-            {
-                inventory.RemoveItem(item);
-                Debug.Log($"Key with ID {doorID} consumed and removed from inventory.");
-                return true;
-            }
+            inventory.RemoveSelectedItem();
+            Debug.Log("Key consumed.");
+            return true;
         }
 
         return false;
@@ -56,16 +62,13 @@ public class Door : MonoBehaviour, i_Interactable
 
     private void PlayAnimation()
     {
-        isOpen = !isOpen;
+        isOpen = true;
+        animator.SetTrigger("Open");
+    }
 
-        if (isOpen)
-        {
-            animator.SetTrigger("Open");
-        }
-        else
-        {
-            animator.SetTrigger("Close");
-        }
+    public InputType GetRequiredInputType()
+    {
+        return InputType.Key;
     }
 }
 

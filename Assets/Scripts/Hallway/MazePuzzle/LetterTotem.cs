@@ -10,6 +10,7 @@ public class LetterTotem : MonoBehaviour, i_Interactable
     private int index;
 
     public bool puzzleSovled;
+    public bool canInteract = true;
 
 
     void Start()
@@ -22,16 +23,19 @@ public class LetterTotem : MonoBehaviour, i_Interactable
 
     public void Interact()
     {
-        index++;
-
-        if (index > letterSprites.Count)
+        if (canInteract)
         {
-            index = 0;
+            index++;
+
+            if (index > letterSprites.Count)
+            {
+                index = 0;
+            }
+
+            currentSprite.sprite = letterSprites[index];
+
+            FindFirstObjectByType<TotemManager>()?.CheckIfSolved();
         }
-
-        currentSprite.sprite = letterSprites[index];
-
-        FindFirstObjectByType<TotemManager>()?.CheckIfSolved();
     }
 
 }

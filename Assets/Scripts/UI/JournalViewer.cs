@@ -1,9 +1,11 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
 
 public class JournalViewer : MonoBehaviour
 {
     private Animator animator;
+    public List<GameObject> buttons;
 
     [Header("Slide Settings")]
     public Vector3 hiddenOffset = new Vector3(0f, -0.35f, 0f);
@@ -29,11 +31,29 @@ public class JournalViewer : MonoBehaviour
     public void pageLeft()
     {
         animator.SetTrigger("go_back");
+        StartCoroutine(ButtonVanish());
     }
 
     public void pageRight()
     {
         animator.SetTrigger("go_ahead");
+        StartCoroutine(ButtonVanish());
+    }
+
+    private IEnumerator ButtonVanish()
+    {
+        buttons[0].gameObject.SetActive(false);
+        buttons[1].gameObject.SetActive(false);
+        buttons[2].gameObject.SetActive(false);
+        buttons[3].gameObject.SetActive(false);
+        buttons[4].gameObject.SetActive(false);
+        yield return new WaitForSeconds(1f);
+        buttons[0].gameObject.SetActive(true);
+        buttons[1].gameObject.SetActive(true);
+        buttons[2].gameObject.SetActive(true);
+        buttons[3].gameObject.SetActive(true);
+        buttons[4].gameObject.SetActive(true);
+
     }
 
     private IEnumerator SlideIn()
@@ -55,21 +75,32 @@ public class JournalViewer : MonoBehaviour
             animator.SetTrigger("go_ahead");
 
         isOpen = true;
-
+        yield return new WaitForSeconds(1f);
         journalUI.gameObject.SetActive(isOpen);
     }
 
     public void Close()
     {
-        if (!isOpen || isClosing) return;
+        if (isClosing) return;
         isClosing = true;
         StartCoroutine(CloseRoutine());
     }
 
     private IEnumerator CloseRoutine()
     {
-        if (animator != null)
-            animator.SetTrigger("go_back");
+        if (animator != null) animator.SetTrigger("go_back");
+        yield return new WaitForSeconds(0.12f);
+        animator.SetTrigger("go_back");
+        yield return new WaitForSeconds(0.12f);
+        animator.SetTrigger("go_back");
+        yield return new WaitForSeconds(0.12f);
+        animator.SetTrigger("go_back");
+        yield return new WaitForSeconds(0.12f);
+        animator.SetTrigger("go_back");
+        yield return new WaitForSeconds(0.12f);
+        animator.SetTrigger("go_back");
+        yield return new WaitForSeconds(0.12f);
+        animator.SetTrigger("go_back");
 
         journalUI.gameObject.SetActive(false);
 
@@ -89,6 +120,7 @@ public class JournalViewer : MonoBehaviour
         transform.localPosition = end;
 
         player.EnableControls();
+        player.NotifyJournalClosed();
         Destroy(gameObject);
     }
 

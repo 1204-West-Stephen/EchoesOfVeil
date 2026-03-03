@@ -106,24 +106,52 @@ public class Hotbar : MonoBehaviour
     {
         int itemCount = inventory.inventory.Count;
 
-        if (itemCount == 0)
+        bool hasAnyItem = false;
+        foreach (var item in inventory.inventory)
         {
-            selectedIndex = 0; 
+            if (item != null)
+            {
+                hasAnyItem = true;
+                break;
+            }
+        }
+
+        if (!hasAnyItem)
+        {
+            inventory.selectedIndex = 0;
+            selectedIndex = 0;
             return;
         }
 
-        if (scrollDelta.y < 0f)
+        if (scrollDelta.y != 0f)
         {
+            bool hasItem = false;
+            foreach (var item in inventory.inventory)
+            {
+                if (item != null)
+                {
+                    hasItem = true;
+                    break;
+                }
+            }
+
+            if (!hasItem) return; 
+
+            int startIndex = selectedIndex;
+
             do
             {
-                selectedIndex = (selectedIndex + 1) % itemCount;
-            } while (inventory.inventory[selectedIndex] == null);
-        }
-        else if (scrollDelta.y > 0f)
-        {
-            do
-            {
-                selectedIndex = (selectedIndex - 1 + itemCount) % itemCount;
+                if (scrollDelta.y < 0f)
+                {
+                    selectedIndex = (selectedIndex + 1) % inventory.inventory.Count;
+                }
+                else
+                {
+                    selectedIndex = (selectedIndex - 1 + inventory.inventory.Count) % inventory.inventory.Count;
+                }
+
+                if (selectedIndex == startIndex) break;
+
             } while (inventory.inventory[selectedIndex] == null);
         }
 
@@ -151,6 +179,8 @@ public class Hotbar : MonoBehaviour
         {
             selectedIndex = 5;
         }
+
+        inventory.selectedIndex = selectedIndex;
     }
     private void DisplayCells()
     {

@@ -11,7 +11,6 @@ public class TabletShrine : MonoBehaviour, i_Interactable
     [Header("Starting State")]
     public ItemData startingTablet;
 
-    public bool canPlace;
     public bool itemPickedUp;
 
     private GameObject player;
@@ -31,23 +30,14 @@ public class TabletShrine : MonoBehaviour, i_Interactable
             MoveTabletToShrine(startingTablet.prefab);
             currentTabletNum = startingTablet.tabletNumber;
         }
-
-        canPlace = false;
     }
 
     public void Interact()
     {
-        if (canPlace)
+        if (placedTablet == null)
         {
-            if (PlaceTablet())
-            {
-                Debug.Log("Tablet placed");
-                canPlace = false;
-            }
-            else
-            {
-                Debug.Log("Tablet not placed - no valid tablet in inventory");
-            }
+            if (!PlaceTablet())
+                Debug.Log("No valid tablet selected.");
         }
         else
         {
@@ -59,33 +49,24 @@ public class TabletShrine : MonoBehaviour, i_Interactable
 
     private bool PlaceTablet()
     {
-        if (inventory == null || inventory.inventory.Count == 0)
+        if (inventory == null) return false;
+
+        ItemData selectedItem = inventory.GetSelectedItem();
+        if (selectedItem == null) return false;
+
+        if (selectedItem.typeInput != InputType.Tablet)
             return false;
 
-        ItemData tabletToPlace = null;
-        foreach (var item in inventory.inventory)
-        {
-            if (item != null && item.typeInput == InputType.Tablet)
-            {
-                tabletToPlace = item;
-                break;
-            }
-        }
+        placedTablet = selectedItem; // THIS WAS MISSING
+        currentTabletNum = selectedItem.tabletNumber;
 
-        if (tabletToPlace != null)
-        {
-            placedTablet = tabletToPlace;
-            currentTabletNum = tabletToPlace.tabletNumber;
+        inventory.RemoveSelectedItem();
 
-            inventory.RemoveItem(tabletToPlace);
+        MoveTabletToShrine(selectedItem.prefab);
 
-            MoveTabletToShrine(tabletToPlace.prefab);
+        Debug.Log($"Tablet {currentTabletNum} placed in shrine {tabletShrineNum}");
 
-            Debug.Log($"Tablet {currentTabletNum} placed in shrine {tabletShrineNum}");
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     private void PickUpTablet()
@@ -103,7 +84,6 @@ public class TabletShrine : MonoBehaviour, i_Interactable
             placedTablet = null;
             currentTabletNum = -1;
             itemPickedUp = true;
-            canPlace = true;
 
             Debug.Log("Tablet picked up from shrine " + tabletShrineNum);
         }
@@ -134,5 +114,10 @@ public class TabletShrine : MonoBehaviour, i_Interactable
         {
             Debug.LogWarning("Tablet prefab is null, cannot move to shrine!");
         }
+    }
+
+    private InputType GetRequiredInputType()
+    {
+        return InputType.Tablet;
     }
 }

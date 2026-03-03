@@ -29,14 +29,17 @@ public class Stone : MonoBehaviour, i_Interactable
             Inventory inventory = player.GetComponent<Inventory>();
             if (inventory != null)
             {
+                if (stoneFell)
+                {
+                    return;
+                }
+
                 if (piece.itemPickedUp && UsePiece(inventory))
                 {
                     animator.SetTrigger("Interacted");
                     stoneFell = true;
                 }
-                else
-                {
-
+                else {
                     controls.StartDialogue("This stone is a little loose. There may be something behind it");
                 }
             }
@@ -44,16 +47,23 @@ public class Stone : MonoBehaviour, i_Interactable
     }
     private bool UsePiece(Inventory inventory)
     {
-        foreach (ItemData item in inventory.inventory)
+        ItemData selectedItem = inventory.GetSelectedItem();
+
+        if (selectedItem == null) return false;
+
+        if (selectedItem.typeInput == GetRequiredInputType() && selectedItem.itemName == "Sharp Metal Piece")
         {
-            if (item.typeInput == InputType.MetalPiece && item.itemName == "Sharp Metal Piece")
-            {
-                inventory.RemoveItem(item);
-                Debug.Log($"Metal Piece consumed and removed from inventory.");
-                return true;
-            }
+            inventory.RemoveSelectedItem();
+            Debug.Log("Torch consumed.");
+            return true;
         }
-            return false;
+
+        return false;
+    }
+
+    public InputType GetRequiredInputType()
+    {
+        return InputType.MetalPiece;
     }
 }
 

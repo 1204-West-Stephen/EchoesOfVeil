@@ -53,28 +53,18 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
 
     private bool PlaceObject()
     {
-        if (inventory == null || inventory.inventory.Count == 0)
-            return false;
-
         ItemData objectToPlace = null;
-        foreach (var item in inventory.inventory)
+        ItemData selectedItem = inventory.GetSelectedItem();
+
+        objectToPlace = selectedItem;
+
+        if (selectedItem == null) return false;
+
+        if (selectedItem.typeInput == GetRequiredInputType())
         {
-            if (item != null && item.typeInput == InputType.GuardianItem)
-            {
-                objectToPlace = item;
-                break;
-            }
-        }
-
-        if (objectToPlace != null)
-        {
-            placedObjectData = objectToPlace;
-
-            inventory.RemoveItem(objectToPlace);
-
+            inventory.RemoveSelectedItem();
             MoveObjectToShrine(objectToPlace.prefab);
-
-            Debug.Log($"Object {placedObjectData.name} placed in tower {towerName}");
+            Debug.Log("Key consumed.");
             return true;
         }
 
@@ -90,7 +80,7 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
             Destroy(placedObject);
             placedObject = null;
 
-            placedObjectData = null; // reset when picked back up
+            placedObjectData = null;
             itemPickedUp = true;
             canPlace = true;
 
@@ -123,5 +113,10 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
         {
             Debug.LogWarning("Tablet prefab is null, cannot move to shrine!");
         }
+    }
+
+    private InputType GetRequiredInputType()
+    {
+        return InputType.GuardianItem;
     }
 }

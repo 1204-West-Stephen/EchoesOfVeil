@@ -7,6 +7,7 @@ public class BalancePuzzle : MonoBehaviour
     public GameObject weightGem;
     public List<NumberStone> numberStones;
     public List<Transform> gemLocations;
+    private Inventory inventory;
 
     public bool puzzleSolved = false;
     private bool isResetting = false;
@@ -15,6 +16,7 @@ public class BalancePuzzle : MonoBehaviour
     {
         weightBalance = 5;
         UpdateGemPosition();
+        inventory = FindFirstObjectByType<Inventory>();
     }
 
     public void ApplyStoneIncrease(ItemData item)
@@ -107,6 +109,15 @@ public class BalancePuzzle : MonoBehaviour
 
         weightBalance = 5;
         UpdateGemPosition();
+
+        for (int i = 0; i < inventory.inventory.Count; i++)
+        {
+            if (inventory.inventory[i] != null &&
+                inventory.inventory[i].typeInput == InputType.NumberStone)
+            {
+                inventory.inventory[i] = null;
+            }
+        }
 
         for (int i = 0; i < numberStones.Count; i++)
         {

@@ -39,18 +39,9 @@ public class LightShrine : MonoBehaviour, i_Interactable
     public void Interact()
     {
         ItemData stoneToPlace = null;
-        foreach (var item in inventory.inventory)
-        {
-            if (item != null && item.typeInput == InputType.NumberStone)
-            {
-                stoneToPlace = item;
-                break;
-            }
-        }
 
-        if (stoneToPlace != null)
+        if (stoneToPlace != null && UseStone(inventory))
         {
-            inventory.RemoveItem(stoneToPlace);
             puzzle.ApplyStoneDecrease(stoneToPlace);
             ShineLight();
         }
@@ -60,24 +51,38 @@ public class LightShrine : MonoBehaviour, i_Interactable
         }
     }
 
+    private bool UseStone(Inventory inventory)
+    {
+        ItemData selectedItem = inventory.GetSelectedItem();
+
+        if (selectedItem == null) return false;
+
+        if (selectedItem.typeInput == GetRequiredInputType())
+        {
+            inventory.RemoveSelectedItem();
+            Debug.Log("Key consumed.");
+            return true;
+        }
+
+        return false;
+    }
+
     public void ShineLight()
     {
         if (lightBeam == null) return;
 
         lightBeam.SetActive(true);
 
-        // Stop any running coroutine
         if (beamCoroutine != null)
             StopCoroutine(beamCoroutine);
 
-        // Reset scale and alpha for a fresh start
         lightBeam.transform.localScale = baseScale;
 
         Renderer r = lightBeam.GetComponent<Renderer>();
         if (r != null && r.material.HasProperty("_TintColor"))
         {
             Color color = r.material.GetColor("_TintColor");
-            color.a = 1f; // reset alpha
+            color.a = 1f;
             r.material.SetColor("_TintColor", color);
         }
 
@@ -89,7 +94,6 @@ public class LightShrine : MonoBehaviour, i_Interactable
         Renderer r = lightBeam.GetComponent<Renderer>();
         string colorProperty = r != null && r.material.HasProperty("_Color") ? "_Color" : "_TintColor";
 
-        // --- Scale Up ---
         Vector3 startScale = lightBeam.transform.localScale; // should be (baseScale.x, 0, baseScale.z)
         Vector3 targetScale = new Vector3(baseScale.x, baseScale.y + growAmount, baseScale.z);
 
@@ -98,17 +102,12 @@ public class LightShrine : MonoBehaviour, i_Interactable
         {
             t += Time.deltaTime;
             float lerp = Mathf.Clamp01(t / growDuration);
-
-            // Scale
             lightBeam.transform.localScale = Vector3.Lerp(startScale, targetScale, lerp);
-
-            // Light intensity
             beam.intensity = Mathf.Lerp(0f, beamIntensity, lerp);
 
             yield return null;
         }
 
-        // --- Fade Out ---
         Color startColor = r.material.GetColor(colorProperty);
         Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
 
@@ -117,18 +116,16 @@ public class LightShrine : MonoBehaviour, i_Interactable
         {
             t += Time.deltaTime;
             float lerp = Mathf.Clamp01(t / fadeDuration);
-
-            // Fade color
             r.material.SetColor(colorProperty, Color.Lerp(startColor, endColor, lerp));
-
-            // Light intensity fade
             beam.intensity = Mathf.Lerp(beamIntensity, 0f, lerp);
 
             yield return null;
         }
+    }
 
-        // Optionally disable at end
-        // lightBeam.SetActive(false);
+    private InputType GetRequiredInputType()
+    {
+        return InputType.NumberStone;
     }
 
 }

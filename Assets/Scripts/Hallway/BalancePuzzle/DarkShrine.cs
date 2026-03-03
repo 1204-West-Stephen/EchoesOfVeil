@@ -35,25 +35,32 @@ public class DarkShrine : MonoBehaviour, i_Interactable
     public void Interact()
     {
         ItemData stoneToPlace = null;
-        foreach (var item in inventory.inventory)
-        {
-            if (item != null && item.typeInput == InputType.NumberStone)
-            {
-                stoneToPlace = item;
-                break;
-            }
-        }
 
-        if (stoneToPlace != null)
+        if (stoneToPlace != null && UseStone(inventory))
         {
-            inventory.RemoveItem(stoneToPlace);
-            puzzle.ApplyStoneIncrease(stoneToPlace);
+            puzzle.ApplyStoneDecrease(stoneToPlace);
             ShineLight();
         }
         else
         {
             Debug.Log("No number stone in inventory to place.");
         }
+    }
+
+    private bool UseStone(Inventory inventory)
+    {
+        ItemData selectedItem = inventory.GetSelectedItem();
+
+        if (selectedItem == null) return false;
+
+        if (selectedItem.typeInput == GetRequiredInputType())
+        {
+            inventory.RemoveSelectedItem();
+            Debug.Log("Key consumed.");
+            return true;
+        }
+
+        return false;
     }
 
     public void ShineLight()
@@ -115,5 +122,10 @@ public class DarkShrine : MonoBehaviour, i_Interactable
         }
 
         lightBeam.SetActive(false);
+    }
+
+    private InputType GetRequiredInputType()
+    {
+        return InputType.NumberStone;
     }
 }
