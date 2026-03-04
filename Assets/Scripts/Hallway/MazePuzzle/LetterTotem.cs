@@ -8,6 +8,7 @@ public class LetterTotem : MonoBehaviour, i_Interactable
     public Sprite answerSprite;
     public SpriteRenderer currentSprite;
     private int index;
+    
 
     public bool puzzleSovled;
     public bool canInteract = true;
@@ -17,7 +18,6 @@ public class LetterTotem : MonoBehaviour, i_Interactable
     {
         index = 0;
         currentSprite.sprite = letterSprites[index];
-
         puzzleSovled = false;
     }
 

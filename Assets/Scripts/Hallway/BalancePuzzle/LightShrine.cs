@@ -38,7 +38,7 @@ public class LightShrine : MonoBehaviour, i_Interactable
 
     public void Interact()
     {
-        ItemData stoneToPlace = null;
+        ItemData stoneToPlace = inventory.GetSelectedItem();    
 
         if (stoneToPlace != null && UseStone(inventory))
         {

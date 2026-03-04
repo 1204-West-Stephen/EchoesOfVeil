@@ -118,4 +118,24 @@ public class HallwayGameManager : MonoBehaviour
 
         isLoaded = true;
     }
+
+    public IEnumerator ShowLight(Camera solvedCamera)
+    {
+        PlayerMovement movement = FindFirstObjectByType<PlayerMovement>();
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        Camera playerCamera = playerObj.GetComponentInChildren<Camera>();
+        playerCamera = playerObj.GetComponentInChildren<Camera>();
+
+        movement.controlLock();
+        yield return new WaitForSeconds(1.5f);
+        solvedCamera.gameObject.SetActive(true);
+        playerCamera.gameObject.SetActive(false);
+        yield return new WaitForSeconds(3.5f);
+
+        playerCamera.gameObject.SetActive(true);
+        solvedCamera.gameObject.SetActive(false);
+        movement.controlUnlock();
+
+        yield return null;
+    }
 }

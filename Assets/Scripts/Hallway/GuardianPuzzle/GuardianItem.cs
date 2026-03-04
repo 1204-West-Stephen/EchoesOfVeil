@@ -1,102 +1,73 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GuardianItem : MonoBehaviour, i_Interactable
 {
     public ItemData item;
-    public bool itemPickedUp = false;
+    private bool itemPickedUp = false;
+
+    public Transform itemPos;
+    private Transform currentItemPos;
+    private GameObject placedObject;
 
     private Inventory inventory;
-
-    public GameObject placedObject;
-    [HideInInspector] public ItemData placedObjectData;
-
-    [Header("Child Transform for Placement")]
-    public Transform itemPos; // assign in prefab hierarchy
+    private Collider col;
+    private Renderer[] renderers;
 
     private void Start()
     {
+        currentItemPos = itemPos;     
+    }
+
+    private void Awake()
+    {
         inventory = FindFirstObjectByType<Inventory>();
+        col = GetComponent<Collider>();
+        renderers = GetComponentsInChildren<Renderer>();
 
         if (itemPos == null)
         {
             Debug.LogError($"{name} has no ItemPos assigned!");
+            itemPos = currentItemPos;
         }
     }
 
     public void Interact()
     {
-        // === PICK UP ORIGINAL WORLD ITEM ===
-        if (item != null && !itemPickedUp)
+        if (inventory == null) return;
+
+        if (!itemPickedUp && item != null)
         {
-            if (inventory != null && inventory.CheckInventory())
-            {
-                inventory.AddItem(item);
-                itemPickedUp = true;
+            if (!inventory.CheckInventory()) return;
 
-                // Detach itemPos so it survives Destroy
-                if (itemPos != null)
-                    itemPos.parent = null;
+            inventory.AddItem(item);
+            itemPickedUp = true;
+            item = null;
 
-                Destroy(gameObject); // destroy the prefab root
-
-                item = null;
-            }
-
-            return;
-        }
-
-        // === PLACE ITEM FROM INVENTORY ===
-        if (placedObject == null)
-        {
-            PlaceObject();
+            if (col != null) col.enabled = false;
+            foreach (var r in renderers) r.enabled = false;
         }
         else
         {
-            PickUpObject();
+            PlaceItem();
         }
     }
 
-    private bool PlaceObject()
+    private void PlaceItem()
     {
-        if (inventory == null) return false;
-
         ItemData selectedItem = inventory.GetSelectedItem();
-        if (selectedItem == null) return false;
-        if (selectedItem.typeInput != InputType.GuardianItem) return false;
+        if (selectedItem == null) return;
+        if (selectedItem.typeInput != InputType.GuardianItem) return;
 
-        placedObjectData = selectedItem;
+        if (placedObject != null) Destroy(placedObject);
+
+        placedObject = Instantiate(
+            selectedItem.prefab,
+            itemPos.position,
+            itemPos.rotation,
+            itemPos
+        );
+
         inventory.RemoveSelectedItem();
-
-        if (itemPos != null)
-        {
-            placedObject = Instantiate(
-                selectedItem.prefab,
-                itemPos.position,
-                itemPos.rotation
-            );
-            placedObject.SetActive(true);
-        }
-        else
-        {
-            Debug.LogError($"{name} has no ItemPos assigned for placement!");
-        }
-
-        Debug.Log("Object placed.");
-        return true;
-    }
-
-    private void PickUpObject()
-    {
-        if (placedObject == null || inventory == null || !inventory.CheckInventory()) return;
-
-        inventory.AddItem(placedObjectData);
-
-        Destroy(placedObject);
-        placedObject = null;
-        placedObjectData = null;
-
-        Debug.Log("Placed object picked up.");
+        itemPickedUp = false;
     }
 }

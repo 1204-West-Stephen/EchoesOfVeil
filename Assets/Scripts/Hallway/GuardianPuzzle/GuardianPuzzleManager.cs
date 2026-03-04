@@ -8,6 +8,13 @@ public class GuardianPuzzleManager : MonoBehaviour
     public GuardianRiddleStone[] stones;
     public bool puzzleSolved;
     public bool first = true;
+    private HallwayGameManager hgm;
+    public Camera solvedCamera;
+
+    private void Start()
+    {
+        hgm = FindFirstObjectByType<HallwayGameManager>();
+    }
 
     public void CheckIfSolved()
     {
@@ -24,6 +31,7 @@ public class GuardianPuzzleManager : MonoBehaviour
         puzzleSolved = true;
 
         FindFirstObjectByType<HallwayGameManager>()?.CheckHallwayPuzzles();
+        StartCoroutine(hgm.ShowLight(solvedCamera));
         Debug.Log("All towers are correct! Puzzle solved!");
     }
 

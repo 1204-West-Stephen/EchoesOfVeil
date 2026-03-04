@@ -8,12 +8,15 @@ public class BalancePuzzle : MonoBehaviour
     public List<NumberStone> numberStones;
     public List<Transform> gemLocations;
     private Inventory inventory;
+    public Camera solvedCamera;
+    private HallwayGameManager hgm;
 
     public bool puzzleSolved = false;
     private bool isResetting = false;
 
     private void Start()
     {
+        hgm = FindFirstObjectByType<HallwayGameManager>();
         weightBalance = 5;
         UpdateGemPosition();
         inventory = FindFirstObjectByType<Inventory>();
@@ -98,6 +101,7 @@ public class BalancePuzzle : MonoBehaviour
     {
         puzzleSolved = true;
         FindFirstObjectByType<HallwayGameManager>()?.CheckHallwayPuzzles();
+        StartCoroutine(hgm.ShowLight(solvedCamera));
     }
 
 

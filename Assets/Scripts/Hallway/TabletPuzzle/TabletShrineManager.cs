@@ -8,14 +8,12 @@ public class TabletShrineManager : MonoBehaviour
     public bool puzzleSolved;
     public Camera solvedCamera;
     private Camera playerCamera;
-    private PlayerMovement movement;
+    private HallwayGameManager hgm;
 
     private void Start()
     {
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        movement = FindFirstObjectByType<PlayerMovement>();
-        playerCamera = playerObj.GetComponentInChildren<Camera>();
         solvedCamera.gameObject.SetActive(false);
+        hgm = FindFirstObjectByType<HallwayGameManager>();
     }
 
     public void CheckIfSolved()
@@ -30,24 +28,9 @@ public class TabletShrineManager : MonoBehaviour
         }
 
         puzzleSolved = true;
-        StartCoroutine(ShowLight());
+        StartCoroutine(hgm.ShowLight(solvedCamera));
         FindFirstObjectByType<HallwayGameManager>()?.CheckHallwayPuzzles();
         Debug.Log("All shrines matched! Puzzle solved!");
-    }
-
-    private IEnumerator ShowLight()
-    {
-        movement.controlLock();
-        yield return new WaitForSeconds(1.5f);
-        solvedCamera.gameObject.SetActive(true);
-        playerCamera.gameObject.SetActive(false);
-        yield return new WaitForSeconds(3.5f);
-
-        playerCamera.gameObject.SetActive(true);
-        solvedCamera.gameObject.SetActive(false);
-        movement.controlUnlock();
-
-        yield return null;
     }
 }
 

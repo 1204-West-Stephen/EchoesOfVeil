@@ -34,11 +34,11 @@ public class DarkShrine : MonoBehaviour, i_Interactable
 
     public void Interact()
     {
-        ItemData stoneToPlace = null;
+        ItemData stoneToPlace = inventory.GetSelectedItem();
 
         if (stoneToPlace != null && UseStone(inventory))
         {
-            puzzle.ApplyStoneDecrease(stoneToPlace);
+            puzzle.ApplyStoneIncrease(stoneToPlace);
             ShineLight();
         }
         else
