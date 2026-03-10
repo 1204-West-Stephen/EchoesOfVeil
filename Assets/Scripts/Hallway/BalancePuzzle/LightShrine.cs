@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using Unity.AppUI.UI;
+using UnityEngine.Audio;
 
 public class LightShrine : MonoBehaviour, i_Interactable
 {
@@ -9,6 +11,9 @@ public class LightShrine : MonoBehaviour, i_Interactable
 
     private GameObject player;
     private Inventory inventory;
+
+    private AudioSource source;
+    public AudioClip clip;
 
     [Header("Beam Settings")]
     public float growAmount = 0.37f;
@@ -24,6 +29,8 @@ public class LightShrine : MonoBehaviour, i_Interactable
     {
         player = GameObject.FindWithTag("Player");
         inventory = player.GetComponent<Inventory>();
+
+        source = player.GetComponent<AudioSource>();
 
         if (lightBeam != null)
         {
@@ -60,6 +67,11 @@ public class LightShrine : MonoBehaviour, i_Interactable
         if (selectedItem.typeInput == GetRequiredInputType())
         {
             inventory.RemoveSelectedItem();
+
+            if (clip != null)
+            {
+                AudioSource.PlayClipAtPoint(clip, transform.position, 0.2f);
+            }
             Debug.Log("Key consumed.");
             return true;
         }

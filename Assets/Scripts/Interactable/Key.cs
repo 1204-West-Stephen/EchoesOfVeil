@@ -1,14 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AppUI.UI;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Key : MonoBehaviour, i_Interactable
 {
     public ItemData item;
     public int keyID;
+    private AudioSource source;
+    public AudioClip keySound;
 
     private void Start()
     {
+        source = GetComponent<AudioSource>();
         keyID = item.keyID;
     }
 
@@ -22,6 +27,11 @@ public class Key : MonoBehaviour, i_Interactable
             {
                 if (inventory.CheckInventory())
                 {
+                    if (keySound != null)
+                    {
+                        AudioSource.PlayClipAtPoint(keySound, transform.position, 0.05f);
+                    }
+
                     inventory.AddItem(item);
                     Destroy(gameObject);
                 }

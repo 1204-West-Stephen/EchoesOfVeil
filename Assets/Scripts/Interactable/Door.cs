@@ -7,15 +7,19 @@ public class Door : MonoBehaviour, i_Interactable
     public int doorID;
 
     private PlayerControls playerManager;
+    private AudioSource audioSource;
+    public AudioClip openDoor;
 
     private void Awake()
     {
         playerManager = FindFirstObjectByType<PlayerControls>();
+
     }
 
     private void Start()
     {
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         isOpen = false;
     }
 
@@ -64,6 +68,11 @@ public class Door : MonoBehaviour, i_Interactable
     {
         isOpen = true;
         animator.SetTrigger("Open");
+
+        if (audioSource != null && openDoor != null)
+        {
+            audioSource.PlayOneShot(openDoor);
+        }
     }
 
     public InputType GetRequiredInputType()

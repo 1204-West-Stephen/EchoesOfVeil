@@ -11,10 +11,13 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
 
     private GameObject player;
     private Inventory inventory;
+    private AudioSource source;
+    public AudioClip pickup;
+    public AudioClip place;
 
     [Header("Answer Setup")]
-    public ItemData correctAnswerData;   // Assign the correct item in inspector
-    [HideInInspector] public ItemData placedObjectData; // What the player placed
+    public ItemData correctAnswerData;
+    [HideInInspector] public ItemData placedObjectData; 
 
     public bool canPlace;
     public bool itemPickedUp;
@@ -64,6 +67,10 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
         {
             inventory.RemoveSelectedItem();
             MoveObjectToShrine(objectToPlace.prefab);
+            if (source != null && place != null)
+            {
+                source.PlayOneShot(place);
+            }
             Debug.Log("Key consumed.");
             return true;
         }
@@ -76,7 +83,10 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
         if (placedObject != null && inventory != null && inventory.CheckInventory())
         {
             inventory.AddItem(placedObjectData);
-
+            if (pickup != null)
+            {
+                AudioSource.PlayClipAtPoint(pickup, transform.position, 0.15f);
+            }
             Destroy(placedObject);
             placedObject = null;
 

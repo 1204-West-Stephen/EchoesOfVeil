@@ -1,25 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class PrisonDoorExit : MonoBehaviour
 {
-    public TorchHilt hilt;
-
     private Animator animator;
+    private AudioSource source;
+    public AudioClip clip;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
+        source = GetComponent<AudioSource>();
     }
-
-    private void Update()
+    public IEnumerator OpenDoor()
     {
-        if (hilt.puzzleComplete)
-            OpenDoor();
-    }
+        yield return new WaitForSeconds(1.2f);
 
-    private void OpenDoor()
-    {
         animator.SetTrigger("Start");
+
+        if (source != null && clip != null)
+        {
+            source.PlayOneShot(clip);
+        }
+
+        yield return null;
     }
 }

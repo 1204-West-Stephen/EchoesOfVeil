@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class TabletShrine : MonoBehaviour, i_Interactable
 {
@@ -18,11 +19,15 @@ public class TabletShrine : MonoBehaviour, i_Interactable
 
     private ItemData placedTablet;
     private GameObject placedTabletObject;
+    private AudioSource source;
+    public AudioClip pickup;
+    public AudioClip place;
 
     private void Start()
     {
         player = GameObject.FindWithTag("Player");
         inventory = player.GetComponent<Inventory>();
+        source = player.GetComponent<AudioSource>();
 
         if (startingTablet != null && startingTablet.prefab != null)
         {
@@ -57,7 +62,12 @@ public class TabletShrine : MonoBehaviour, i_Interactable
         if (selectedItem.typeInput != InputType.Tablet)
             return false;
 
-        placedTablet = selectedItem; // THIS WAS MISSING
+        if (place != null)
+        {
+            AudioSource.PlayClipAtPoint(place, transform.position, 0.2f);
+        }
+
+        placedTablet = selectedItem;
         currentTabletNum = selectedItem.tabletNumber;
 
         inventory.RemoveSelectedItem();
@@ -77,6 +87,11 @@ public class TabletShrine : MonoBehaviour, i_Interactable
 
             if (placedTabletObject != null)
             {
+                if (pickup != null)
+                {
+                    AudioSource.PlayClipAtPoint(pickup, transform.position, 0.15f);
+                }
+
                 Destroy(placedTabletObject); 
                 placedTabletObject = null;
             }

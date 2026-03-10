@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class MetalPiece : MonoBehaviour, i_Interactable
 {
@@ -6,10 +7,17 @@ public class MetalPiece : MonoBehaviour, i_Interactable
 
     public bool itemPickedUp = false;
     private PlayerControls playerManager;
+    private AudioSource source;
+    public AudioClip pickup;
 
     private void Awake()
     {
         playerManager = FindFirstObjectByType<PlayerControls>();
+    }
+
+    private void Start()
+    {
+        source = GetComponent<AudioSource>();
     }
 
     public void Interact()
@@ -22,6 +30,11 @@ public class MetalPiece : MonoBehaviour, i_Interactable
             {
                 if (inventory.CheckInventory())
                 {
+                    if (pickup != null)
+                    {
+                        AudioSource.PlayClipAtPoint(pickup, transform.position, 0.05f);
+                    }
+
                     inventory.AddItem(item);
                     gameObject.SetActive(false);
                     itemPickedUp = true;
