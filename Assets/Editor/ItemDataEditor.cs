@@ -18,6 +18,8 @@ public class ItemDataEditor : Editor
         SerializedProperty keyID = serializedObject.FindProperty("keyID");
         SerializedProperty tabletNumber = serializedObject.FindProperty("tabletNumber");
         SerializedProperty stoneValue = serializedObject.FindProperty("stoneValue");
+        SerializedProperty scale = serializedObject.FindProperty("scale");
+        SerializedProperty rotation = serializedObject.FindProperty("rotation");
 
         EditorGUILayout.PropertyField(itemName);
         EditorGUILayout.PropertyField(puzzleNumber);
@@ -25,6 +27,8 @@ public class ItemDataEditor : Editor
         EditorGUILayout.PropertyField(sprite);
         EditorGUILayout.PropertyField(canBeInspected);
         EditorGUILayout.PropertyField(itemInspectUI);
+        EditorGUILayout.PropertyField(scale);
+        EditorGUILayout.PropertyField(rotation);
 
         if ((InputType)typeInput.enumValueIndex == InputType.Key)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using Unity.AppUI.UI;
 
 public class HallwayGameManager : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class HallwayGameManager : MonoBehaviour
     public GuardianPuzzleManager gpm;
     public TotemManager tm;
     public TabletShrineManager tbm;
+
+    public Camera solvedCamera;
     
     public bool gameMaster = false;
     private bool isLoaded = false;
@@ -21,6 +24,9 @@ public class HallwayGameManager : MonoBehaviour
     public float lightIntensity = 6f;
 
     private Animator animator;
+    private AudioSource source;
+    public AudioClip clip;
+    public AudioClip lightSound;
 
     private void Start()
     {
@@ -37,6 +43,7 @@ public class HallwayGameManager : MonoBehaviour
         }
 
         animator = GetComponent<Animator>();
+        source = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -72,9 +79,11 @@ public class HallwayGameManager : MonoBehaviour
 
         if (puzzleCompleted.All(p => p) || gameMaster)
         {
-            if (!isLoaded) { 
+            if (!isLoaded)
+            {
+                isLoaded = true; // lock it immediately
                 StartCoroutine(LoadLibrary());
-                OpenDoors();
+                StartCoroutine(OpenDoors());
                 gameMaster = false;
             }
         }
@@ -83,6 +92,8 @@ public class HallwayGameManager : MonoBehaviour
     private IEnumerator FadeInLight(Light light)
     {
         yield return new WaitForSeconds(3f);
+
+        AudioSource.PlayClipAtPoint(lightSound, transform.position, 0.55f);
 
         float t = 0f;
         while (t < fadeDuration && light.intensity <= lightIntensity)
@@ -94,9 +105,15 @@ public class HallwayGameManager : MonoBehaviour
         }
     }
 
-    private void OpenDoors()
+    private IEnumerator OpenDoors()
     {
+        yield return new WaitForSeconds(2.0f);
+        StartCoroutine(ShowLight(solvedCamera));
+        yield return new WaitForSeconds(1.5f);
         animator.SetTrigger("Open");
+        AudioSource.PlayClipAtPoint(clip, transform.position, 0.55f);
+
+        yield return new WaitForSeconds(1.5f);
     }
 
     private IEnumerator LoadLibrary()

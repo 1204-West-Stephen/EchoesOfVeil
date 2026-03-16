@@ -39,21 +39,20 @@ public class TableSlot : MonoBehaviour, i_Interactable
         // SLOT EMPTY  PLACE ITEM
         if (selectedItem == null) return;
 
-        currentItem = Instantiate(selectedItem.prefab, itemAnchor);
-
-        currentItem.transform.localPosition = Vector3.zero;
+        currentItem = Instantiate(
+             selectedItem.prefab,
+             itemAnchor.position,
+             itemAnchor.rotation
+         );
 
         WorldItem newWorldItem = currentItem.GetComponent<WorldItem>();
 
         if (newWorldItem != null)
         {
-            currentItem.transform.localRotation = Quaternion.Euler(newWorldItem.placedRotation);
-            currentItem.transform.localScale = newWorldItem.placedScale;
-        }
-        else
-        {
-            currentItem.transform.localRotation = Quaternion.identity;
-            currentItem.transform.localScale = Vector3.one;
+            ItemData data = newWorldItem.item;
+
+            currentItem.transform.rotation = Quaternion.Euler(data.rotation);
+            currentItem.transform.localScale = data.scale;
         }
 
         inventory.RemoveSelectedItem();

@@ -28,7 +28,7 @@ public class GuardianRiddleStone : MonoBehaviour, i_Interactable
 
         playerControls.StartDialogue(text);
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(6f);
 
         if (manager.first)
         {

@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class Stone : MonoBehaviour, i_Interactable
 {
-    private Animator animator;
     public MetalPiece piece;
     public bool stoneFell = false;
 
-    private MeshCollider MeshCollider;
     private PlayerControls controls;
+    private Rigidbody rb;
 
     private void Awake()
     {
@@ -18,8 +17,10 @@ public class Stone : MonoBehaviour, i_Interactable
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
-        MeshCollider = GetComponent<MeshCollider>();
+        rb = GetComponent<Rigidbody>();
+
+        rb.isKinematic = true;   // disables physics
+        rb.useGravity = false;
     }
     public void Interact()
     {
@@ -36,7 +37,12 @@ public class Stone : MonoBehaviour, i_Interactable
 
                 if (piece.itemPickedUp && UsePiece(inventory))
                 {
-                    animator.SetTrigger("Interacted");
+                    rb.isKinematic = false;   // turn physics ON
+                    rb.useGravity = true;
+
+                    rb.AddForce(Vector3.down * 0.005f, ForceMode.Impulse);
+                    rb.WakeUp();
+
                     stoneFell = true;
                 }
                 else {

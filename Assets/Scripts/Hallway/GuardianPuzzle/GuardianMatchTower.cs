@@ -17,10 +17,14 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
 
     [Header("Answer Setup")]
     public ItemData correctAnswerData;
-    [HideInInspector] public ItemData placedObjectData; 
+    [HideInInspector] public ItemData placedObjectData;
+
+    [Header("Placement Override")]
+    public Vector3 rotationOverride;
 
     public bool canPlace;
     public bool itemPickedUp;
+    public bool canInteract = true;
 
     private void Start()
     {
@@ -35,43 +39,38 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
 
     public void Interact()
     {
-        if (canPlace)
+        if (canInteract)
         {
-            if (PlaceObject())
+            if (canPlace)
             {
-                canPlace = false;
+                if (PlaceObject())
+                    canPlace = false;
+                else
+                    Debug.Log("Object not placed - no valid object in inventory");
             }
             else
             {
-                Debug.Log("Object not placed - no valid object in inventory");
+                PickUpObject();
             }
-        }
-        else
-        {
-            PickUpObject();
-        }
 
-        FindFirstObjectByType<GuardianPuzzleManager>()?.CheckIfSolved();
+            FindFirstObjectByType<GuardianPuzzleManager>()?.CheckIfSolved();
+        }
     }
 
     private bool PlaceObject()
     {
-        ItemData objectToPlace = null;
         ItemData selectedItem = inventory.GetSelectedItem();
-
-        objectToPlace = selectedItem;
 
         if (selectedItem == null) return false;
 
         if (selectedItem.typeInput == GetRequiredInputType())
         {
             inventory.RemoveSelectedItem();
-            MoveObjectToShrine(objectToPlace.prefab);
+            MoveObjectToShrine(selectedItem);
+
             if (source != null && place != null)
-            {
                 source.PlayOneShot(place);
-            }
-            Debug.Log("Key consumed.");
+
             return true;
         }
 
@@ -83,18 +82,16 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
         if (placedObject != null && inventory != null && inventory.CheckInventory())
         {
             inventory.AddItem(placedObjectData);
+
             if (pickup != null)
-            {
                 AudioSource.PlayClipAtPoint(pickup, transform.position, 0.15f);
-            }
+
             Destroy(placedObject);
             placedObject = null;
-
             placedObjectData = null;
+
             itemPickedUp = true;
             canPlace = true;
-
-            Debug.Log("Tablet picked up from tower " + towerName);
         }
         else
         {
@@ -102,27 +99,29 @@ public class GuardianMatchTower : MonoBehaviour, i_Interactable
         }
     }
 
-    private void MoveObjectToShrine(GameObject objectPrefab)
+    private void MoveObjectToShrine(ItemData itemData)
     {
-        if (objectPrefab != null)
+        if (itemData == null || itemData.prefab == null)
         {
-            if (placedObject != null)
-            {
-                Destroy(placedObject);
-            }
-
-            placedObject = Instantiate(
-                objectPrefab,
-                floatPos.position,
-                Quaternion.Euler(0, 0, 0)
-            );
-
-            placedObject.SetActive(true);
+            Debug.LogWarning("Item prefab is null, cannot move to shrine!");
+            return;
         }
-        else
-        {
-            Debug.LogWarning("Tablet prefab is null, cannot move to shrine!");
-        }
+
+        if (placedObject != null)
+            Destroy(placedObject);
+
+        placedObject = Instantiate(
+            itemData.prefab,
+            floatPos.position,
+            Quaternion.identity
+        );
+
+        placedObject.transform.rotation =
+            Quaternion.Euler(itemData.rotation + rotationOverride);
+
+        placedObject.transform.localScale = itemData.scale;
+
+        placedObjectData = itemData;
     }
 
     private InputType GetRequiredInputType()

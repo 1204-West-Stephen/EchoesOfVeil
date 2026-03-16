@@ -18,6 +18,8 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 346d528b178fe2745b9578727c222e75, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
+  scale: {x: 0.25, y: 0.25, z: 0.25}
+  rotation: {x: -90, y: 0, z: 0}
   keyID: 0
   tabletNumber: 0
   prefab: {fileID: 245210537784541367, guid: 2665003ca0067fb4cb5ae8f95cf64887, type: 3}

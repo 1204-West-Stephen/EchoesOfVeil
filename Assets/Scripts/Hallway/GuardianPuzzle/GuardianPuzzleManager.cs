@@ -6,6 +6,7 @@ public class GuardianPuzzleManager : MonoBehaviour
 {
     public GuardianMatchTower[] towers;
     public GuardianRiddleStone[] stones;
+    public WorldItem[] worldItems;
     public bool puzzleSolved;
     public bool first = true;
     private HallwayGameManager hgm;
@@ -29,6 +30,11 @@ public class GuardianPuzzleManager : MonoBehaviour
         }
 
         puzzleSolved = true;
+
+        foreach (GuardianMatchTower tower in towers)
+        {
+            tower.canInteract = false;
+        }
 
         FindFirstObjectByType<HallwayGameManager>()?.CheckHallwayPuzzles();
         StartCoroutine(hgm.ShowLight(solvedCamera));

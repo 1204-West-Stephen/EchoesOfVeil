@@ -29,8 +29,8 @@ public class ItemData : ScriptableObject
     public Sprite sprite;
     public bool canBeInspected;
     public Canvas itemInspectUI;
-    public Vector3 placedRotation;
-    public Vector3 placedScale = Vector3.one;
+    public Vector3 scale = Vector3.one;
+    public Vector3 rotation;
 
     [HideInInspector] public int keyID;
     [HideInInspector] public int tabletNumber;
