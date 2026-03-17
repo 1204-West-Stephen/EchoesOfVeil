@@ -54,6 +54,7 @@ public class PlayerControls : MonoBehaviour
     public Journal journal;
     private JournalViewer activeJournal;
     private bool pressedJ;
+    public bool IsDialogueRunning => dialogueRunning;
 
     private void Awake()
     {
@@ -78,6 +79,8 @@ public class PlayerControls : MonoBehaviour
 
         controls.Menus.Journal.performed += _ => pressedJ = true;
         controls.Menus.Journal.canceled += _ => pressedJ = false;
+
+        controls.Menus.Submit.performed += _ => SkipDialogue();
     }
     private void OnEnable() => controls.Enable();
     private void OnDisable() => controls.Disable();
@@ -249,12 +252,24 @@ public class PlayerControls : MonoBehaviour
         canInteract = false;
         Cursor.visible = true;
     }
+
+    public void DisableMovementOnly()
+    {
+        movement.controlLock();   // stops WASD
+        canInteract = false;
+    }
     public void EnableControls()
     {
         movement.controlUnlock();
         playerCamera.controlUnlock();
         canInteract = true;
         Cursor.visible = false;
+    }
+
+    public void EnableMovementOnly()
+    {
+        movement.controlUnlock();   // stops WASD
+        canInteract = false;
     }
 
     // ========== JOURNAL ========== \\
@@ -323,7 +338,7 @@ public class PlayerControls : MonoBehaviour
         canvasGroup.alpha = 1f;
 
         // Stay on screen
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(3.85f);
 
         // Fade Out
         float fadeDuration = 1f;
@@ -337,6 +352,19 @@ public class PlayerControls : MonoBehaviour
         }
 
         canvasGroup.alpha = 0f;
+    }
+
+    public void SkipDialogue()
+    {
+        if (!dialogueRunning) return;
+
+        StopAllCoroutines(); // stops current dialogue coroutine
+
+        dialogueQueue.Clear();
+        dialogueRunning = false;
+
+        if (internalDialogueCanvas != null)
+            internalDialogueCanvas.gameObject.SetActive(false);
     }
 
     // ========== EXIT ========== \\

@@ -98,8 +98,6 @@ public class PlayerMovement : MonoBehaviour
 
         originalDragDistance = groundCheckDistance;
         crouchDragDistance = groundCheckDistance / 4;
-
-        canMove = true;
     }
 
     private void Update()

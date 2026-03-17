@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "PlayerInput",
     "maps": [
         {
@@ -9,7 +10,7 @@
                     "name": "Forward",
                     "type": "Button",
                     "id": "56a5cc30-6d6a-405d-aedd-5afc2b5d226f",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -237,7 +238,7 @@
                     "name": "Pause",
                     "type": "Button",
                     "id": "c0b8747c-4edb-461f-ad86-640862bcd2d8",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -310,6 +311,15 @@
                     "type": "Button",
                     "id": "6a26dfd4-8384-422a-91c0-b8af4e527b41",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Submit",
+                    "type": "Button",
+                    "id": "5348ca6e-a815-42fb-b69f-8fff03a29626",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -412,6 +422,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Journal",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5f2fa4e7-5e33-4cb5-bc1d-b8a7511bbbf0",
+                    "path": "<Keyboard>/{Submit}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Submit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
