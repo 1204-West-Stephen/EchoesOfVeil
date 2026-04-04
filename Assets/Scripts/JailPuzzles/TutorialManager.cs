@@ -1,10 +1,18 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 
 public class TutorialManager : MonoBehaviour
 {
     private PlayerControls controls;
     public GameObject journalUI;
+    public GameObject skipCanvas;
+
+    public GameObject keysCanvas;
+    public GameObject jControlUI;
+    
+    private CanvasGroup wasdCG;
+    public CanvasGroup jCG;
 
 
     void Start()
@@ -12,16 +20,15 @@ public class TutorialManager : MonoBehaviour
         controls = FindFirstObjectByType<PlayerControls>();
         controls.DisableMovementOnly();
 
+        wasdCG = keysCanvas.GetComponent<CanvasGroup>();
+        jCG = jControlUI.GetComponent<CanvasGroup>();
+
         journalUI.SetActive(false);
+        skipCanvas.SetActive(true);
+        keysCanvas.SetActive(false);
+        jControlUI.SetActive(false);
 
         StartCoroutine(Tutorial());
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private IEnumerator Tutorial()
@@ -39,12 +46,47 @@ public class TutorialManager : MonoBehaviour
         // WAIT until dialogue finishes
         yield return new WaitUntil(() => !controls.IsDialogueRunning);
 
-        JournalTutorialUI();          // NOW this will actually happen at the right time
-        controls.EnableMovementOnly();
+        JournalTutorialUI();
+        StartCoroutine(ShowKeyUI(keysCanvas, wasdCG));
+        controls.EnableControls();
     }
 
     private void JournalTutorialUI()
     {
         journalUI.SetActive(true);
+        skipCanvas.SetActive(false);
+    }
+
+    public IEnumerator ShowKeyUI(GameObject keyControlUI, CanvasGroup cg)
+    {
+        keyControlUI.SetActive(true);
+
+        cg.alpha = 0f; // ALWAYS reset AFTER enabling
+
+        float duration = 1f;
+        float t = 0f;
+
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            Debug.Log("Alpha: " + cg.alpha);
+            Debug.Log("GameObject: " + keyControlUI);
+            cg.alpha = Mathf.Lerp(0f, 1f, t / duration);
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(3f);
+
+        t = 0f;
+
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            cg.alpha = Mathf.Lerp(1f, 0f, t / duration);
+            yield return null;
+        }
+
+        cg.alpha = 0f;
+        keyControlUI.SetActive(false);
     }
 }

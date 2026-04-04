@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 public class TorchPuzzle : MonoBehaviour, i_Interactable
 {
@@ -10,6 +11,9 @@ public class TorchPuzzle : MonoBehaviour, i_Interactable
     public bool itemPickedUp;
     private AudioSource source;
     public AudioClip clip;
+
+    public string HallwaySceneName = "Hallway";
+    private bool isLoaded = false;
 
     private void Start()
     {
@@ -33,7 +37,7 @@ public class TorchPuzzle : MonoBehaviour, i_Interactable
 
                     inventory.AddItem(item);
                     itemPickedUp = true;
-                    gameObject.SetActive(false);
+                    StartCoroutine(LoadHallway());
                 }
             }
             else
@@ -42,6 +46,27 @@ public class TorchPuzzle : MonoBehaviour, i_Interactable
             }
         }
     }
+    private IEnumerator LoadHallway()
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(HallwaySceneName, LoadSceneMode.Additive);
+        asyncLoad.allowSceneActivation = false;
+
+        // Wait until loading is complete
+        while (!asyncLoad.isDone)
+        {
+            // Unity considers scene ready when progress hits 0.9
+            if (asyncLoad.progress >= 0.9f)
+            {
+                asyncLoad.allowSceneActivation = true;
+            }
+
+            yield return null;
+        }
+
+        isLoaded = true;
+        gameObject.SetActive(false);
+    }
+
     public InputType GetRequiredInputType()
     {
         return InputType.None;

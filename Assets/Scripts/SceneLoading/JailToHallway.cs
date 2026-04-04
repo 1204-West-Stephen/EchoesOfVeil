@@ -5,37 +5,50 @@ using UnityEngine.SceneManagement;
 
 public class JailToHallway : MonoBehaviour
 {
-    public string HallwaySceneName = "Hallway";
-    private bool isLoaded = false;
+    public GameObject jumpscareObject;
+    public float jumpscareSpeed;
+    public AudioClip jumpscareSound;
 
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Entered trigger: " + other.name);
 
-        if (!isLoaded && other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            StartCoroutine(LoadHallway());
+            Jumpscare(other);
         }
+
     }
 
-    IEnumerator LoadHallway()
+    private void Jumpscare(Collider player)
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(HallwaySceneName, LoadSceneMode.Additive);
-        asyncLoad.allowSceneActivation = false;
+        StartCoroutine(JumpscareRoutine(player.transform));
+    }
 
-        // Wait until loading is complete
-        while (!asyncLoad.isDone)
+    IEnumerator JumpscareRoutine(Transform player)
+    {
+        float speed = jumpscareSpeed;
+        float stopDistance = 0.005f;
+
+        AudioSource.PlayClipAtPoint(jumpscareSound, player.position, 1f);
+
+        while (true)
         {
-            // Unity considers scene ready when progress hits 0.9
-            if (asyncLoad.progress >= 0.9f)
+            Vector3 direction = (player.position - jumpscareObject.transform.position).normalized;
+            jumpscareObject.transform.position += direction * speed * Time.deltaTime;
+
+            jumpscareObject.transform.LookAt(player);
+
+            float distance = Vector3.Distance(jumpscareObject.transform.position, player.position);
+
+            if (distance <= stopDistance)
             {
-                asyncLoad.allowSceneActivation = true;
+                jumpscareObject.SetActive(false);
+                yield break; // stop the coroutine
             }
 
             yield return null;
         }
-
-        isLoaded = true;
     }
 
 

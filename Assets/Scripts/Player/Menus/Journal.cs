@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -7,6 +8,9 @@ public class Journal : MonoBehaviour, i_Interactable
     private AudioSource source;
     public AudioClip clip;
     public GameObject journalUI;
+
+    public TutorialManager tutorialManager;
+    private CanvasGroup cg;
 
     private void Start()
     {
@@ -22,6 +26,7 @@ public class Journal : MonoBehaviour, i_Interactable
             AudioSource.PlayClipAtPoint(clip, transform.position, 0.15f);
         }
         journalUI.SetActive(false);
+        tutorialManager.StartCoroutine(tutorialManager.ShowKeyUI(tutorialManager.jControlUI, tutorialManager.jCG));
         Destroy(gameObject);
     }
 

@@ -6,6 +6,8 @@ public class JournalViewer : MonoBehaviour
 {
     private Animator animator;
     public List<GameObject> buttons;
+    public AudioClip clip;
+    public AudioClip closing;
 
     [Header("Slide Settings")]
     public Vector3 hiddenOffset = new Vector3(0f, -0.35f, 0f);
@@ -31,12 +33,14 @@ public class JournalViewer : MonoBehaviour
     public void pageLeft()
     {
         animator.SetTrigger("go_back");
+        PlaySound(clip);
         StartCoroutine(ButtonVanish());
     }
 
     public void pageRight()
     {
         animator.SetTrigger("go_ahead");
+        PlaySound(clip);
         StartCoroutine(ButtonVanish());
     }
 
@@ -72,7 +76,10 @@ public class JournalViewer : MonoBehaviour
         transform.localPosition = end;
 
         if (animator != null)
+        {
             animator.SetTrigger("go_ahead");
+            PlaySound(clip);
+        }
 
         isOpen = true;
         yield return new WaitForSeconds(1f);
@@ -95,6 +102,7 @@ public class JournalViewer : MonoBehaviour
         animator.SetTrigger("go_back");
         yield return new WaitForSeconds(0.12f);
         animator.SetTrigger("go_back");
+        PlaySound(closing);
         yield return new WaitForSeconds(0.12f);
         animator.SetTrigger("go_back");
         yield return new WaitForSeconds(0.12f);
@@ -144,6 +152,11 @@ public class JournalViewer : MonoBehaviour
         Vector3 spawnPos = cam.transform.position + cam.transform.forward * spawnDistance;
         transform.position = spawnPos;
         transform.SetParent(cam.transform, true);
+    }
+
+    public void PlaySound(AudioClip sound)
+    {
+        AudioSource.PlayClipAtPoint(sound, transform.position, 0.2f);
     }
 
 }

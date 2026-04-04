@@ -169,6 +169,7 @@ public class PlayerControls : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactionRange, interactableLayer))
         {
+            Debug.Log("Hit: " + hit.collider.name + " | Layer: " + LayerMask.LayerToName(hit.collider.gameObject.layer));
             i_Interactable interactable = hit.collider.GetComponent<i_Interactable>();
             if (interactable != null)
             {
