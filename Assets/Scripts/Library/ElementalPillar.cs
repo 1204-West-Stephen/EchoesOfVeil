@@ -18,6 +18,7 @@ public class ElementalPillar : MonoBehaviour, i_Interactable
 
     public bool canPlace;
     public bool itemPickedUp;
+    public bool first = false;
 
     private void Start()
     {
@@ -73,6 +74,11 @@ public class ElementalPillar : MonoBehaviour, i_Interactable
             inventory.RemoveItem(objectToPlace);
 
             MoveObjectToPillar(objectToPlace.prefab);
+
+            if (correctAnswerData == placedObjectData)
+            {
+                first = true;
+            }
 
             Debug.Log($"Object {placedObjectData.name} placed in tower {towerName}");
             return true;

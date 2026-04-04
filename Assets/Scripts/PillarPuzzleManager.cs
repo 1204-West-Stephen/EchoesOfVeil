@@ -6,6 +6,8 @@ public class PillarPuzzleManager : MonoBehaviour
 {
     public ElementalPillar[] pillars;
     public bool puzzleSolved;
+    public bool enemySpawn = false;
+    public GameObject enemy;
 
     public void CheckIfSolved()
     {
@@ -16,6 +18,12 @@ public class PillarPuzzleManager : MonoBehaviour
             {
                 puzzleSolved = false;
                 return;
+            }
+
+            if (pillar.first && !enemySpawn)
+            {
+                enemySpawn = true;
+                enemy.SetActive(true);
             }
         }
 
