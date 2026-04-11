@@ -61,7 +61,7 @@ public class TutorialManager : MonoBehaviour
     {
         keyControlUI.SetActive(true);
 
-        cg.alpha = 0f; // ALWAYS reset AFTER enabling
+        cg.alpha = 0f;
 
         float duration = 1f;
         float t = 0f;
@@ -69,8 +69,6 @@ public class TutorialManager : MonoBehaviour
         while (t < duration)
         {
             t += Time.deltaTime;
-            Debug.Log("Alpha: " + cg.alpha);
-            Debug.Log("GameObject: " + keyControlUI);
             cg.alpha = Mathf.Lerp(0f, 1f, t / duration);
             yield return null;
         }

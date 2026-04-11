@@ -40,6 +40,10 @@ public class PlayerControls : MonoBehaviour
     private bool pressedQ;
     private bool inspectionToggle;
 
+    [Header("Options Menu")]
+    public Canvas optionsCanvas;
+    private bool optionsToggle = false;
+
     [Header("Interaction UI")] 
     public Canvas interactionCanvas; 
     public Canvas internalDialogueCanvas; 
@@ -242,6 +246,22 @@ public class PlayerControls : MonoBehaviour
         {
             EnableControls();
             inspectionMenu.gameObject.SetActive(false);
+        }
+    }
+    public void OptionsMenu()
+    {
+        optionsToggle = !optionsToggle;
+        pauseMenu.gameObject.SetActive(optionsToggle);
+
+        if (optionsToggle)
+        {
+            Time.timeScale = 0f;
+            DisableControls();
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            EnableControls();
         }
     }
 

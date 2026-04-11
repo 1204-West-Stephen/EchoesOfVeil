@@ -274,9 +274,25 @@ PrefabInstance:
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
       objectReference: {fileID: 0}
+    - target: {fileID: 927491398663382543, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1336861230384778276, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: 'overviewPages.Array.data[4]'
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2076620318105704543, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+      propertyPath: playChance
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2076620318105704543, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+      propertyPath: minCooldown
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2076620318105704543, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+      propertyPath: checkInterval
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2078542722826478393, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: xSensitivity
@@ -349,6 +365,10 @@ PrefabInstance:
     - target: {fileID: 5643505001754196183, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
+      objectReference: {fileID: 0}
+    - target: {fileID: 5643610822921864414, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6035032611580980390, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: m_ClearFlags
