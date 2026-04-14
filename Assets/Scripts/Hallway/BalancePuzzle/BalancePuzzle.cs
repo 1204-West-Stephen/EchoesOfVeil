@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class BalancePuzzle : MonoBehaviour
@@ -10,9 +12,15 @@ public class BalancePuzzle : MonoBehaviour
     private Inventory inventory;
     public Camera solvedCamera;
     private HallwayGameManager hgm;
+    private PlayerCamera playerCamera;
+
+    public GameObject Enemy;
+    public Animator enemyAnimator;
+    public AudioClip clip;
 
     public bool puzzleSolved = false;
     private bool isResetting = false;
+    public bool firstTime = true;
 
     private void Start()
     {
@@ -20,6 +28,9 @@ public class BalancePuzzle : MonoBehaviour
         weightBalance = 5;
         UpdateGemPosition();
         inventory = FindFirstObjectByType<Inventory>();
+
+        Enemy.SetActive(false);
+        playerCamera = FindFirstObjectByType<PlayerCamera>();
     }
 
     public void ApplyStoneIncrease(ItemData item)
@@ -114,6 +125,12 @@ public class BalancePuzzle : MonoBehaviour
         weightBalance = 5;
         UpdateGemPosition();
 
+        if (firstTime)
+        {
+            StartCoroutine(JumpscareLibrary());
+
+        }
+
         for (int i = 0; i < inventory.inventory.Count; i++)
         {
             if (inventory.inventory[i] != null &&
@@ -129,5 +146,20 @@ public class BalancePuzzle : MonoBehaviour
         }
 
         isResetting = false;
+    }
+
+    IEnumerator JumpscareLibrary()
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        Enemy.SetActive(true);
+        enemyAnimator.Play("JumpScare", 0, 0f);
+        AudioSource.PlayClipAtPoint(clip, playerCamera.transform.position, 2f);
+
+        yield return new WaitForSeconds(0.3f);
+
+        Enemy.SetActive(false);
+
+        firstTime = false;
     }
 }

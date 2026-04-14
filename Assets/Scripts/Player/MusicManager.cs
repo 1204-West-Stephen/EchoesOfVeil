@@ -30,7 +30,7 @@ public class MusicManager : MonoBehaviour
                 bool cooldownPassed = Time.time >= lastPlayTime + minCooldown;
 
                 if (cooldownPassed)
-                {//
+                {
                     float value = Random.value;
 
                     if (value <= playChance)
