@@ -4176,6 +4176,7 @@ MonoBehaviour:
   clip: {fileID: 8300000, guid: b0468debe345a6a4eb6324dce1e2c4bd, type: 3}
   puzzleSovled: 0
   canInteract: 1
+  first: 1
 --- !u!64 &302191066
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -24507,6 +24508,7 @@ MonoBehaviour:
   clip: {fileID: 8300000, guid: b0468debe345a6a4eb6324dce1e2c4bd, type: 3}
   puzzleSovled: 0
   canInteract: 1
+  first: 1
 --- !u!64 &1353332253
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -31256,6 +31258,7 @@ MonoBehaviour:
   clip: {fileID: 8300000, guid: b0468debe345a6a4eb6324dce1e2c4bd, type: 3}
   puzzleSovled: 0
   canInteract: 1
+  first: 1
 --- !u!64 &1818091225
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -31454,7 +31457,7 @@ MonoBehaviour:
   solvedCamera: {fileID: 1322728527}
   Enemy: {fileID: 502007924}
   enemyAnimator: {fileID: 502007927}
-  clip: {fileID: 8300000, guid: 229b23f7e427c594da680bde828c9ea6, type: 3}
+  clip: {fileID: 8300000, guid: 89c68ea48870e194483e06a1b708bcb9, type: 3}
   puzzleSolved: 0
   firstTime: 1
 --- !u!82 &1818173899

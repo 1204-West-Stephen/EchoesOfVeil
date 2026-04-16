@@ -1,6 +1,10 @@
-using UnityEngine;
-using UnityEngine.AI;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.AppUI.UI;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.AI;
+
 
 public class EnemyAI : MonoBehaviour
 {
@@ -46,8 +50,6 @@ public class EnemyAI : MonoBehaviour
     public float lurkCooldown = 6f;
     public float lurkChance = 0.6f;
     public float lurkDuration = 8.833f;
-    private float hearingCheckInterval = 0.5f;
-    private float lastHearingCheck;
 
     private float lastLurkTime;
     private bool isLurking;
@@ -92,7 +94,6 @@ public class EnemyAI : MonoBehaviour
         {
             case EnemyState.Wander:
                 DetectPlayer();
-                DetectHearing();
                 break;
 
             case EnemyState.Chase:
@@ -120,9 +121,6 @@ public class EnemyAI : MonoBehaviour
     }
     void DetectHearing()
     {
-        if (Time.time < lastHearingCheck + hearingCheckInterval) return;
-        lastHearingCheck = Time.time;
-
         if (Time.time < lastLurkTime + lurkCooldown) return;
 
         float distance = Vector3.Distance(transform.position, player.position);
@@ -179,16 +177,15 @@ public class EnemyAI : MonoBehaviour
             if (NavMesh.SamplePosition(Random.insideUnitSphere * wanderRadius + transform.position,
                 out NavMeshHit hit, wanderRadius, NavMesh.AllAreas))
             {
-                if (!agent.isOnNavMesh)
+                if (!agent.isOnNavMesh || agent.isStopped)
                     yield return null;
-
-                if (agent.isStopped)
-                    agent.isStopped = false;
 
                 agent.speed = wanderSpeed;
 
                 if (agent.isOnNavMesh)
                     agent.SetDestination(hit.position);
+
+                agent.SetDestination(hit.position);
 
                 animator.SetBool("isWalking", true);
                 animator.SetBool("isRunning", false);
@@ -216,7 +213,7 @@ public class EnemyAI : MonoBehaviour
         if (isFrozen) return;
 
         if (!agent.isOnNavMesh || agent.isStopped) return;
-       
+
         agent.SetDestination(player.position);
 
         if (!screamPlayed)
@@ -261,7 +258,6 @@ public class EnemyAI : MonoBehaviour
 
         Vector3 dir = (player.position - transform.position).normalized;
         float angle = Vector3.Angle(transform.forward, dir);
-
         return angle < viewAngle / 2f &&
                !Physics.Raycast(transform.position + Vector3.up, dir, dist, obstacleMask);
     }
@@ -270,7 +266,6 @@ public class EnemyAI : MonoBehaviour
         currentState = EnemyState.Wander;
 
         agent.isStopped = false;
-        agent.ResetPath(); //IMPORTANT
 
         animator.SetBool("isRunning", false);
         animator.SetBool("isWalking", true);
@@ -317,7 +312,8 @@ public class EnemyAI : MonoBehaviour
         if (respawnPoint)
             player.position = respawnPoint.position;
 
-        if (enemyResetPoint) { 
+        if (enemyResetPoint)
+        {
             if (NavMesh.SamplePosition(enemyResetPoint.position, out NavMeshHit hit, 2f, NavMesh.AllAreas))
             {
                 agent.Warp(hit.position);

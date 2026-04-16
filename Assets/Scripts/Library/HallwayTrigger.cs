@@ -42,7 +42,7 @@ public class HallwayTrigger : MonoBehaviour
         controls.DisableControls();
 
         yield return new WaitForSeconds(0.3f);
-        AudioSource.PlayClipAtPoint(scream, transform.position, 0.7f);
+        AudioSource.PlayClipAtPoint(scream, transform.position, 0.8f);
 
         controls.StartDialogue("What in the gods was that?!");
         controls.StartDialogue("I need to locate the Dragon's Pulse");

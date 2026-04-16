@@ -60,7 +60,7 @@ public class Stone : MonoBehaviour, i_Interactable
         if (selectedItem.typeInput == GetRequiredInputType() && selectedItem.itemName == "Sharp Metal Piece")
         {
             inventory.RemoveSelectedItem();
-            Debug.Log("Torch consumed.");
+            Debug.Log("Metal Piece consumed.");
             return true;
         }
 

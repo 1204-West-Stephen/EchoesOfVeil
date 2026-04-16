@@ -3019,6 +3019,8 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: b58c9791d751fb741bacec2cf5606eb8, type: 2}
   canPlace: 0
   itemPickedUp: 0
+  ppm: {fileID: 1600014680}
+  spawnedSeason: 0
 --- !u!23 &15162671
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -46970,6 +46972,8 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: e2a06eef21df25843ab3c460497916fe, type: 2}
   canPlace: 0
   itemPickedUp: 0
+  ppm: {fileID: 1600014680}
+  spawnedSeason: 0
 --- !u!23 &302809864
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -74736,6 +74740,8 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: 86f4f681c898b5648b4a4d94e421c07a, type: 2}
   canPlace: 0
   itemPickedUp: 0
+  ppm: {fileID: 1600014680}
+  spawnedSeason: 0
 --- !u!23 &485483051
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -175903,7 +175909,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1186148270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205967,6 +205973,8 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: d69007f47dc292d4cac5f1a87aaa8925, type: 2}
   canPlace: 0
   itemPickedUp: 0
+  ppm: {fileID: 1600014680}
+  spawnedSeason: 0
 --- !u!23 &1423107230
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -230281,6 +230289,7 @@ MonoBehaviour:
   puzzleSolved: 0
   enemySpawn: 0
   enemy: {fileID: 845036076}
+  spawnSeasonBooks: 0
 --- !u!4 &1600014681
 Transform:
   m_ObjectHideFlags: 0
@@ -265920,7 +265929,7 @@ MonoBehaviour:
   doors:
   - {fileID: 1276337194}
   - {fileID: 1979780873}
-  scream: {fileID: 0}
+  scream: {fileID: 8300000, guid: 229b23f7e427c594da680bde828c9ea6, type: 3}
 --- !u!1001 &1867117242
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -283065,6 +283074,8 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: 0bd03bbad8a9cb7438e980b25b05a754, type: 2}
   canPlace: 0
   itemPickedUp: 0
+  ppm: {fileID: 1600014680}
+  spawnedSeason: 0
 --- !u!23 &1999533923
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -303382,6 +303393,8 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: 088d251c5380a3f449033500a80668d4, type: 2}
   canPlace: 0
   itemPickedUp: 0
+  ppm: {fileID: 1600014680}
+  spawnedSeason: 0
 --- !u!65 &5177513169489620995
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -303419,6 +303432,8 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: 9f5edc96056f2bf4f94ecb355b405e56, type: 2}
   canPlace: 0
   itemPickedUp: 0
+  ppm: {fileID: 1600014680}
+  spawnedSeason: 0
 --- !u!65 &5177513170106714845
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -303456,6 +303471,8 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: b2ee6cc0312cbbe4a814caef836a5eda, type: 2}
   canPlace: 0
   itemPickedUp: 0
+  ppm: {fileID: 1600014680}
+  spawnedSeason: 0
 --- !u!65 &6190194163314534979
 BoxCollider:
   m_ObjectHideFlags: 0
