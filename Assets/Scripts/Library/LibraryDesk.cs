@@ -1,10 +1,16 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LibraryDesk : MonoBehaviour, i_Interactable
 {
     public GameObject bookPrefab;
-    public float spawnDistance = 0.25f;
+    public GameObject bookUI;
+
+    [Header("UI Buttons")]
+    public Button nextButton;
+    public Button prevButton;
+    public Button closeButton;
+
     private PlayerControls player;
     private Camera cam;
 
@@ -12,6 +18,9 @@ public class LibraryDesk : MonoBehaviour, i_Interactable
     {
         player = FindAnyObjectByType<PlayerControls>();
         cam = Camera.main;
+
+        if (bookUI != null)
+            bookUI.SetActive(false);
     }
 
     public void Interact()
@@ -22,14 +31,22 @@ public class LibraryDesk : MonoBehaviour, i_Interactable
             return;
         }
 
+        player.DisableControls();
+
+        if (bookUI != null)
+            bookUI.SetActive(true);
+
         GameObject bookGO = Instantiate(bookPrefab);
-        Debug.Log("Book prefab instantiated: " + bookGO.name);
 
         BookViewer viewer = bookGO.GetComponent<BookViewer>();
-        if (viewer != null)
-            viewer.Init(player, cam);
-        else
-            Debug.LogWarning("BookViewer component missing on prefab");
-    }
 
+        if (viewer != null)
+        {
+            viewer.Init(player, cam, this);
+        }
+        else
+        {
+            Debug.LogWarning("BookViewer missing on prefab");
+        }
+    }
 }

@@ -17,7 +17,6 @@ public class JailToHallway : MonoBehaviour
         {
             Jumpscare(other);
         }
-
     }
 
     private void Jumpscare(Collider player)
@@ -47,6 +46,7 @@ public class JailToHallway : MonoBehaviour
                 yield break; // stop the coroutine
             }
 
+            gameObject.SetActive(false);
             yield return null;
         }
     }

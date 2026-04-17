@@ -3019,8 +3019,6 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: b58c9791d751fb741bacec2cf5606eb8, type: 2}
   canPlace: 0
   itemPickedUp: 0
-  ppm: {fileID: 1600014680}
-  spawnedSeason: 0
 --- !u!23 &15162671
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -46972,8 +46970,6 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: e2a06eef21df25843ab3c460497916fe, type: 2}
   canPlace: 0
   itemPickedUp: 0
-  ppm: {fileID: 1600014680}
-  spawnedSeason: 0
 --- !u!23 &302809864
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -74740,8 +74736,6 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: 86f4f681c898b5648b4a4d94e421c07a, type: 2}
   canPlace: 0
   itemPickedUp: 0
-  ppm: {fileID: 1600014680}
-  spawnedSeason: 0
 --- !u!23 &485483051
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -128233,7 +128227,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
   currentState: 0
-  jumpscareAnimator: {fileID: 88856006}
   jumpscareCamera: {fileID: 1022703258}
   hearingRadius: 8
   viewAngle: 50
@@ -128251,6 +128244,10 @@ MonoBehaviour:
   jumpscareDistance: 1.5
   jumpscareDuration: 2.3
   respawnPoint: {fileID: 1543948702}
+  jumpscareAnimator: {fileID: 88856006}
+  jumpscareClip: {fileID: 0}
+  jumpscareSource: {fileID: 0}
+  jumpscareMixerGroup: {fileID: 0}
   lurkCooldown: 6
   lurkChance: 0.6
   lurkDuration: 8.833
@@ -186906,7 +186903,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1856061324868532, guid: c97bb854328dd9c4883d35e568588fd2, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4132962946472436, guid: c97bb854328dd9c4883d35e568588fd2, type: 3}
       propertyPath: m_LocalScale.x
@@ -205973,8 +205970,6 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: d69007f47dc292d4cac5f1a87aaa8925, type: 2}
   canPlace: 0
   itemPickedUp: 0
-  ppm: {fileID: 1600014680}
-  spawnedSeason: 0
 --- !u!23 &1423107230
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -230289,7 +230284,6 @@ MonoBehaviour:
   puzzleSolved: 0
   enemySpawn: 0
   enemy: {fileID: 845036076}
-  spawnSeasonBooks: 0
 --- !u!4 &1600014681
 Transform:
   m_ObjectHideFlags: 0
@@ -265877,7 +265871,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1866810723
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -265930,6 +265924,7 @@ MonoBehaviour:
   - {fileID: 1276337194}
   - {fileID: 1979780873}
   scream: {fileID: 8300000, guid: 229b23f7e427c594da680bde828c9ea6, type: 3}
+  screamLocation: {fileID: 0}
 --- !u!1001 &1867117242
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -280936,7 +280931,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1856061324868532, guid: c97bb854328dd9c4883d35e568588fd2, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4132962946472436, guid: c97bb854328dd9c4883d35e568588fd2, type: 3}
       propertyPath: m_LocalScale.x
@@ -283074,8 +283069,6 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: 0bd03bbad8a9cb7438e980b25b05a754, type: 2}
   canPlace: 0
   itemPickedUp: 0
-  ppm: {fileID: 1600014680}
-  spawnedSeason: 0
 --- !u!23 &1999533923
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -303311,6 +303304,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1727354128431113546, guid: e88c9dab988b41f4cbba5193db600679, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 405
+      objectReference: {fileID: 0}
+    - target: {fileID: 1727354128431113546, guid: e88c9dab988b41f4cbba5193db600679, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -346
+      objectReference: {fileID: 0}
+    - target: {fileID: 1914297223771473533, guid: e88c9dab988b41f4cbba5193db600679, type: 3}
+      propertyPath: desk
+      value: 
+      objectReference: {fileID: 3224378897590661040}
+    - target: {fileID: 4084131353222990272, guid: e88c9dab988b41f4cbba5193db600679, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6329316510935084561, guid: e88c9dab988b41f4cbba5193db600679, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7405451983135968306, guid: e88c9dab988b41f4cbba5193db600679, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -346.00003
+      objectReference: {fileID: 0}
     - target: {fileID: 8651944958110611611, guid: e88c9dab988b41f4cbba5193db600679, type: 3}
       propertyPath: m_Name
       value: DeskJournal
@@ -303320,6 +303337,22 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e88c9dab988b41f4cbba5193db600679, type: 3}
+--- !u!114 &1629810774445227733 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1914297223771473533, guid: e88c9dab988b41f4cbba5193db600679, type: 3}
+  m_PrefabInstance: {fileID: 1629810774445227732}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a44bf704328e22d44966a812be005a00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BookViewer
+--- !u!1 &1629810774445227734 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4084131353222990272, guid: e88c9dab988b41f4cbba5193db600679, type: 3}
+  m_PrefabInstance: {fileID: 1629810774445227732}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3224378897590661039
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -303328,6 +303361,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1692841228667929405, guid: 6b2f0d74f36773849a05bdd6dee99865, type: 3}
+      propertyPath: bookUI
+      value: 
+      objectReference: {fileID: 1629810774445227734}
+    - target: {fileID: 1692841228667929405, guid: 6b2f0d74f36773849a05bdd6dee99865, type: 3}
+      propertyPath: viewer
+      value: 
+      objectReference: {fileID: 1629810774445227733}
     - target: {fileID: 5143467252632690984, guid: 6b2f0d74f36773849a05bdd6dee99865, type: 3}
       propertyPath: m_Name
       value: desk
@@ -303377,6 +303418,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b2f0d74f36773849a05bdd6dee99865, type: 3}
+--- !u!114 &3224378897590661040 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1692841228667929405, guid: 6b2f0d74f36773849a05bdd6dee99865, type: 3}
+  m_PrefabInstance: {fileID: 3224378897590661039}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8fd27736232fdc469caf238c215c33f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!114 &5177513169489620994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303393,8 +303445,6 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: 088d251c5380a3f449033500a80668d4, type: 2}
   canPlace: 0
   itemPickedUp: 0
-  ppm: {fileID: 1600014680}
-  spawnedSeason: 0
 --- !u!65 &5177513169489620995
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -303432,8 +303482,6 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: 9f5edc96056f2bf4f94ecb355b405e56, type: 2}
   canPlace: 0
   itemPickedUp: 0
-  ppm: {fileID: 1600014680}
-  spawnedSeason: 0
 --- !u!65 &5177513170106714845
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -303471,8 +303519,6 @@ MonoBehaviour:
   startingBook: {fileID: 11400000, guid: b2ee6cc0312cbbe4a814caef836a5eda, type: 2}
   canPlace: 0
   itemPickedUp: 0
-  ppm: {fileID: 1600014680}
-  spawnedSeason: 0
 --- !u!65 &6190194163314534979
 BoxCollider:
   m_ObjectHideFlags: 0
