@@ -13,6 +13,20 @@ public class BookViewer : MonoBehaviour
     private Vector3 shownLocalPos;
     private bool isOpen;
     private bool isClosing;
+    public PlayerInput controls;
+
+    private bool pressedEsc;
+
+    private void Awake()
+    { 
+        controls.Movement.Esc.performed += _ => pressedEsc = true;
+        controls.Movement.Esc.canceled += _ => pressedEsc = false;
+    }
+
+    private void Update()
+    {
+        if (pressedEsc) Close();
+    }
 
     public void Init(PlayerControls owner, Camera cam)
     {

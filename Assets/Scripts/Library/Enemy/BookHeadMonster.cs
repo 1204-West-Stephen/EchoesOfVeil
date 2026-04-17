@@ -4,6 +4,7 @@ using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.AI;
+using UnityEngine.Audio;
 
 
 public class EnemyAI : MonoBehaviour
@@ -14,7 +15,6 @@ public class EnemyAI : MonoBehaviour
     [Header("References")]
     private NavMeshAgent agent;
     private Animator animator;
-    public Animator jumpscareAnimator;
     private Transform player;
     private PlayerControls playerControls;
 
@@ -45,6 +45,10 @@ public class EnemyAI : MonoBehaviour
     public float jumpscareDistance = 1.5f;
     public float jumpscareDuration = 2.3f;
     public Transform respawnPoint;
+    public Animator jumpscareAnimator;
+    public AudioClip jumpscareClip;
+    public AudioSource jumpscareSource;
+    public AudioMixerGroup jumpscareMixerGroup;
 
     [Header("Lurk")]
     public float lurkCooldown = 6f;
@@ -67,6 +71,9 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
+
+        jumpscareSource.PlayOneShot(jumpscareClip);
+
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
@@ -290,8 +297,12 @@ public class EnemyAI : MonoBehaviour
         canJumpscare = false;
         currentState = EnemyState.Jumpscare;
 
-        jumpscareAnimator.Play("JumpScare", 0, 0f);
-        jumpscareAnimator.Update(0f); // forces pose update THIS frame
+        jumpscareAnimator.Play("JumpScare 1", 0, 0f);
+        jumpscareAnimator.Update(0f);
+        jumpscareSource.spatialBlend = 0f;
+        jumpscareSource.volume = 1f;
+        jumpscareSource.outputAudioMixerGroup = jumpscareMixerGroup;
+        jumpscareSource.PlayOneShot(jumpscareClip);
 
         yield return null;
 

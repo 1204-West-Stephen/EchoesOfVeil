@@ -10,6 +10,7 @@ public class HallwayTrigger : MonoBehaviour
     private PlayerControls controls;
 
     public AudioClip scream;
+    public Transform screamLocation;
 
     private void Start()
     {
@@ -42,7 +43,7 @@ public class HallwayTrigger : MonoBehaviour
         controls.DisableControls();
 
         yield return new WaitForSeconds(0.3f);
-        AudioSource.PlayClipAtPoint(scream, transform.position, 0.8f);
+        AudioSource.PlayClipAtPoint(scream, screamLocation.position, 0.8f);
 
         controls.StartDialogue("What in the gods was that?!");
         controls.StartDialogue("I need to locate the Dragon's Pulse");
