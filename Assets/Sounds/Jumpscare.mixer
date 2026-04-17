@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!244 &-3646652270352526400
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: c562f540576d04048bb72359ab086845
+  m_EffectName: Attenuation
+  m_MixLevel: 2fc1a75b230a2b045aebee281c7aa042
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!241 &24100000
+AudioMixerController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Jumpscare
+  m_OutputGroup: {fileID: 0}
+  m_MasterGroup: {fileID: 24300002}
+  m_Snapshots:
+  - {fileID: 24500006}
+  m_StartSnapshot: {fileID: 24500006}
+  m_SuspendThreshold: -80
+  m_EnableSuspend: 1
+  m_UpdateMode: 0
+  m_ExposedParameters:
+  - guid: 8cfad09b090c57e4bb3cf04791842e9e
+    name: MyExposedParam
+  m_AudioMixerGroupViews:
+  - guids:
+    - edb2e08480e7c7246953ce1b69e1f822
+    - b309c5a88bc2884478118fc339772857
+    name: View
+  m_CurrentViewIndex: 0
+  m_TargetSnapshot: {fileID: 24500006}
+--- !u!243 &24300002
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Master
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: edb2e08480e7c7246953ce1b69e1f822
+  m_Children:
+  - {fileID: 6750008116702153428}
+  m_Volume: 739fe58579a7775459a9692aaea24805
+  m_Pitch: a3dd3be1ce3c8a94f99cd2097b133d9b
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 24400004}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!244 &24400004
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: b8e5400b1bebde742b819e80ff128e58
+  m_EffectName: Attenuation
+  m_MixLevel: 13210f2e807561b4196d3563c5523a5b
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!245 &24500006
+AudioMixerSnapshotController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Snapshot
+  m_AudioMixer: {fileID: 24100000}
+  m_SnapshotID: 4dcf5b244ebc40f44af6c4375370d878
+  m_FloatValues:
+    8cfad09b090c57e4bb3cf04791842e9e: 15.708343
+  m_TransitionOverrides: {}
+--- !u!243 &6750008116702153428
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Jumpscare
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: b309c5a88bc2884478118fc339772857
+  m_Children: []
+  m_Volume: 8cfad09b090c57e4bb3cf04791842e9e
+  m_Pitch: cbf041541221c934c8004c1bfdb3836c
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -3646652270352526400}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
