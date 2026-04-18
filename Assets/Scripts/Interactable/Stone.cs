@@ -9,6 +9,7 @@ public class Stone : MonoBehaviour, i_Interactable
 
     private PlayerControls controls;
     private Rigidbody rb;
+    public AudioClip rockFall;
 
     private void Awake()
     {
@@ -37,13 +38,15 @@ public class Stone : MonoBehaviour, i_Interactable
 
                 if (piece.itemPickedUp && UsePiece(inventory))
                 {
-                    rb.isKinematic = false;   // turn physics ON
+                    rb.isKinematic = false;
                     rb.useGravity = true;
 
                     rb.AddForce(Vector3.down * 0.005f, ForceMode.Impulse);
                     rb.WakeUp();
 
                     stoneFell = true;
+
+                    AudioSource.PlayClipAtPoint(rockFall, player.transform.position, 0.8f);
                 }
                 else {
                     controls.StartDialogue("This stone is a little loose. There may be something behind it");
