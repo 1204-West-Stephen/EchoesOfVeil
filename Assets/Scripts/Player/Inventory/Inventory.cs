@@ -82,7 +82,14 @@ public class Inventory : MonoBehaviour
 
     public void RemoveItem(ItemData item)
     {
-        Debug.Log($"Item Removed: {item.name}");
-        inventory.Remove(item);
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[i] == item)
+            {
+                Debug.Log($"Item Removed: {item.name}");
+                inventory[i] = null;  
+                return;
+            }
+        }
     }
 }

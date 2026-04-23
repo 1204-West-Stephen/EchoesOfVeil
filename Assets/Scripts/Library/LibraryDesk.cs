@@ -1,15 +1,8 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class LibraryDesk : MonoBehaviour, i_Interactable
 {
     public GameObject bookPrefab;
-    public GameObject bookUI;
-
-    [Header("UI Buttons")]
-    public Button nextButton;
-    public Button prevButton;
-    public Button closeButton;
 
     private PlayerControls player;
     private Camera cam;
@@ -18,35 +11,24 @@ public class LibraryDesk : MonoBehaviour, i_Interactable
     {
         player = FindAnyObjectByType<PlayerControls>();
         cam = Camera.main;
-
-        if (bookUI != null)
-            bookUI.SetActive(false);
     }
 
     public void Interact()
     {
-        if (bookPrefab == null || player == null || cam == null)
-        {
-            Debug.LogWarning("Missing prefab or player/cam");
-            return;
-        }
+        if (bookPrefab == null || player == null || cam == null) return;
 
-        player.DisableControls();
+        // Spawn book viewer
+        GameObject bookObj = Instantiate(bookPrefab);
 
-        if (bookUI != null)
-            bookUI.SetActive(true);
-
-        GameObject bookGO = Instantiate(bookPrefab);
-
-        BookViewer viewer = bookGO.GetComponent<BookViewer>();
-
+        // Get script and initialize it
+        BookViewer viewer = bookObj.GetComponent<BookViewer>();
         if (viewer != null)
         {
-            viewer.Init(player, cam, this);
+            viewer.Init(player, cam);
         }
         else
         {
-            Debug.LogWarning("BookViewer missing on prefab");
+            Debug.LogError("Book prefab is missing BookViewer component!");
         }
     }
 }

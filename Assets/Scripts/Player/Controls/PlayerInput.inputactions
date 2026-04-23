@@ -310,7 +310,7 @@
                     "name": "Journal",
                     "type": "Button",
                     "id": "6a26dfd4-8384-422a-91c0-b8af4e527b41",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -319,6 +319,15 @@
                     "name": "Submit",
                     "type": "Button",
                     "id": "5348ca6e-a815-42fb-b69f-8fff03a29626",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Space",
+                    "type": "Button",
+                    "id": "42440725-1de9-4809-8a77-6e03d17e2d20",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -433,6 +442,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f8592d60-58b2-4e7f-93e6-c095e2742622",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Space",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

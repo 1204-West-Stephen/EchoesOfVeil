@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using static Unity.VisualScripting.Member;
-using Unity.AppUI.UI;
 
 public class DarkShrine : MonoBehaviour, i_Interactable
 {

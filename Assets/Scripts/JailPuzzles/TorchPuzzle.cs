@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
@@ -22,27 +21,29 @@ public class TorchPuzzle : MonoBehaviour, i_Interactable
     }
     public void Interact()
     {
-        GameObject player = GameObject.FindWithTag("Player");
-        if (player != null)
-        {
-            Inventory inventory = player.GetComponent<Inventory>();
-            if (inventory != null)
+        if (!itemPickedUp) { 
+            GameObject player = GameObject.FindWithTag("Player");
+            if (player != null)
             {
-                if (inventory.CheckInventory())
+                Inventory inventory = player.GetComponent<Inventory>();
+                if (inventory != null)
                 {
-                    if (clip != null)
+                    if (inventory.CheckInventory())
                     {
-                        AudioSource.PlayClipAtPoint(clip, transform.position, 0.05f);
-                    }
+                        if (clip != null)
+                        {
+                            AudioSource.PlayClipAtPoint(clip, transform.position, 0.05f);
+                        }
 
-                    inventory.AddItem(item);
-                    itemPickedUp = true;
-                    StartCoroutine(LoadHallway());
+                        inventory.AddItem(item);
+                        itemPickedUp = true;
+                        StartCoroutine(LoadHallway());
+                    }
                 }
-            }
-            else
-            {
-                Debug.LogWarning("Player has no Inventory component.");
+                else
+                {
+                    Debug.LogWarning("Player has no Inventory component.");
+                }
             }
         }
     }

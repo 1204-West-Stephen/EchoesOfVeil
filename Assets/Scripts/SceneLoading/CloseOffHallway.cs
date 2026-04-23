@@ -9,6 +9,8 @@ public class CloseOffHallway : MonoBehaviour
     public HallwayDoors door2;
 
     public AudioClip closeDoors;
+    public Material closeLeft;
+    public Material closeRight;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -21,7 +23,10 @@ public class CloseOffHallway : MonoBehaviour
             AudioSource.PlayClipAtPoint(closeDoors, other.transform.position, 1f);
 
             gameObject.SetActive(false);
+
+            JournalStateManager.Instance.UpdateMaterial(closeLeft, closeRight);
         }
+
     }
 
 }

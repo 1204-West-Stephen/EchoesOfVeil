@@ -6,8 +6,7 @@ public class PillarPuzzleManager : MonoBehaviour
 {
     public ElementalPillar[] pillars;
     public bool puzzleSolved;
-    public bool enemySpawn = false;
-    public GameObject enemy;
+    public Camera solvedCamera;
 
     public void CheckIfSolved()
     {
@@ -19,18 +18,52 @@ public class PillarPuzzleManager : MonoBehaviour
                 puzzleSolved = false;
                 return;
             }
-
-            if (pillar.first && !enemySpawn)
-            {
-                enemySpawn = true;
-                enemy.SetActive(true);
-            }
         }
 
         puzzleSolved = true;
 
-        FindFirstObjectByType<SeasonCamera>()?.StartCamera();
-        FindFirstObjectByType<ShrineWall>()?.CheckPuzzle();
+        StartCoroutine(ShowLight(solvedCamera));
         Debug.Log("All towers are correct! Puzzle solved!");
+    }
+
+    public IEnumerator ShowLight(Camera solvedCamera)
+    {
+        PlayerMovement movement = null;
+        Camera playerCamera = null;
+
+        // Wait for player to spawn
+        while (movement == null)
+        {
+            movement = FindFirstObjectByType<PlayerMovement>();
+            yield return null;
+        }
+
+        // Wait for camera to exist
+        while (playerCamera == null)
+        {
+            playerCamera = movement.GetComponentInChildren<Camera>();
+            yield return null;
+        }
+
+        if (solvedCamera == null)
+        {
+            Debug.LogError("Solved camera not assigned!");
+            yield break;
+        }
+
+        movement.controlLock();
+        FindFirstObjectByType<ShrineWall>()?.CheckPuzzle();
+
+        yield return new WaitForSeconds(1.5f);
+
+        solvedCamera.gameObject.SetActive(true);
+        playerCamera.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(3.5f);
+
+        playerCamera.gameObject.SetActive(true);
+        solvedCamera.gameObject.SetActive(false);
+
+        movement.controlUnlock();
     }
 }

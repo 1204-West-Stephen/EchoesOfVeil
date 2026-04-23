@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 public class SeasonShrine : MonoBehaviour, i_Interactable
 {
@@ -13,8 +14,13 @@ public class SeasonShrine : MonoBehaviour, i_Interactable
     private Inventory inventory;
 
     [Header("Answer Setup")]
-    public ItemData correctAnswerData;   // Assign the correct item in inspector
-    [HideInInspector] public ItemData placedObjectData; // What the player placed
+    public ItemData correctAnswerData;
+    [HideInInspector] public ItemData placedObjectData;
+
+    public Vector3 rotationOverride;
+    private AudioSource source;
+    public AudioClip pickup;
+    public AudioClip place;
 
     public bool canPlace;
     public bool itemPickedUp;
@@ -53,28 +59,18 @@ public class SeasonShrine : MonoBehaviour, i_Interactable
 
     private bool PlaceObject()
     {
-        if (inventory == null || inventory.inventory.Count == 0)
-            return false;
+        ItemData selectedItem = inventory.GetSelectedItem();
 
-        ItemData objectToPlace = null;
-        foreach (var item in inventory.inventory)
+        if (selectedItem == null) return false;
+
+        if (selectedItem.typeInput == GetRequiredInputType())
         {
-            if (item != null && item.typeInput == InputType.SeasonItem)
-            {
-                objectToPlace = item;
-                break;
-            }
-        }
+            inventory.RemoveSelectedItem();
+            MoveObjectToShrine(selectedItem);
 
-        if (objectToPlace != null)
-        {
-            placedObjectData = objectToPlace;
+            if (source != null && place != null)
+                source.PlayOneShot(place);
 
-            inventory.RemoveItem(objectToPlace);
-
-            MoveObjectToShrine(objectToPlace.prefab);
-
-            Debug.Log($"Object {placedObjectData.name} placed in tower {towerName}");
             return true;
         }
 
@@ -87,14 +83,15 @@ public class SeasonShrine : MonoBehaviour, i_Interactable
         {
             inventory.AddItem(placedObjectData);
 
+            if (pickup != null)
+                AudioSource.PlayClipAtPoint(pickup, transform.position, 0.15f);
+
             Destroy(placedObject);
             placedObject = null;
+            placedObjectData = null;
 
-            placedObjectData = null; // reset when picked back up
             itemPickedUp = true;
             canPlace = true;
-
-            Debug.Log("Tablet picked up from tower " + towerName);
         }
         else
         {
@@ -102,26 +99,33 @@ public class SeasonShrine : MonoBehaviour, i_Interactable
         }
     }
 
-    private void MoveObjectToShrine(GameObject objectPrefab)
+    private void MoveObjectToShrine(ItemData itemData)
     {
-        if (objectPrefab != null)
+        if (itemData == null || itemData.prefab == null)
         {
-            if (placedObject != null)
-            {
-                Destroy(placedObject);
-            }
-
-            placedObject = Instantiate(
-                objectPrefab,
-                floatPos.position,
-                Quaternion.Euler(0, 0, 0)
-            );
-
-            placedObject.SetActive(true);
+            Debug.LogWarning("Item prefab is null, cannot move to shrine!");
+            return;
         }
-        else
-        {
-            Debug.LogWarning("Tablet prefab is null, cannot move to shrine!");
-        }
+
+        if (placedObject != null)
+            Destroy(placedObject);
+
+        placedObject = Instantiate(
+            itemData.prefab,
+            floatPos.position,
+            Quaternion.identity
+        );
+
+        placedObject.transform.rotation =
+            Quaternion.Euler(itemData.rotation + rotationOverride);
+
+        placedObject.transform.localScale = itemData.scale;
+
+        placedObjectData = itemData;
+    }
+
+    private InputType GetRequiredInputType()
+    {
+        return InputType.SeasonItem;
     }
 }

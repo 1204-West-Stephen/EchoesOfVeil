@@ -11,6 +11,8 @@ public class Stone : MonoBehaviour, i_Interactable
     private Rigidbody rb;
     public AudioClip rockFall;
 
+    private bool canInteract = true;
+
     private void Awake()
     {
         controls = FindFirstObjectByType<PlayerControls>();
@@ -25,31 +27,36 @@ public class Stone : MonoBehaviour, i_Interactable
     }
     public void Interact()
     {
-        GameObject player = GameObject.FindWithTag("Player");
-        if (player != null)
+        if (canInteract)
         {
-            Inventory inventory = player.GetComponent<Inventory>();
-            if (inventory != null)
+            GameObject player = GameObject.FindWithTag("Player");
+            if (player != null)
             {
-                if (stoneFell)
+                Inventory inventory = player.GetComponent<Inventory>();
+                if (inventory != null)
                 {
-                    return;
-                }
+                    if (stoneFell)
+                    {
+                        return;
+                    }
 
-                if (piece.itemPickedUp && UsePiece(inventory))
-                {
-                    rb.isKinematic = false;
-                    rb.useGravity = true;
+                    if (piece.itemPickedUp && UsePiece(inventory))
+                    {
+                        canInteract = false;
+                        rb.isKinematic = false;
+                        rb.useGravity = true;
 
-                    rb.AddForce(Vector3.down * 0.005f, ForceMode.Impulse);
-                    rb.WakeUp();
+                        rb.AddForce(Vector3.down * 0.005f, ForceMode.Impulse);
+                        rb.WakeUp();
 
-                    stoneFell = true;
+                        stoneFell = true;
 
-                    AudioSource.PlayClipAtPoint(rockFall, player.transform.position, 0.8f);
-                }
-                else {
-                    controls.StartDialogue("This stone is a little loose. There may be something behind it");
+                        AudioSource.PlayClipAtPoint(rockFall, player.transform.position, 0.8f);
+                    }
+                    else
+                    {
+                        controls.StartDialogue("This stone is a little loose. There may be something behind it");
+                    }
                 }
             }
         }

@@ -27,7 +27,6 @@ public class VideoTransitionManager : MonoBehaviour
         playingTransition = true;
 
 
-        // When done, call LoadNextScene
         videoPlayer.loopPointReached += OnVideoFinished;
     }
 

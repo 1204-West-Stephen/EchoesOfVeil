@@ -125,4 +125,32 @@ public class BookShelf : MonoBehaviour, i_Interactable
             Debug.LogWarning("Tablet prefab is null, cannot move to shrine!");
         }
     }
+
+    public void ResetIfMatches(ItemData item)
+    {
+        if (startingBook != item) return;
+
+        // Remove visual
+        if (placedBookObject != null)
+        {
+            Destroy(placedBookObject);
+            placedBookObject = null;
+        }
+
+        // Restore book
+        if (startingBook != null && startingBook.prefab != null)
+        {
+            placedBook = startingBook;
+            MoveBookToShelf(startingBook.prefab);
+        }
+
+        canPlace = false;
+        itemPickedUp = false;
+    }
+
+    public ItemData GetStartingBook()
+    {
+        return startingBook;
+    }
+
 }

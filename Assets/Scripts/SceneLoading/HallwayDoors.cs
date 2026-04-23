@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.AppUI.UI;
 using UnityEngine;
-using static Unity.VisualScripting.Member;
 
 public class HallwayDoors : MonoBehaviour
 {

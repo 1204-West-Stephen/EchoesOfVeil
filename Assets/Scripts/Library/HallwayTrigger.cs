@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +10,9 @@ public class HallwayTrigger : MonoBehaviour
 
     public AudioClip scream;
     public Transform screamLocation;
+
+    public Material hallwayLeft;
+    public Material hallwayRight;
 
     private void Start()
     {
@@ -31,10 +33,11 @@ public class HallwayTrigger : MonoBehaviour
             foreach (GameObject door in doors)
             {
                 door.gameObject.SetActive(true);
-                StartCoroutine(LibraryEnemyScream());
             }
 
-            gameObject.SetActive(false);
+            StartCoroutine(LibraryEnemyScream());
+
+            JournalStateManager.Instance.UpdateMaterial(hallwayLeft, hallwayRight);
         }
     }
 
@@ -51,6 +54,7 @@ public class HallwayTrigger : MonoBehaviour
 
         yield return new WaitForSeconds(0.3f);
         controls.EnableControls();
+        gameObject.SetActive(false);
     }
 
 }

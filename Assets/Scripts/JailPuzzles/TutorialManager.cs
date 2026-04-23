@@ -18,7 +18,9 @@ public class TutorialManager : MonoBehaviour
     void Start()
     {
         controls = FindFirstObjectByType<PlayerControls>();
+        Cursor.lockState = CursorLockMode.Confined;
         controls.DisableMovementOnly();
+        Cursor.lockState = CursorLockMode.Confined;
 
         wasdCG = keysCanvas.GetComponent<CanvasGroup>();
         jCG = jControlUI.GetComponent<CanvasGroup>();
@@ -33,6 +35,7 @@ public class TutorialManager : MonoBehaviour
 
     private IEnumerator Tutorial()
     {
+        Cursor.lockState = CursorLockMode.Confined;
         yield return new WaitForSeconds(2f);
 
         controls.StartDialogue("Where... where am I?");
@@ -49,6 +52,7 @@ public class TutorialManager : MonoBehaviour
         JournalTutorialUI();
         StartCoroutine(ShowKeyUI(keysCanvas, wasdCG));
         controls.EnableControls();
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     private void JournalTutorialUI()

@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.AppUI.UI;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class Key : MonoBehaviour, i_Interactable
 {

@@ -396,7 +396,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": ""Journal"",
                     ""type"": ""Button"",
                     ""id"": ""6a26dfd4-8384-422a-91c0-b8af4e527b41"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -405,6 +405,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": ""Submit"",
                     ""type"": ""Button"",
                     ""id"": ""5348ca6e-a815-42fb-b69f-8fff03a29626"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Space"",
+                    ""type"": ""Button"",
+                    ""id"": ""42440725-1de9-4809-8a77-6e03d17e2d20"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -521,6 +530,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Submit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f8592d60-58b2-4e7f-93e6-c095e2742622"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Space"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -552,6 +572,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Menus_Scroll = m_Menus.FindAction("Scroll", throwIfNotFound: true);
         m_Menus_Journal = m_Menus.FindAction("Journal", throwIfNotFound: true);
         m_Menus_Submit = m_Menus.FindAction("Submit", throwIfNotFound: true);
+        m_Menus_Space = m_Menus.FindAction("Space", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -849,6 +870,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Menus_Scroll;
     private readonly InputAction m_Menus_Journal;
     private readonly InputAction m_Menus_Submit;
+    private readonly InputAction m_Menus_Space;
     /// <summary>
     /// Provides access to input actions defined in input action map "Menus".
     /// </summary>
@@ -900,6 +922,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Menus/Submit".
         /// </summary>
         public InputAction @Submit => m_Wrapper.m_Menus_Submit;
+        /// <summary>
+        /// Provides access to the underlying input action "Menus/Space".
+        /// </summary>
+        public InputAction @Space => m_Wrapper.m_Menus_Space;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -956,6 +982,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Submit.started += instance.OnSubmit;
             @Submit.performed += instance.OnSubmit;
             @Submit.canceled += instance.OnSubmit;
+            @Space.started += instance.OnSpace;
+            @Space.performed += instance.OnSpace;
+            @Space.canceled += instance.OnSpace;
         }
 
         /// <summary>
@@ -997,6 +1026,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Submit.started -= instance.OnSubmit;
             @Submit.performed -= instance.OnSubmit;
             @Submit.canceled -= instance.OnSubmit;
+            @Space.started -= instance.OnSpace;
+            @Space.performed -= instance.OnSpace;
+            @Space.canceled -= instance.OnSpace;
         }
 
         /// <summary>
@@ -1192,5 +1224,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSubmit(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Space" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpace(InputAction.CallbackContext context);
     }
 }

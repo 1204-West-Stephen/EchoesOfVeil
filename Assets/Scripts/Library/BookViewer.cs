@@ -1,92 +1,59 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Collections;
 
 public class BookViewer : MonoBehaviour
 {
-    [Header("Transform Settings")]
+    private Animator animator;
+    public List<GameObject> buttons;
+    public AudioClip clip;
+    public AudioClip closing;
+
+    [Header("Slide Settings")]
     public Vector3 hiddenOffset = new Vector3(0f, -0.35f, 0f);
     public float slideDuration = 0.35f;
+
+    [Header("Spawn Settings")]
+    public float spawnDistance = 0.25f;
     public Vector3 spawnRotationEuler = Vector3.zero;
     public Vector3 spawnScale = Vector3.one;
 
-    private LibraryDesk desk;
-    private Animator animator;
     private PlayerControls player;
-
+    public GameObject journalUI;
     private Vector3 shownLocalPos;
     private bool isOpen;
     private bool isClosing;
-    public PlayerInput controls;
 
-    private bool pressedEsc;
-
-    private void Awake()
-    { 
-        controls.Movement.Esc.performed += _ => pressedEsc = true;
-        controls.Movement.Esc.canceled += _ => pressedEsc = false;
-    }
-
-    private void Update()
+    private void Start()
     {
-        if (pressedEsc) Close();
-    }
-
-    // Called immediately after instantiation
-    public void Init(PlayerControls owner, Camera cam, LibraryDesk sourceDesk)
-    {
-        player = owner;
-        desk = sourceDesk;
+        player = FindAnyObjectByType<PlayerControls>();
         animator = GetComponent<Animator>();
-
-        // Position in front of camera
-        Vector3 spawnPos = cam.transform.position + cam.transform.forward * 0.25f;
-        transform.position = spawnPos;
-        transform.SetParent(cam.transform, true);
-
-        transform.localEulerAngles = spawnRotationEuler;
-        transform.localScale = spawnScale;
-
-        shownLocalPos = transform.localPosition;
-        transform.localPosition += hiddenOffset;
-
-        player.DisableControls();
-
-        // Hook up UI buttons to THIS instance
-        SetupUI();
-
-        StartCoroutine(SlideIn());
     }
 
-    private void SetupUI()
+    public void pageLeft()
     {
-        if (desk == null || desk.bookUI == null)
-        {
-            Debug.LogWarning("BookViewer: Desk or UI missing");
-            return;
-        }
+        animator.SetTrigger("go_back");
+        PlaySound(clip);
+        StartCoroutine(ButtonVanish());
+    }
 
-        Button nextButton = desk.nextButton;
-        Button prevButton = desk.prevButton;
-        Button closeButton = desk.closeButton;
+    public void pageRight()
+    {
+        animator.SetTrigger("go_ahead");
+        PlaySound(clip);
+        StartCoroutine(ButtonVanish());
+    }
 
-        if (nextButton != null)
-        {
-            nextButton.onClick.RemoveAllListeners();
-            nextButton.onClick.AddListener(NextPage);
-        }
+    private IEnumerator ButtonVanish()
+    {
+        buttons[0].gameObject.SetActive(false);
+        buttons[1].gameObject.SetActive(false);
+        buttons[2].gameObject.SetActive(false);
+        yield return new WaitForSeconds(1f);
+        buttons[0].gameObject.SetActive(true);
+        buttons[1].gameObject.SetActive(true);
+        buttons[2].gameObject.SetActive(true);
 
-        if (prevButton != null)
-        {
-            prevButton.onClick.RemoveAllListeners();
-            prevButton.onClick.AddListener(PreviousPage);
-        }
-
-        if (closeButton != null)
-        {
-            closeButton.onClick.RemoveAllListeners();
-            closeButton.onClick.AddListener(Close);
-        }
     }
 
     private IEnumerator SlideIn()
@@ -105,27 +72,41 @@ public class BookViewer : MonoBehaviour
         transform.localPosition = end;
 
         if (animator != null)
+        {
             animator.SetTrigger("go_ahead");
+            PlaySound(clip);
+        }
 
         isOpen = true;
+        yield return new WaitForSeconds(1f);
+        journalUI.gameObject.SetActive(isOpen);
     }
 
     public void Close()
     {
-        if (!isOpen || isClosing) return;
-
+        if (isClosing) return;
         isClosing = true;
-
-        if (desk != null && desk.bookUI != null)
-            desk.bookUI.SetActive(false);
-
         StartCoroutine(CloseRoutine());
     }
 
     private IEnumerator CloseRoutine()
     {
-        if (animator != null)
-            animator.SetTrigger("go_back");
+        if (animator != null) animator.SetTrigger("go_back");
+        yield return new WaitForSeconds(0.12f);
+        animator.SetTrigger("go_back");
+        yield return new WaitForSeconds(0.12f);
+        animator.SetTrigger("go_back");
+        yield return new WaitForSeconds(0.12f);
+        animator.SetTrigger("go_back");
+        PlaySound(closing);
+        yield return new WaitForSeconds(0.12f);
+        animator.SetTrigger("go_back");
+        yield return new WaitForSeconds(0.12f);
+        animator.SetTrigger("go_back");
+        yield return new WaitForSeconds(0.12f);
+        animator.SetTrigger("go_back");
+
+        journalUI.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(1.1f);
 
@@ -142,21 +123,36 @@ public class BookViewer : MonoBehaviour
 
         transform.localPosition = end;
 
-        if (player != null)
-            player.EnableControls();
-
+        player.EnableControls();
+        player.NotifyJournalClosed();
         Destroy(gameObject);
     }
 
-    public void PreviousPage()
+    public void Init(PlayerControls owner, Camera cam)
     {
-        if (animator != null)
-            animator.SetTrigger("go_back");
+        player = owner;
+        journalUI.SetActive(false);
+        PositionInFrontOfCamera(cam);
+
+        transform.localEulerAngles = spawnRotationEuler;
+        transform.localScale = spawnScale;
+
+        shownLocalPos = transform.localPosition;
+        transform.localPosition += hiddenOffset;
+
+        player.DisableControls();
+        StartCoroutine(SlideIn());
+    }
+    public void PositionInFrontOfCamera(Camera cam)
+    {
+        Vector3 spawnPos = cam.transform.position + cam.transform.forward * spawnDistance;
+        transform.position = spawnPos;
+        transform.SetParent(cam.transform, true);
     }
 
-    public void NextPage()
+    public void PlaySound(AudioClip sound)
     {
-        if (animator != null)
-            animator.SetTrigger("go_ahead");
+        AudioSource.PlayClipAtPoint(sound, transform.position, 0.2f);
     }
+
 }

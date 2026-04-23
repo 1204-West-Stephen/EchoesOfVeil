@@ -14,7 +14,6 @@ public class LetterTotem : MonoBehaviour, i_Interactable
 
     public bool puzzleSovled;
     public bool canInteract = true;
-    public bool first = true;
 
 
     void Start()
@@ -31,13 +30,12 @@ public class LetterTotem : MonoBehaviour, i_Interactable
         {
             index++;
 
-            if (source != null && clip != null && first)
+            if (source != null && clip != null)
             {
-                first = false;
                 source.PlayOneShot(clip);
             }
 
-            if (index > letterSprites.Count)
+            if (index >= letterSprites.Count)
             {
                 index = 0;
             }

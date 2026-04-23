@@ -1,378 +1,435 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.AppUI.UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.AI;
-using UnityEngine.Audio;
-
 
 public class EnemyAI : MonoBehaviour
 {
-    public enum EnemyState { Wander, Chase, Jumpscare, Lurk, Scream }
+    public enum EnemyState { Patrol, Chase, Jumpscare }
     public EnemyState currentState;
 
-    [Header("References")]
     private NavMeshAgent agent;
     private Animator animator;
     private Transform player;
-    private PlayerControls playerControls;
 
-    [Header("Cameras")]
-    public Camera jumpscareCamera;
-    private Camera playerCamera;
+    [Header("Patrol Points")]
+    public Transform[] patrolPoints;
+    private int patrolIndex;
 
     [Header("Detection")]
-    public float hearingRadius = 8f;
-    public float viewAngle = 50f;
+    public float hearingRadius = 10f;
+    public float viewAngle = 60f;
     public LayerMask obstacleMask;
 
-    [Header("Wandering")]
-    public float wanderRadius = 40f;
-    public float wanderDelay = 5f;
-    public float playerBias = 0.3f;
+    [Header("Movement")]
+    public float patrolSpeed = 1.5f;
+    public float chaseSpeed = 3.5f;
+    public float patrolPause = 0.5f;
 
     [Header("Chase")]
-    public float chaseSpeed = 2f;
-    public float wanderSpeed = 0.8f;
-    public float initialChaseTime = 5f;
-    public float chaseExtension = 2f;
+    public float chaseTime = 6f;
+    public AudioClip scream;
+    private float chaseTimer;
+    public float chaseDetectionRadius = 5f;
 
-    [Header("Scream")]
-    public float screamStopTime = 1.0f;
+    [Header("Lurk")]
+    public float lurkInterval = 4f;
+    public float lurkChance = 0.35f;
+    private float lurkTimer;
 
     [Header("Jumpscare")]
     public float jumpscareDistance = 1.5f;
     public float jumpscareDuration = 2.3f;
     public Transform respawnPoint;
-    public Animator jumpscareAnimator;
-    public AudioClip jumpscareClip;
-    public AudioSource jumpscareSource;
-    public AudioMixerGroup jumpscareMixerGroup;
-
-    [Header("Lurk")]
-    public float lurkCooldown = 6f;
-    public float lurkChance = 0.6f;
-    public float lurkDuration = 8.833f;
-
-    private float lastLurkTime;
-    private bool isLurking;
-
-    [Header("Reset")]
     public Transform enemyResetPoint;
-    public float postRespawnGraceTime = 1.2f;
+    private Inventory playerInventory;
+    private BookShelf[] allShelves;
 
-    private float chaseTimer;
-    private bool screamPlayed;
+    public Camera jumpscareCamera;
+    private Camera playerCamera;
+
+    public Animator jumpscareAnimator;
+    public AudioSource jumpscareSource;
+    public AudioClip jumpscareClip;
+
+    private bool isBusy;
     private bool isJumpscareActive;
-    private bool isFrozen;
     private bool canJumpscare = true;
-    private Coroutine wanderCoroutine;
+
+    private float decisionTimer = 15f;
 
     void Start()
     {
-
-        jumpscareSource.PlayOneShot(jumpscareClip);
-
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
-        animator.applyRootMotion = false;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        playerCamera = Camera.main;
 
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        player = playerObj.transform;
-        playerControls = playerObj.GetComponent<PlayerControls>();
+        playerInventory = player.GetComponent<Inventory>();
+        allShelves = FindObjectsOfType<BookShelf>();
 
-        playerCamera = playerObj.GetComponentInChildren<Camera>();
+        agent.autoBraking = true;
+        agent.stoppingDistance = 1.2f;
+        agent.angularSpeed = 240f;
+        agent.acceleration = 8f;
 
-        currentState = EnemyState.Wander;
-        wanderCoroutine = StartCoroutine(WanderRoutine());
+        currentState = EnemyState.Patrol;
+
+        StartCoroutine(PatrolLoop());
     }
+
     void Awake()
     {
         if (jumpscareCamera)
             jumpscareCamera.gameObject.SetActive(false);
     }
+
     void Update()
     {
-        if (isFrozen || isJumpscareActive) return;
+        if (isJumpscareActive) return;
+        if (isBusy) return;
 
-        switch (currentState)
+        if (currentState == EnemyState.Patrol)
         {
-            case EnemyState.Wander:
-                DetectPlayer();
-                break;
-
-            case EnemyState.Chase:
-                ChasePlayer();
-                CheckJumpscareDistance();
-                break;
-            case EnemyState.Lurk:
-                break;
+            DetectPlayer();
+            HandleLurk();
+            HandlePatrolSwitch();
+        }
+        else if (currentState == EnemyState.Chase)
+        {
+            Chase();
         }
     }
 
-    // -------------------- DETECTION --------------------
+    // ---------------- PATROL ----------------
+
+    IEnumerator PatrolLoop()
+    {
+        while (true)
+        {
+            if (currentState != EnemyState.Patrol || isBusy)
+            {
+                yield return null;
+                continue;
+            }
+
+            Vector3 target = GetPatrolTarget();
+
+            agent.speed = patrolSpeed;
+            agent.SetDestination(target);
+
+            animator.SetBool("isWalking", true);
+            animator.SetBool("isRunning", false);
+
+            while (currentState == EnemyState.Patrol && !isBusy)
+            {
+                if (!agent.pathPending &&
+                    agent.remainingDistance <= agent.stoppingDistance + 0.2f)
+                    break;
+
+                yield return null;
+            }
+
+            patrolIndex = (patrolIndex + 1) % patrolPoints.Length;
+
+            yield return new WaitForSeconds(patrolPause);
+        }
+    }
+
+    Vector3 GetPatrolTarget()
+    {
+        Vector3 basePoint = patrolPoints[patrolIndex].position;
+        Vector2 offset = Random.insideUnitCircle * 2f;
+        Vector3 candidate = basePoint + new Vector3(offset.x, 0, offset.y);
+
+        if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+            return hit.position;
+
+        return basePoint;
+    }
+
+    void HandlePatrolSwitch()
+    {
+        decisionTimer -= Time.deltaTime;
+        if (decisionTimer > 0f) return;
+
+        decisionTimer = 15f;
+
+        if (Random.value < 0.3f)
+            SwitchPatrolPoint();
+    }
+
+    void SwitchPatrolPoint()
+    {
+        if (patrolPoints == null || patrolPoints.Length == 0)
+            return;
+
+        float roll = Random.value;
+
+        Vector3 target;
+
+        // ---------------- 60% NORMAL PATROL ----------------
+        if (roll < 0.6f)
+        {
+            int newIndex = patrolIndex;
+
+            for (int i = 0; i < 5; i++)
+            {
+                newIndex = Random.Range(0, patrolPoints.Length);
+                if (newIndex != patrolIndex) break;
+            }
+
+            patrolIndex = newIndex;
+            target = GetPatrolTarget();
+        }
+        else
+        {
+            // ---------------- 40% SPECIAL BEHAVIOR ----------------
+            float subRoll = Random.value;
+
+            if (subRoll < 0.8f)
+            {
+                // 60% of 40% investigate player area
+                target = GetInvestigationPoint();
+            }
+            else
+            {
+                // 40% of 40%  just pick another patrol point
+                int newIndex = Random.Range(0, patrolPoints.Length);
+                patrolIndex = newIndex;
+                target = GetPatrolTarget();
+            }
+        }
+
+        agent.ResetPath();
+        agent.SetDestination(target);
+    }
+
+    Vector3 GetInvestigationPoint()
+    {
+        // small random offset around player so it feels like searching, not locking on
+        Vector2 offset = Random.insideUnitCircle * 3f;
+        Vector3 candidate = player.position + new Vector3(offset.x, 0, offset.y);
+
+        if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+            return hit.position;
+
+        return player.position;
+    }
+
+    // ---------------- DETECTION ----------------
+
     void DetectPlayer()
     {
-        float distance = Vector3.Distance(transform.position, player.position);
-        if (distance > hearingRadius) return;
+        float dist = Vector3.Distance(transform.position, player.position);
+        if (dist > hearingRadius) return;
 
         Vector3 dir = (player.position - transform.position).normalized;
         float angle = Vector3.Angle(transform.forward, dir);
 
-        if (angle < viewAngle / 2f && !Physics.Raycast(transform.position + Vector3.up, dir, distance, obstacleMask))
+        bool inVision =
+            angle < viewAngle / 2f &&
+            !Physics.Raycast(transform.position + Vector3.up, dir, dist, obstacleMask);
+
+        bool closeOverride = dist < chaseDetectionRadius;
+
+        if (inVision || closeOverride)
         {
-            StartChase();
+            StartCoroutine(ScreamThenChase());
         }
     }
-    void DetectHearing()
+
+    IEnumerator ScreamThenChase()
     {
-        if (Time.time < lastLurkTime + lurkCooldown) return;
+        if (isBusy) yield break;
 
-        float distance = Vector3.Distance(transform.position, player.position);
-        if (distance > hearingRadius) return;
-
-        if (CanSeePlayer()) return;
-
-        if (Random.value > lurkChance) return;
-
-        StartLurk();
-    }
-    // -------------------- LURK --------------------
-    void StartLurk()
-    {
-        if (currentState != EnemyState.Wander) return;
-
-        currentState = EnemyState.Lurk;
-        lastLurkTime = Time.time;
-        isLurking = true;
-
-        if (wanderCoroutine != null)
-            StopCoroutine(wanderCoroutine);
+        isBusy = true;
 
         agent.isStopped = true;
         agent.ResetPath();
 
         animator.SetBool("isWalking", false);
         animator.SetBool("isRunning", false);
-        animator.SetTrigger("Lurk");
 
-        StartCoroutine(LurkRoutine());
+        animator.Play("screamFix", 0, 0f);
+
+        AudioSource.PlayClipAtPoint(scream, transform.position, 1f);
+
+        yield return new WaitForSeconds(1f);
+
+        StartChase();
+
+        isBusy = false;
     }
-    IEnumerator LurkRoutine()
+
+    // ---------------- LURK ----------------
+
+    void HandleLurk()
     {
-        yield return new WaitForSeconds(lurkDuration);
+        if (isBusy) return;
 
-        isLurking = false;
+        lurkTimer -= Time.deltaTime;
+        if (lurkTimer > 0f) return;
 
-        if (CanSeePlayer())
+        lurkTimer = lurkInterval;
+
+        float dist = Vector3.Distance(transform.position, player.position);
+
+        if (dist < chaseDetectionRadius) return;
+
+        if (Random.value < lurkChance)
         {
-            animator.SetBool("isRunning", true);
-            animator.SetBool("isWalking", false);
-            StartChase();
-            yield break;
-        }
-
-        ReturnToWander();
-    }
-    // -------------------- WANDER --------------------
-    IEnumerator WanderRoutine()
-    {
-        while (currentState == EnemyState.Wander)
-        {
-            if (NavMesh.SamplePosition(Random.insideUnitSphere * wanderRadius + transform.position,
-                out NavMeshHit hit, wanderRadius, NavMesh.AllAreas))
-            {
-                if (!agent.isOnNavMesh || agent.isStopped)
-                    yield return null;
-
-                agent.speed = wanderSpeed;
-
-                if (agent.isOnNavMesh)
-                    agent.SetDestination(hit.position);
-
-                agent.SetDestination(hit.position);
-
-                animator.SetBool("isWalking", true);
-                animator.SetBool("isRunning", false);
-            }
-
-            yield return new WaitForSeconds(wanderDelay);
+            StartCoroutine(LurkCoroutine());
         }
     }
-    // -------------------- CHASE --------------------
+
+    IEnumerator LurkCoroutine()
+    {
+        if (isBusy) yield break;
+
+        isBusy = true;
+
+        agent.isStopped = true;
+        agent.ResetPath();
+
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isWalking", false);
+
+        animator.Play("searchingFIx", 0, 0f);
+
+        yield return new WaitForSeconds(8f);
+
+        isBusy = false;
+    }
+
+    // ---------------- CHASE ----------------
+
     void StartChase()
     {
-        if (currentState == EnemyState.Chase) return;
-
         currentState = EnemyState.Chase;
-        chaseTimer = initialChaseTime;
-        screamPlayed = false;
+        chaseTimer = chaseTime;
 
         agent.speed = chaseSpeed;
 
-        if (wanderCoroutine != null)
-            StopCoroutine(wanderCoroutine);
-    }
-    void ChasePlayer()
-    {
-        if (isFrozen) return;
-
-        if (!agent.isOnNavMesh || agent.isStopped) return;
-
-        agent.SetDestination(player.position);
-
-        if (!screamPlayed)
-        {
-            StartCoroutine(ScreamRoutine());
-            screamPlayed = true;
-        }
-
         animator.SetBool("isRunning", true);
         animator.SetBool("isWalking", false);
+    }
+
+    void Chase()
+    {
+        agent.SetDestination(player.position);
 
         chaseTimer -= Time.deltaTime;
 
-        if (CanSeePlayer() && chaseTimer <= 0f)
-            chaseTimer += chaseExtension;
-
-        if (chaseTimer <= 0f && !CanSeePlayer())
-            ReturnToWander();
-    }
-    // -------------------- SCREAM --------------------
-    IEnumerator ScreamRoutine()
-    {
-        FreezeEnemy();
-
-        animator.SetTrigger("Scream");
-
-        yield return new WaitForSeconds(screamStopTime);
-
-        UnfreezeEnemy();
-    }
-    void CheckJumpscareDistance()
-    {
-        if (!canJumpscare || isFrozen) return;
-
-        if (Vector3.Distance(transform.position, player.position) <= jumpscareDistance)
-            StartCoroutine(JumpscareRoutine());
-    }
-    bool CanSeePlayer()
-    {
-        float dist = Vector3.Distance(transform.position, player.position);
-        if (dist > hearingRadius) return false;
-
-        Vector3 dir = (player.position - transform.position).normalized;
-        float angle = Vector3.Angle(transform.forward, dir);
-        return angle < viewAngle / 2f &&
-               !Physics.Raycast(transform.position + Vector3.up, dir, dist, obstacleMask);
-    }
-    void ReturnToWander()
-    {
-        currentState = EnemyState.Wander;
-
-        agent.isStopped = false;
-
-        animator.SetBool("isRunning", false);
-        animator.SetBool("isWalking", true);
-
-        if (wanderCoroutine != null)
-            StopCoroutine(wanderCoroutine);
-
-        wanderCoroutine = StartCoroutine(WanderRoutine());
-    }
-    // -------------------- JUMPSCARE / KILL --------------------
-    IEnumerator JumpscareRoutine()
-    {
-        if (wanderCoroutine != null)
+        if (canJumpscare &&
+            Vector3.Distance(transform.position, player.position) <= jumpscareDistance)
         {
-            StopCoroutine(wanderCoroutine);
-            wanderCoroutine = null;
+            StartCoroutine(JumpscareRoutine());
+            return;
         }
 
+        if (chaseTimer <= 0f && !CanSeePlayer())
+        {
+            ReturnToPatrol();
+        }
+    }
+
+    // ---------------- JUMPSCARE ----------------
+
+    IEnumerator JumpscareRoutine()
+    {
         if (isJumpscareActive) yield break;
 
         isJumpscareActive = true;
-        canJumpscare = false;
-        currentState = EnemyState.Jumpscare;
+
+        agent.isStopped = true;
+        agent.ResetPath();
 
         jumpscareAnimator.Play("JumpScare 1", 0, 0f);
-        jumpscareAnimator.Update(0f);
-        jumpscareSource.spatialBlend = 0f;
-        jumpscareSource.volume = 1f;
-        jumpscareSource.outputAudioMixerGroup = jumpscareMixerGroup;
-        jumpscareSource.PlayOneShot(jumpscareClip);
 
-        yield return null;
+        if (jumpscareSource && jumpscareClip)
+            jumpscareSource.PlayOneShot(jumpscareClip);
 
-        jumpscareCamera.gameObject.SetActive(true);
         playerCamera.gameObject.SetActive(false);
-
-
-        FreezeEnemy();
-
-        if (playerControls != null)
-            playerControls.DisableControls();
-
         jumpscareCamera.gameObject.SetActive(true);
-        playerCamera.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(jumpscareDuration);
 
         if (respawnPoint)
             player.position = respawnPoint.position;
 
-        if (enemyResetPoint)
+        if (patrolPoints != null && patrolPoints.Length > 0)
         {
-            if (NavMesh.SamplePosition(enemyResetPoint.position, out NavMeshHit hit, 2f, NavMesh.AllAreas))
+            Transform randomPoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
+
+            if (NavMesh.SamplePosition(randomPoint.position, out NavMeshHit hit, 3f, NavMesh.AllAreas))
             {
                 agent.Warp(hit.position);
-            }
-            else
-            {
-                Debug.LogError("Enemy reset point is NOT on NavMesh!");
+                patrolIndex = System.Array.IndexOf(patrolPoints, randomPoint);
             }
         }
 
-        playerCamera.gameObject.SetActive(true);
+        ItemData heldItem = playerInventory.GetSelectedItem();
+
+        if (heldItem == null)
+        {
+            Debug.Log("No item in selected slot.");
+            yield return null;
+        }
+
+        if (heldItem.typeInput != InputType.Book)
+        {
+            Debug.Log("Selected item is not a book.");
+            yield return null;
+        }
+
+        //  FIND MATCHING SHELF FIRST
+        BookShelf matchingShelf = null;
+
+        foreach (BookShelf shelf in allShelves)
+        {
+            if (shelf.GetStartingBook() == heldItem)
+            {
+                matchingShelf = shelf;
+                break;
+            }
+        }
+
+        if (matchingShelf == null)
+        {
+            Debug.LogWarning("No matching shelf found for this book.");
+            yield return null;
+        }
+
+        // NOW remove + reset
+        playerInventory.RemoveSelectedItem();
+        matchingShelf.ResetIfMatches(heldItem);
+
         jumpscareCamera.gameObject.SetActive(false);
+        playerCamera.gameObject.SetActive(true);
 
-        if (playerControls != null)
-            playerControls.EnableControls();
-
-        UnfreezeEnemy();
-
-        currentState = EnemyState.Wander;
-        isJumpscareActive = false;
-
-        wanderCoroutine = StartCoroutine(WanderRoutine());
-
-        yield return new WaitForSeconds(postRespawnGraceTime);
-        canJumpscare = true;
-    }
-
-    // -------------------- FREEZE HELPERS --------------------
-    void FreezeEnemy()
-    {
-        isFrozen = true;
-
-        agent.isStopped = true;
-        agent.velocity = Vector3.zero;
-        agent.updatePosition = false;
-        agent.updateRotation = false;
-
-        animator.speed = 0f;
-    }
-    void UnfreezeEnemy()
-    {
-        agent.updatePosition = true;
-        agent.updateRotation = true;
+        currentState = EnemyState.Patrol;
         agent.isStopped = false;
 
-        animator.speed = 1f;
+        isBusy = false;
+        isJumpscareActive = false;
+    }
 
+    void ReturnToPatrol()
+    {
+        currentState = EnemyState.Patrol;
         agent.ResetPath();
-        isFrozen = false;
+    }
+
+    // ---------------- HELPERS ----------------
+
+    bool CanSeePlayer()
+    {
+        float dist = Vector3.Distance(transform.position, player.position);
+        if (dist > hearingRadius) return false;
+
+        Vector3 dir = (player.position - transform.position).normalized;
+
+        return !Physics.Raycast(transform.position + Vector3.up, dir, dist, obstacleMask);
     }
 }

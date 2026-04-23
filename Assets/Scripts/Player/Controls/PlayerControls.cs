@@ -34,11 +34,6 @@ public class PlayerControls : MonoBehaviour
     [Header("Movement")]
     public float moveDuration = 0.3f; 
     public float moveDistance = 100f; 
-    
-    [Header("Inspection Menu")] 
-    public Canvas inspectionMenu;
-    private bool pressedQ;
-    private bool inspectionToggle;
 
     [Header("Options Menu")]
     public Canvas optionsCanvas;
@@ -75,9 +70,6 @@ public class PlayerControls : MonoBehaviour
         controls.Movement.PressF.performed += _ => pressedF = true;
         controls.Movement.PressF.canceled += _ => pressedF = false;
 
-        controls.Movement.PressQ.performed += _ => pressedQ = true;
-        controls.Movement.PressQ.canceled += _ => pressedQ = false;
-
         controls.Menus.Pause.performed += _ => isPaused = true;
         controls.Menus.Pause.canceled += _ => isPaused = false;
 
@@ -100,8 +92,6 @@ public class PlayerControls : MonoBehaviour
         }
 
         canInteract = true;
-        inspectionToggle = false;
-        inspectionMenu.gameObject.SetActive(false);
 
         if (interactionCanvas != null)
             interactionCanvas.gameObject.SetActive(false);
@@ -137,15 +127,8 @@ public class PlayerControls : MonoBehaviour
 
         if (isPaused)
         {
-            PauseMenu();
+            HandleEscape();
             isPaused = false;
-        }
-
-        if (pressedQ)
-        {
-            inspectionToggle = !inspectionToggle;
-            InspectionMenu();
-            pressedQ = false;
         }
 
         if (pressedJ && hasJournal)
@@ -232,37 +215,12 @@ public class PlayerControls : MonoBehaviour
             EnableControls();
         }
     }
-    private void InspectionMenu()
-    {
-        if (inspectionToggle)
-        {
-            DisableControls();
-            inspectionMenu.gameObject.SetActive(true);
 
-            if (interactionCanvas != null)
-                interactionCanvas.gameObject.SetActive(false);
-        }
-        else
-        {
-            EnableControls();
-            inspectionMenu.gameObject.SetActive(false);
-        }
-    }
     public void OptionsMenu()
     {
         optionsToggle = !optionsToggle;
-        pauseMenu.gameObject.SetActive(optionsToggle);
-
-        if (optionsToggle)
-        {
-            Time.timeScale = 0f;
-            DisableControls();
-        }
-        else
-        {
-            Time.timeScale = 1f;
-            EnableControls();
-        }
+        optionsCanvas.gameObject.SetActive(optionsToggle);
+        pauseMenu.gameObject.SetActive(!optionsToggle);
     }
 
     // ========== CONTROL LOCKS ========== \\
@@ -291,6 +249,34 @@ public class PlayerControls : MonoBehaviour
     {
         movement.controlUnlock();   // stops WASD
         canInteract = false;
+    }
+    private void HandleEscape()
+    {
+        // 1. Options menu open  close it
+        if (optionsCanvas.gameObject.activeSelf)
+        {
+            optionsToggle = false;
+            optionsCanvas.gameObject.SetActive(false);
+            pauseMenu.gameObject.SetActive(true);
+            return;
+        }
+
+        // 2. Journal open  close it
+        if (activeJournal != null)
+        {
+            activeJournal.Close();
+            return;
+        }
+
+        // 3. Pause menu  close it
+        if (pauseMenu.gameObject.activeSelf)
+        {
+            PauseMenu(); // this will unpause
+            return;
+        }
+
+        // 4. Nothing open  open pause menu
+        PauseMenu();
     }
 
     // ========== JOURNAL ========== \\

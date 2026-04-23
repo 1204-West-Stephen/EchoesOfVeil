@@ -27,7 +27,7 @@ public class JailToHallway : MonoBehaviour
     IEnumerator JumpscareRoutine(Transform player)
     {
         float speed = jumpscareSpeed;
-        float stopDistance = 0.005f;
+        float stopDistance = 0.2f;
 
         AudioSource.PlayClipAtPoint(jumpscareSound, player.position, 1f);
 
@@ -43,10 +43,10 @@ public class JailToHallway : MonoBehaviour
             if (distance <= stopDistance)
             {
                 jumpscareObject.SetActive(false);
+                gameObject.SetActive(false);
                 yield break; // stop the coroutine
             }
 
-            gameObject.SetActive(false);
             yield return null;
         }
     }

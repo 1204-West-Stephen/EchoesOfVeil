@@ -24,6 +24,16 @@ public class JournalViewer : MonoBehaviour
     private bool isOpen;
     private bool isClosing;
 
+    public List<Canvas> canvases;
+
+    public Material leftMaterial;
+    public Material rightMaterial;
+
+    public GameObject leftPage;
+    public GameObject rightPage;
+
+    private int flipCounter = 0;
+
     private void Start()
     {
         player = FindAnyObjectByType<PlayerControls>();
@@ -32,32 +42,32 @@ public class JournalViewer : MonoBehaviour
 
     public void pageLeft()
     {
-        animator.SetTrigger("go_back");
-        PlaySound(clip);
-        StartCoroutine(ButtonVanish());
+        if (flipCounter > 0) {
+            animator.SetTrigger("go_back");
+            PlaySound(clip);
+            StartCoroutine(ButtonVanish());
+
+            flipCounter--;
+        }
     }
 
     public void pageRight()
     {
-        animator.SetTrigger("go_ahead");
-        PlaySound(clip);
-        StartCoroutine(ButtonVanish());
+        if (flipCounter < 4) {
+            animator.SetTrigger("go_ahead");
+            PlaySound(clip);
+            StartCoroutine(ButtonVanish());
+            flipCounter++;
+        }
     }
 
     private IEnumerator ButtonVanish()
     {
         buttons[0].gameObject.SetActive(false);
         buttons[1].gameObject.SetActive(false);
-        buttons[2].gameObject.SetActive(false);
-        buttons[3].gameObject.SetActive(false);
-        buttons[4].gameObject.SetActive(false);
         yield return new WaitForSeconds(1f);
         buttons[0].gameObject.SetActive(true);
         buttons[1].gameObject.SetActive(true);
-        buttons[2].gameObject.SetActive(true);
-        buttons[3].gameObject.SetActive(true);
-        buttons[4].gameObject.SetActive(true);
-
     }
 
     private IEnumerator SlideIn()
@@ -92,7 +102,6 @@ public class JournalViewer : MonoBehaviour
         isClosing = true;
         StartCoroutine(CloseRoutine());
     }
-
     private IEnumerator CloseRoutine()
     {
         if (animator != null) animator.SetTrigger("go_back");
@@ -135,7 +144,8 @@ public class JournalViewer : MonoBehaviour
     public void Init(PlayerControls owner, Camera cam)
     {
         player = owner;
-        journalUI.SetActive(false); 
+        journalUI.SetActive(false);
+        UpdateMaterials();
         PositionInFrontOfCamera(cam);
 
         transform.localEulerAngles = spawnRotationEuler;
@@ -147,16 +157,38 @@ public class JournalViewer : MonoBehaviour
         player.DisableControls();
         StartCoroutine(SlideIn());
     }
+
+    private void UpdateMaterials() 
+    {
+        leftMaterial = JournalStateManager.Instance.leftMaterial;
+        rightMaterial = JournalStateManager.Instance.rightMaterial;
+
+        Debug.Log(leftMaterial.name);
+        Debug.Log(rightMaterial.name);
+
+        SkinnedMeshRenderer leftSMR = leftPage.GetComponent<SkinnedMeshRenderer>();
+        SkinnedMeshRenderer rightSMR = rightPage.GetComponent<SkinnedMeshRenderer>();
+
+        Material[] leftMat = leftSMR.materials;
+        Material[] rightMat = rightSMR.materials;
+
+        leftMat[1] = leftMaterial;
+        rightMat[0] = rightMaterial;
+
+        leftSMR.materials = leftMat;
+        rightSMR.materials = rightMat;
+    }
+
     public void PositionInFrontOfCamera(Camera cam)
     {
         Vector3 spawnPos = cam.transform.position + cam.transform.forward * spawnDistance;
         transform.position = spawnPos;
         transform.SetParent(cam.transform, true);
     }
-
     public void PlaySound(AudioClip sound)
     {
         AudioSource.PlayClipAtPoint(sound, transform.position, 0.2f);
     }
+
 
 }

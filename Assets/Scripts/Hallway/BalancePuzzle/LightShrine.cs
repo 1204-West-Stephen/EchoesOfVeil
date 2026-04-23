@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using Unity.AppUI.UI;
-using UnityEngine.Audio;
 
 public class LightShrine : MonoBehaviour, i_Interactable
 {

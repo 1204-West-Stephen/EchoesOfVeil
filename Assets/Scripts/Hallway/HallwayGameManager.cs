@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
-using Unity.AppUI.UI;
 
 public class HallwayGameManager : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class HallwayGameManager : MonoBehaviour
     public TabletShrineManager tbm;
 
     public Camera solvedCamera;
-    
+
     public bool gameMaster = false;
     private bool isLoaded = false;
     public string LibrarySceneName = "Library";
@@ -24,9 +23,10 @@ public class HallwayGameManager : MonoBehaviour
     public float lightIntensity = 6f;
 
     private Animator animator;
-    private AudioSource source;
     public AudioClip clip;
     public AudioClip lightSound;
+
+    private int activeFades = 0;
 
     private void Start()
     {
@@ -43,7 +43,6 @@ public class HallwayGameManager : MonoBehaviour
         }
 
         animator = GetComponent<Animator>();
-        source = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -55,65 +54,90 @@ public class HallwayGameManager : MonoBehaviour
     {
         if (bpm.puzzleSolved && !puzzleCompleted[0])
         {
-            StartCoroutine(FadeInLight(lights[0]));
             puzzleCompleted[0] = true;
+            activeFades++;
+            StartCoroutine(FadeInLight(lights[0]));
         }
 
-        if (gpm.puzzleSolved)
+        if (gpm.puzzleSolved && !puzzleCompleted[1])
         {
-            StartCoroutine(FadeInLight(lights[1]));
             puzzleCompleted[1] = true;
+            activeFades++;
+            StartCoroutine(FadeInLight(lights[1]));
         }
 
-        if (tm.puzzleSolved)
+        if (tm.puzzleSolved && !puzzleCompleted[2])
         {
-            StartCoroutine(FadeInLight(lights[2]));
             puzzleCompleted[2] = true;
+            activeFades++;
+            StartCoroutine(FadeInLight(lights[2]));
         }
 
-        if (tbm.puzzleSolved)
+        if (tbm.puzzleSolved && !puzzleCompleted[3])
         {
-            StartCoroutine(FadeInLight(lights[3]));
             puzzleCompleted[3] = true;
+            activeFades++;
+            StartCoroutine(FadeInLight(lights[3]));
         }
 
-        if (puzzleCompleted.All(p => p) || gameMaster)
+        // CHANGED: wait for fades before opening
+        if ((puzzleCompleted.All(p => p) || gameMaster) && !isLoaded)
         {
-            if (!isLoaded)
-            {
-                isLoaded = true; // lock it immediately
-                StartCoroutine(LoadLibrary());
-                StartCoroutine(OpenDoors());
-                gameMaster = false;
-            }
+            isLoaded = true;
+            StartCoroutine(WaitForFadesThenOpen());
+            gameMaster = false;
         }
+    }
+
+    private IEnumerator WaitForFadesThenOpen()
+    {
+        // Wait until all fades complete
+        while (activeFades > 0)
+            yield return null;
+
+        // Now safe to proceed
+        StartCoroutine(LoadLibrary());
+        StartCoroutine(OpenDoors());
     }
 
     private IEnumerator FadeInLight(Light light)
     {
         yield return new WaitForSeconds(3f);
 
-        AudioSource.PlayClipAtPoint(lightSound, transform.position, 0.55f);
+        // Prevent duplicate triggers
+        if (light.intensity > 0f)
+        {
+            activeFades--;
+            yield break;
+        }
+
+        AudioSource.PlayClipAtPoint(lightSound, transform.position, 0.9f);
 
         float t = 0f;
-        while (t < fadeDuration && light.intensity <= lightIntensity)
+
+        while (t < fadeDuration)
         {
             t += Time.deltaTime;
             float lerp = Mathf.Clamp01(t / fadeDuration);
-            light.intensity += lerp; 
+            light.intensity = Mathf.Lerp(0f, lightIntensity, lerp);
             yield return null;
         }
+
+        light.intensity = lightIntensity;
+
+        activeFades--; // IMPORTANT
     }
 
     private IEnumerator OpenDoors()
     {
         yield return new WaitForSeconds(2.0f);
+
         StartCoroutine(ShowLight(solvedCamera));
-        yield return new WaitForSeconds(1.5f);
-        animator.SetTrigger("Open");
-        AudioSource.PlayClipAtPoint(clip, transform.position, 0.55f);
 
         yield return new WaitForSeconds(1.5f);
+
+        animator.SetTrigger("Open");
+        AudioSource.PlayClipAtPoint(clip, transform.position, 0.55f);
     }
 
     private IEnumerator LoadLibrary()
@@ -121,10 +145,8 @@ public class HallwayGameManager : MonoBehaviour
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(LibrarySceneName, LoadSceneMode.Additive);
         asyncLoad.allowSceneActivation = false;
 
-        // Wait until loading is complete
         while (!asyncLoad.isDone)
         {
-            // Unity considers scene ready when progress hits 0.9
             if (asyncLoad.progress >= 0.9f)
             {
                 asyncLoad.allowSceneActivation = true;
@@ -132,27 +154,45 @@ public class HallwayGameManager : MonoBehaviour
 
             yield return null;
         }
-
-        isLoaded = true;
     }
 
     public IEnumerator ShowLight(Camera solvedCamera)
     {
-        PlayerMovement movement = FindFirstObjectByType<PlayerMovement>();
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        Camera playerCamera = playerObj.GetComponentInChildren<Camera>();
-        playerCamera = playerObj.GetComponentInChildren<Camera>();
+        PlayerMovement movement = null;
+        Camera playerCamera = null;
+
+        // Wait for player to spawn
+        while (movement == null)
+        {
+            movement = FindFirstObjectByType<PlayerMovement>();
+            yield return null;
+        }
+
+        // Wait for camera to exist
+        while (playerCamera == null)
+        {
+            playerCamera = movement.GetComponentInChildren<Camera>();
+            yield return null;
+        }
+
+        if (solvedCamera == null)
+        {
+            Debug.LogError("Solved camera not assigned!");
+            yield break;
+        }
 
         movement.controlLock();
+
         yield return new WaitForSeconds(1.5f);
+
         solvedCamera.gameObject.SetActive(true);
         playerCamera.gameObject.SetActive(false);
+
         yield return new WaitForSeconds(3.5f);
 
         playerCamera.gameObject.SetActive(true);
         solvedCamera.gameObject.SetActive(false);
-        movement.controlUnlock();
 
-        yield return null;
+        movement.controlUnlock();
     }
 }
