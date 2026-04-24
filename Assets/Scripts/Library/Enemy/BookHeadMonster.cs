@@ -187,7 +187,7 @@ public class EnemyAI : MonoBehaviour
             // ---------------- 40% SPECIAL BEHAVIOR ----------------
             float subRoll = Random.value;
 
-            if (subRoll < 0.8f)
+            if (subRoll < 0.85f)
             {
                 // 60% of 40% investigate player area
                 target = GetInvestigationPoint();

@@ -13065,7 +13065,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 0
-  m_Color: {r: 0.5018867, g: 0.14683408, b: 0.08617299, a: 1}
+  m_Color: {r: 0.6740388, g: 0.8986869, b: 0.9339623, a: 1}
   m_Intensity: 3.39
   m_Range: 1.26
   m_SpotAngle: 61
@@ -128353,7 +128353,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   patrolSpeed: 1.3
-  chaseSpeed: 1.8
+  chaseSpeed: 1.65
   patrolPause: 0.5
   chaseTime: 5
   scream: {fileID: 8300000, guid: 229b23f7e427c594da680bde828c9ea6, type: 3}
@@ -135986,7 +135986,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 0
-  m_Color: {r: 0.5018867, g: 0.14683408, b: 0.08617299, a: 1}
+  m_Color: {r: 0, g: 0.4811321, b: 0.45106134, a: 1}
   m_Intensity: 3.39
   m_Range: 1.26
   m_SpotAngle: 61
@@ -285127,7 +285127,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 0
-  m_Color: {r: 0.5018867, g: 0.14683408, b: 0.08617299, a: 1}
+  m_Color: {r: 0.3647059, g: 0.2627451, b: 0.21568629, a: 1}
   m_Intensity: 3.39
   m_Range: 1.26
   m_SpotAngle: 61
@@ -303597,7 +303597,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5032725489094713736, guid: e88c9dab988b41f4cbba5193db600679, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6329316510935084561, guid: e88c9dab988b41f4cbba5193db600679, type: 3}
       propertyPath: m_IsActive

@@ -22,7 +22,7 @@ public class PlayerControls : MonoBehaviour
     [Header("Pause Menu")] 
     public Canvas pauseMenu; 
     private bool pauseToggle;
-    private bool isPaused;
+    public bool isPaused;
 
     [Header("Held Item")] 
     public Canvas ItemInHand; 
@@ -134,9 +134,15 @@ public class PlayerControls : MonoBehaviour
         if (pressedJ && hasJournal)
         {
             if (activeJournal == null)
+            {
                 OpenJournal();
+                isPaused = false;
+            }
             else
+            {
                 activeJournal.Close();
+                isPaused = true;
+            }
 
             pressedJ = false;
         }

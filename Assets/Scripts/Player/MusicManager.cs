@@ -5,6 +5,7 @@ public class MusicManager : MonoBehaviour
 {
     private AudioSource audioSource;
     public AudioClip clip;
+    public AudioClip libraryClip;
 
     [Header("Timing")]
     public float minCooldown = 360f; // 6 minutes
@@ -14,6 +15,7 @@ public class MusicManager : MonoBehaviour
 
     private float lastPlayTime = -999f;
     private bool isPlaying;
+    public bool inLibrary = false;
 
     void Start()
     {
@@ -50,9 +52,18 @@ public class MusicManager : MonoBehaviour
     {
         if (clip == null) return;
 
-        audioSource.clip = clip;
-        audioSource.Play();
-        isPlaying = true;
+        if (inLibrary)
+        {
+            audioSource.clip = libraryClip;
+            audioSource.Play();
+            isPlaying = true;
+        }
+        else
+        {
+            audioSource.clip = clip;
+            audioSource.Play();
+            isPlaying = true;
+        }
     }
 
     IEnumerator WaitForClipToFinish()

@@ -44,14 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bddd4567d1ae89479fbb540f43964ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  leftPages:
-  - {fileID: 2800000, guid: 8a0bbef7c304d3a439fcc4f4fab897ea, type: 3}
-  - {fileID: 2800000, guid: 9738ac4a66ae01c4a857d3ccf283a1d2, type: 3}
-  - {fileID: 2800000, guid: bab074ef6dfd4f441822506882ef719f, type: 3}
-  rightPages:
-  - {fileID: 2800000, guid: 92be2f696a2b02e4eb6504624455a1bf, type: 3}
-  - {fileID: 2800000, guid: 6fdd4d0c8f276084da19bbde5b784adc, type: 3}
-  - {fileID: 2800000, guid: 92be2f696a2b02e4eb6504624455a1bf, type: 3}
+  leftMaterial: {fileID: 0}
+  rightMaterial: {fileID: 0}
 --- !u!1 &1070498879379465313
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,9 +266,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   clip: {fileID: 8300000, guid: 8af317065cb587e488a2beeca671c0bc, type: 3}
+  libraryClip: {fileID: 8300000, guid: 3e75a6f58829758448ec7f592a6c22c9, type: 3}
   minCooldown: 600
-  checkInterval: 2
-  playChance: 1
+  checkInterval: 6
+  playChance: 0.772
+  inLibrary: 0
 --- !u!1 &2920011903230975336
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ public class HallwayTrigger : MonoBehaviour
 
     public Material hallwayLeft;
     public Material hallwayRight;
+    private MusicManager musicManager;
 
     private void Start()
     {
@@ -22,6 +23,7 @@ public class HallwayTrigger : MonoBehaviour
         }
 
         controls = FindFirstObjectByType<PlayerControls>();   
+        musicManager = FindFirstObjectByType<MusicManager>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -38,6 +40,7 @@ public class HallwayTrigger : MonoBehaviour
             StartCoroutine(LibraryEnemyScream());
 
             JournalStateManager.Instance.UpdateMaterial(hallwayLeft, hallwayRight);
+            musicManager.inLibrary = true;
         }
     }
 
@@ -47,6 +50,8 @@ public class HallwayTrigger : MonoBehaviour
 
         yield return new WaitForSeconds(0.3f);
         AudioSource.PlayClipAtPoint(scream, screamLocation.position, 0.8f);
+
+        yield return new WaitForSeconds(1.5f);
 
         controls.StartDialogue("What in the gods was that?!");
         controls.StartDialogue("I need to locate the Dragon's Pulse");

@@ -29,6 +29,7 @@ public class ItemDataEditor : Editor
         EditorGUILayout.PropertyField(itemInspectUI);
         EditorGUILayout.PropertyField(scale);
         EditorGUILayout.PropertyField(rotation);
+        EditorGUILayout.PropertyField(prefab);
 
         if ((InputType)typeInput.enumValueIndex == InputType.Key)
         {
@@ -38,14 +39,6 @@ public class ItemDataEditor : Editor
         if ((InputType)typeInput.enumValueIndex == InputType.Tablet)
         {
             EditorGUILayout.PropertyField(tabletNumber);
-        }
-
-        if ((InputType)typeInput.enumValueIndex == InputType.Tablet || 
-            (InputType)typeInput.enumValueIndex == InputType.GuardianItem || 
-            (InputType)typeInput.enumValueIndex == InputType.SeasonItem || 
-            (InputType)typeInput.enumValueIndex == InputType.PillarItem)
-        {
-            EditorGUILayout.PropertyField(prefab);
         }
 
         if ((InputType)typeInput.enumValueIndex == InputType.NumberStone)

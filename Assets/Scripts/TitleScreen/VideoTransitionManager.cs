@@ -16,7 +16,7 @@ public class VideoTransitionManager : MonoBehaviour
 
     void Start()
     {
-        Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
+        Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow);
         PlayVideo(backgroundLoop, true);
     }
 

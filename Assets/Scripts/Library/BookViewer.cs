@@ -58,6 +58,7 @@ public class BookViewer : MonoBehaviour
 
     private IEnumerator SlideIn()
     {
+        player.isPaused = false;
         Vector3 start = transform.localPosition;
         Vector3 end = shownLocalPos;
         float t = 0f;
@@ -124,6 +125,7 @@ public class BookViewer : MonoBehaviour
         transform.localPosition = end;
 
         player.EnableControls();
+        player.isPaused = true;
         player.NotifyJournalClosed();
         Destroy(gameObject);
     }

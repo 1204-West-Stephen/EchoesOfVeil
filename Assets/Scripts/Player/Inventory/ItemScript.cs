@@ -31,9 +31,9 @@ public class ItemData : ScriptableObject
     public Canvas itemInspectUI;
     public Vector3 scale = Vector3.one;
     public Vector3 rotation;
+    public GameObject prefab;
 
     [HideInInspector] public int keyID;
     [HideInInspector] public int tabletNumber;
-    [HideInInspector] public GameObject prefab;
     [HideInInspector] public int stoneValue;
 }

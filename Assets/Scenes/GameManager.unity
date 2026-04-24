@@ -412,19 +412,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4407183253493862064, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: moveSpeed
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 4407183253493862064, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: sprintSpeed
-      value: 2
+      value: 2.3
       objectReference: {fileID: 0}
     - target: {fileID: 4407183253493862064, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: staminaDrainRate
-      value: 0.3
+      value: 0.24
       objectReference: {fileID: 0}
     - target: {fileID: 4407183253493862064, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: staminaRegenRate
-      value: 0.5
+      value: 0.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 4407183253493862064, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+      propertyPath: staminaRegenDelay
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4596628086089084290, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'

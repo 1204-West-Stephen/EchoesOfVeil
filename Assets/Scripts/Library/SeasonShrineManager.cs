@@ -49,14 +49,17 @@ public class SeasonShrineManager : MonoBehaviour
         }
 
         movement.controlLock();
-        FindFirstObjectByType<DragonPartProtector>()?.CheckShrinePuzzle();
 
         yield return new WaitForSeconds(1.5f);
 
         solvedCamera.gameObject.SetActive(true);
         playerCamera.gameObject.SetActive(false);
 
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(1f);
+
+        FindFirstObjectByType<DragonPartProtector>()?.CheckShrinePuzzle();
+
+        yield return new WaitForSeconds(4.5f);
 
         playerCamera.gameObject.SetActive(true);
         solvedCamera.gameObject.SetActive(false);
