@@ -18,7 +18,11 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: dcb3c255d6a4adb4bbb4d124f273e20d, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
+  prefab: {fileID: 3872396379594883614, guid: 4225034df68d6804ea2f3c0c5594961f, type: 3}
+  scale: {x: 1.6, y: 1.6, z: 1.6}
+  rotation: {x: 200, y: 0, z: -90}
+  inHandScale: {x: 1, y: 1, z: 1}
+  inHandRotation: {x: 0, y: 0, z: 0}
   keyID: 0
   tabletNumber: 0
-  prefab: {fileID: 0}
   stoneValue: 8

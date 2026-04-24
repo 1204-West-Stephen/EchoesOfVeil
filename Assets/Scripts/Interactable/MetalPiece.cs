@@ -10,6 +10,9 @@ public class MetalPiece : MonoBehaviour, i_Interactable
     private AudioSource source;
     public AudioClip pickup;
 
+    public Material newLeft;
+    public Material newRight;
+
     private void Awake()
     {
         playerManager = FindFirstObjectByType<PlayerControls>();
@@ -43,6 +46,7 @@ public class MetalPiece : MonoBehaviour, i_Interactable
                 if (itemPickedUp)
                 {
                     playerManager.StartDialogue("I should be able to pry something with this...");
+                    JournalStateManager.Instance.UpdateMaterial(newLeft, newRight);
                 }
             }
             else

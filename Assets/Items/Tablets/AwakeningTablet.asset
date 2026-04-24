@@ -12,12 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc513b4af99458438e47bdd56d9648e, type: 3}
   m_Name: AwakeningTablet
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2787620120796407535, guid: 39b23003cbda9fa4da51ad9d4ce97d2d, type: 3}
   itemName: Tablet of Awakening
   puzzleNumber: 0
   typeInput: 5
   sprite: {fileID: 21300000, guid: 06b696bd88eb9ac4e98c96c83706dedd, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
+  prefab: {fileID: 2787620120796407535, guid: 39b23003cbda9fa4da51ad9d4ce97d2d, type: 3}
+  scale: {x: 0.02, y: 0.02, z: 0.02}
+  rotation: {x: 177, y: 95, z: -124}
+  inHandScale: {x: 0.02, y: 0.02, z: 0.02}
+  inHandRotation: {x: 177, y: 95, z: -124}
   keyID: 0
   tabletNumber: 5
+  stoneValue: 0

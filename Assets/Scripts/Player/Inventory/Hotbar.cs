@@ -3,13 +3,14 @@ using TMPro;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
-using Unity.VisualScripting;
 public class Hotbar : MonoBehaviour
 {
     public List<Cell> cells;
     public Inventory inventory;
+    private ItemData lastItem = null;
 
     public int selectedIndex = 0;
+    private int lastIndex = -1;
 
     PlayerInput controls;
 
@@ -31,8 +32,6 @@ public class Hotbar : MonoBehaviour
     private float lastInputTime;
 
     private Coroutine fadeOutDelayCoroutine;
-
-    public Image itemInHand; 
     public PlayerControls playerControls;
 
     private void Awake()
@@ -85,7 +84,6 @@ public class Hotbar : MonoBehaviour
         if (changeDetected)
         {
             lastInputTime = Time.time;
-            playerControls.ItemInHand.gameObject.SetActive(true);
 
             if (inventory.itemAdded)
             {
@@ -192,30 +190,19 @@ public class Hotbar : MonoBehaviour
             cells[i].SetSelected(i == selectedIndex); 
         }
 
-        if (inventory.inventory.Count > 0 && selectedIndex < inventory.inventory.Count)
+        ItemData currentItem = inventory.inventory[selectedIndex];
+
+        if (selectedIndex != lastIndex || currentItem != lastItem)
         {
-            SetItemInHand(inventory.inventory[selectedIndex] as ItemData);
-        }
-        else
-        {
-            SetItemInHand(null); 
+            lastIndex = selectedIndex;
+            lastItem = currentItem;
+
+            if (currentItem != null)
+                playerControls.SpawnSelectedHotbarItem(currentItem);
+            else
+                playerControls.ClearHeldItem();
         }
     }
-
-    public void SetItemInHand(ItemData item)
-    {
-        if (item == null || item.sprite == null)
-        {
-            itemInHand.gameObject.SetActive(false);
-        }
-        else
-        {
-            itemInHand.sprite = item.sprite;
-            itemInHand.gameObject.SetActive(true);
-        }
-    }
-
-
     private void FadeHotbar()
     {
         float currentAlpha = cells[0].GetComponentInChildren<TextMeshProUGUI>()?.color.a ?? 0f;

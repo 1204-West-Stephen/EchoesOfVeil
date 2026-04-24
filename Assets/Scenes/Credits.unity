@@ -693,73 +693,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'ECHOES OF VEIL - Demo
-
-
-
-
-    Creator
-
-    Stephen West
-
-
-
-
-    Mural
-    Art Work
-
-    Callie Sumsion
-
-
-
-
-    Sound Effects
-
-    Brandon Beck
-
-
-
-
-
-    Enemy 
-    Animations
-
-    jackatgoogle
-
-
-
-
-
-    Music
-
-    Stephen West
-
-
-
-
-
-    Thank
-    you for playing my game
-
-
-
-
-
-    Special thanks to everyone who supported
-
-    my
-    development on my social media.
-
-
-
-
-
-    If you would like to see ECHOES OF VEIL
-
-    become
-    a full game release, support me on
-
-    patreon! '
+  m_text: "ECHOES OF VEIL - Demo\n\n\n\nCreator\nStephen West\n\n\n\nMural Art Work\nCallie
+    Sumsion\n\n\n\nSound Effects\nBrandon Beck\n\n\n\n\nEnemy  Animations\njackatgoogle\n\n\n\n\nMusic\nStephen
+    West\n\n\n\n\nThank you for playing my game\n\n\n\n\nSpecial thanks to everyone
+    who supported\nmy development on my social media.\n\n\n\n\n\nA very special shout
+    out to my Beta Testers! You guys are awesome!\n\nDad_of_war_Official\t\tMom_of_War_Official\n\nCarrotable\t\tassassincomplex\t\tBeckNyet\n\nThe
+    Drunk Aimbot\t\tError303\n\n\n\n\n\nIf you would like to see ECHOES OF VEIL\nbecome
+    a full game release, support me on\npatreon - @MrBoatCraft "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
   m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}

@@ -12,15 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc513b4af99458438e47bdd56d9648e, type: 3}
   m_Name: WrongStatue2
   m_EditorClassIdentifier: 
-  itemName: Statue2
+  itemName: Angel Guardian
   puzzleNumber: 0
   typeInput: 9
   sprite: {fileID: 21300000, guid: 46e6f08174466694faa06976819ee62b, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
+  prefab: {fileID: 7610708523918797888, guid: a7f5d64bc44b1a64d9ba298b01ff2e74, type: 3}
   scale: {x: 0.05, y: 0.05, z: 0.05}
   rotation: {x: 0, y: 180, z: 0}
+  inHandScale: {x: 0.03, y: 0.03, z: 0.03}
+  inHandRotation: {x: 0, y: 180, z: 0}
   keyID: 0
   tabletNumber: 0
-  prefab: {fileID: 7610708523918797888, guid: a7f5d64bc44b1a64d9ba298b01ff2e74, type: 3}
   stoneValue: 0

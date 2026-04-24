@@ -65,7 +65,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2866196864021734138, guid: f99885465f20a5b4ab097e2d7f7cb26c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 6582f0bf28ded88428c21de22df762a6, type: 2}
     - target: {fileID: 919132149155446097, guid: f99885465f20a5b4ab097e2d7f7cb26c, type: 3}
@@ -77,5 +77,26 @@ PrefabInstance:
     - {fileID: -8700617353114198275, guid: f99885465f20a5b4ab097e2d7f7cb26c, type: 3}
     - {fileID: 65702495048144492, guid: f99885465f20a5b4ab097e2d7f7cb26c, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f99885465f20a5b4ab097e2d7f7cb26c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3227383830124299964}
   m_SourcePrefab: {fileID: 100100000, guid: f99885465f20a5b4ab097e2d7f7cb26c, type: 3}
+--- !u!1 &5222477690053875037 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f99885465f20a5b4ab097e2d7f7cb26c, type: 3}
+  m_PrefabInstance: {fileID: 4951881633106847756}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3227383830124299964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5222477690053875037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0ac259502bd37e4286118d0919b0b01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Tablet
+  tablet: {fileID: 0}

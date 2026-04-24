@@ -8,6 +8,7 @@ public class Inventory : MonoBehaviour
     public int selectedIndex = 0;
     public int maxSlots = 6;
     public bool itemAdded = false;
+    public PlayerControls playerControls;
 
     private void Awake()
     {
@@ -37,6 +38,8 @@ public class Inventory : MonoBehaviour
             Debug.Log($"Removed: {inventory[selectedIndex].name}");
             inventory[selectedIndex] = null;
         }
+
+        playerControls.ClearHeldItem();
     }
 
     public bool CheckInventory()

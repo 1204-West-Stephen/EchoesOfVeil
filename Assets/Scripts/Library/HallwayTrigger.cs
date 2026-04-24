@@ -10,6 +10,8 @@ public class HallwayTrigger : MonoBehaviour
 
     public AudioClip scream;
     public Transform screamLocation;
+    private WorldItem[] allItems;
+    private Tablet[] tablets;
 
     public Material hallwayLeft;
     public Material hallwayRight;
@@ -24,6 +26,21 @@ public class HallwayTrigger : MonoBehaviour
 
         controls = FindFirstObjectByType<PlayerControls>();   
         musicManager = FindFirstObjectByType<MusicManager>();
+
+        allItems = FindObjectsByType<WorldItem>(FindObjectsSortMode.None);
+        tablets = FindObjectsByType<Tablet>(FindObjectsSortMode.None);
+
+        foreach (WorldItem item in allItems)
+        {
+            Destroy(item.gameObject);
+        }
+
+        foreach (Tablet item in tablets)
+        {
+            Destroy(item.gameObject);
+        }
+
+        controls.ClearInventory();
     }
 
     private void OnTriggerEnter(Collider other)

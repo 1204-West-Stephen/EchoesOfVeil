@@ -350,6 +350,10 @@ PrefabInstance:
       propertyPath: ySensitivity
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 2218174150714549848, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+      propertyPath: soundManager
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3113305152562575663, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -482,6 +486,10 @@ PrefabInstance:
       propertyPath: journalSpawnPoint
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6545076461631427057, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.5604
+      objectReference: {fileID: 0}
     - target: {fileID: 6732532308795397282, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
       propertyPath: m_SizeDelta.x
       value: 1350.829
@@ -581,6 +589,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8360021449906681609, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
+    - {fileID: 5732332674477477046, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a69e4a48c1e2b48489fbe513f9a24792, type: 3}

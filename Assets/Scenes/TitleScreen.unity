@@ -1013,7 +1013,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   videoPlayer: {fileID: 1244158622}
   rawImage: {fileID: 1244158623}
-  backgroundLoop: {fileID: 32900000, guid: 60c3b4628a8d42a43aac828709f8bae9, type: 3}
+  backgroundLoop: {fileID: 32900000, guid: 786a8c2e9ceac5442bf2adf710ec2159, type: 3}
   transitionClip: {fileID: 32900000, guid: c95cf786582ce2d47b93f4c091a52894, type: 3}
   sceneToLoad: GameManager
   button: {fileID: 1860977939}

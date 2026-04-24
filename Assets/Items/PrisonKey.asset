@@ -12,10 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc513b4af99458438e47bdd56d9648e, type: 3}
   m_Name: PrisonKey
   m_EditorClassIdentifier: 
-  itemName: PrisonKey
+  itemName: Prison Key
   puzzleNumber: 0
   typeInput: 3
   sprite: {fileID: 21300000, guid: b00f298c8ba879c4c91730ee9321aa66, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
+  prefab: {fileID: 3212985094304451374, guid: a80bd46db0f1c9e47af7d42dc972d73d, type: 3}
+  scale: {x: 0.28346458, y: 0.28346458, z: 0.28346458}
+  rotation: {x: 0, y: -3, z: 90}
+  inHandScale: {x: 0.28346458, y: 0.28346458, z: 0.28346458}
+  inHandRotation: {x: 0, y: -3, z: 90}
   keyID: 1000
+  tabletNumber: 0
+  stoneValue: 0

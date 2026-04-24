@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -66,7 +66,7 @@ public class EnemyAI : MonoBehaviour
         playerCamera = Camera.main;
 
         playerInventory = player.GetComponent<Inventory>();
-        allShelves = FindObjectsOfType<BookShelf>();
+        allShelves = FindObjectsByType<BookShelf>(FindObjectsSortMode.None);
 
         agent.autoBraking = true;
         agent.stoppingDistance = 1.2f;
@@ -345,68 +345,70 @@ public class EnemyAI : MonoBehaviour
         agent.isStopped = true;
         agent.ResetPath();
 
-        jumpscareAnimator.Play("JumpScare 1", 0, 0f);
+        if (jumpscareAnimator != null)
+            jumpscareAnimator.Play("JumpScare 1", 0, 0f);
 
         if (jumpscareSource && jumpscareClip)
             jumpscareSource.PlayOneShot(jumpscareClip);
 
-        playerCamera.gameObject.SetActive(false);
-        jumpscareCamera.gameObject.SetActive(true);
+        if (playerCamera != null)
+            playerCamera.gameObject.SetActive(false);
+
+        if (jumpscareCamera != null)
+            jumpscareCamera.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(jumpscareDuration);
 
-        if (respawnPoint)
+        // ---------------- SAFE GAME LOGIC ----------------
+        if (player != null && respawnPoint != null)
             player.position = respawnPoint.position;
 
         if (patrolPoints != null && patrolPoints.Length > 0)
         {
             Transform randomPoint = patrolPoints[Random.Range(0, patrolPoints.Length)];
 
-            if (NavMesh.SamplePosition(randomPoint.position, out NavMeshHit hit, 3f, NavMesh.AllAreas))
+            if (randomPoint != null &&
+                NavMesh.SamplePosition(randomPoint.position, out NavMeshHit hit, 3f, NavMesh.AllAreas))
             {
                 agent.Warp(hit.position);
                 patrolIndex = System.Array.IndexOf(patrolPoints, randomPoint);
             }
         }
 
-        ItemData heldItem = playerInventory.GetSelectedItem();
-
-        if (heldItem == null)
+        // ---------------- INVENTORY (SAFE, NO BREAKS) ----------------
+        if (playerInventory != null)
         {
-            Debug.Log("No item in selected slot.");
-            yield return null;
-        }
+            ItemData heldItem = playerInventory.GetSelectedItem();
 
-        if (heldItem.typeInput != InputType.Book)
-        {
-            Debug.Log("Selected item is not a book.");
-            yield return null;
-        }
-
-        //  FIND MATCHING SHELF FIRST
-        BookShelf matchingShelf = null;
-
-        foreach (BookShelf shelf in allShelves)
-        {
-            if (shelf.GetStartingBook() == heldItem)
+            if (heldItem != null)
             {
-                matchingShelf = shelf;
-                break;
+                Debug.Log("BOOK FOUND ON DEATH: " + heldItem.name);
+
+                playerInventory.RemoveSelectedItem();
+
+                if (allShelves != null)
+                {
+                    foreach (BookShelf shelf in allShelves)
+                    {
+                        if (shelf == null) continue;
+
+                        if (shelf.GetStartingBook() == heldItem)
+                        {
+                            Debug.Log("RETURNING BOOK TO SHELF: " + heldItem.name);
+                            shelf.ResetIfMatches(heldItem);
+                            break;
+                        }
+                    }
+                }
             }
         }
 
-        if (matchingShelf == null)
-        {
-            Debug.LogWarning("No matching shelf found for this book.");
-            yield return null;
-        }
+        // ---------------- ALWAYS RUN (CRITICAL) ----------------
+        if (jumpscareCamera != null)
+            jumpscareCamera.gameObject.SetActive(false);
 
-        // NOW remove + reset
-        playerInventory.RemoveSelectedItem();
-        matchingShelf.ResetIfMatches(heldItem);
-
-        jumpscareCamera.gameObject.SetActive(false);
-        playerCamera.gameObject.SetActive(true);
+        if (playerCamera != null)
+            playerCamera.gameObject.SetActive(true);
 
         currentState = EnemyState.Patrol;
         agent.isStopped = false;

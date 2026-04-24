@@ -25,11 +25,13 @@ public class PlayerControls : MonoBehaviour
     public bool isPaused;
 
     [Header("Held Item")] 
-    public Canvas ItemInHand; 
-    public RectTransform ItemInHandTransform; 
     public Hotbar hotbar;
     private bool pressedF;
     private Inventory inventory;
+    public float itemSpawnDistance = 0.5f;
+    private GameObject spawnedHeldItem;
+    [Header("Held Item Anchor")]
+    public Transform itemAnchor;
 
     [Header("Movement")]
     public float moveDuration = 0.3f; 
@@ -108,7 +110,7 @@ public class PlayerControls : MonoBehaviour
     }
     private void Update()
     {
-        if (pressedF)
+        if (pressedF && spawnedHeldItem != null)
         {
             StartCoroutine(MoveItemDownAndHide());
             pressedF = false;
@@ -185,25 +187,37 @@ public class PlayerControls : MonoBehaviour
             currentInteractable.Interact();
         }
     }
+    public void ClearInventory()
+    {
+        for (int i = 0; i < inventory.inventory.Count; i++)
+        {
+            inventory.inventory[i] = null;
+        }
+
+        inventory.selectedIndex = 0;
+        ClearHeldItem();
+
+        Debug.Log("Inventory Cleared Completely");
+    }
 
     // ========== MENUS ========== \\
     private IEnumerator MoveItemDownAndHide()
     {
-        Vector3 startPos = ItemInHandTransform.anchoredPosition;
+        Vector3 startPos = spawnedHeldItem.transform.position;
         Vector3 endPos = startPos - new Vector3(0, moveDistance, 0);
         float elapsed = 0f;
 
         while (elapsed < moveDuration)
         {
-            ItemInHandTransform.anchoredPosition = Vector3.Lerp(startPos, endPos, elapsed / moveDuration);
+            spawnedHeldItem.transform.position = Vector3.Lerp(startPos, endPos, elapsed / moveDuration);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        ItemInHandTransform.anchoredPosition = endPos;
-        ItemInHand.gameObject.SetActive(false);
+        spawnedHeldItem.transform.position = endPos;
+        spawnedHeldItem.gameObject.SetActive(false);
 
-        ItemInHandTransform.anchoredPosition = startPos;
+        spawnedHeldItem.transform.position = startPos;
     }
     public void PauseMenu()
     {
@@ -221,12 +235,45 @@ public class PlayerControls : MonoBehaviour
             EnableControls();
         }
     }
-
     public void OptionsMenu()
     {
         optionsToggle = !optionsToggle;
         optionsCanvas.gameObject.SetActive(optionsToggle);
         pauseMenu.gameObject.SetActive(!optionsToggle);
+    }
+    public void SpawnSelectedHotbarItem(ItemData item)
+    {
+        if (item == null || item.prefab == null) return;
+
+        if (spawnedHeldItem != null)
+            Destroy(spawnedHeldItem);
+
+        Transform anchor = itemAnchor != null ? itemAnchor : Camera.main.transform;
+
+        spawnedHeldItem = Instantiate(
+            item.prefab,
+            anchor.position,
+            anchor.rotation
+        );
+
+        spawnedHeldItem.transform.SetParent(anchor, true);
+
+        spawnedHeldItem.transform.localScale = item.inHandScale;
+        spawnedHeldItem.transform.localRotation = Quaternion.Euler(item.inHandRotation);
+
+        Rigidbody rb = spawnedHeldItem.GetComponent<Rigidbody>();
+        if (rb != null) Destroy(rb);
+
+        foreach (var c in spawnedHeldItem.GetComponentsInChildren<Collider>())
+            c.enabled = false;
+    }
+    public void ClearHeldItem()
+    {
+        if (spawnedHeldItem != null)
+        {
+            Destroy(spawnedHeldItem);
+            spawnedHeldItem = null;
+        }
     }
 
     // ========== CONTROL LOCKS ========== \\
@@ -237,7 +284,6 @@ public class PlayerControls : MonoBehaviour
         canInteract = false;
         Cursor.visible = true;
     }
-
     public void DisableMovementOnly()
     {
         movement.controlLock();   // stops WASD
@@ -250,7 +296,6 @@ public class PlayerControls : MonoBehaviour
         canInteract = true;
         Cursor.visible = false;
     }
-
     public void EnableMovementOnly()
     {
         movement.controlUnlock();   // stops WASD
@@ -366,7 +411,6 @@ public class PlayerControls : MonoBehaviour
 
         canvasGroup.alpha = 0f;
     }
-
     public void SkipDialogue()
     {
         if (!dialogueRunning) return;

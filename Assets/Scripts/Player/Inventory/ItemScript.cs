@@ -29,9 +29,15 @@ public class ItemData : ScriptableObject
     public Sprite sprite;
     public bool canBeInspected;
     public Canvas itemInspectUI;
+    public GameObject prefab;
+
+    [Header("Normal Scale/Rotation")]
     public Vector3 scale = Vector3.one;
     public Vector3 rotation;
-    public GameObject prefab;
+
+    [Header("InHand Scale/Rotation")]
+    public Vector3 inHandScale = Vector3.one;
+    public Vector3 inHandRotation;
 
     [HideInInspector] public int keyID;
     [HideInInspector] public int tabletNumber;

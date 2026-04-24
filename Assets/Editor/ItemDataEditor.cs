@@ -20,6 +20,8 @@ public class ItemDataEditor : Editor
         SerializedProperty stoneValue = serializedObject.FindProperty("stoneValue");
         SerializedProperty scale = serializedObject.FindProperty("scale");
         SerializedProperty rotation = serializedObject.FindProperty("rotation");
+        SerializedProperty inHandScale = serializedObject.FindProperty("inHandScale");
+        SerializedProperty inHandRotation = serializedObject.FindProperty("inHandRotation");
 
         EditorGUILayout.PropertyField(itemName);
         EditorGUILayout.PropertyField(puzzleNumber);
@@ -29,6 +31,8 @@ public class ItemDataEditor : Editor
         EditorGUILayout.PropertyField(itemInspectUI);
         EditorGUILayout.PropertyField(scale);
         EditorGUILayout.PropertyField(rotation);
+        EditorGUILayout.PropertyField(inHandScale);
+        EditorGUILayout.PropertyField(inHandRotation);
         EditorGUILayout.PropertyField(prefab);
 
         if ((InputType)typeInput.enumValueIndex == InputType.Key)

@@ -12,12 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc513b4af99458438e47bdd56d9648e, type: 3}
   m_Name: DeceitTablet
   m_EditorClassIdentifier: 
-  prefab: {fileID: 7145306982861108215, guid: 5cb61d1ee30c4bf4db2c09f942331275, type: 3}
   itemName: Tablet of Deceit
   puzzleNumber: 0
   typeInput: 5
   sprite: {fileID: 21300000, guid: a9de926a218abc7459a41be12b9a5a27, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
+  prefab: {fileID: 7145306982861108215, guid: 5cb61d1ee30c4bf4db2c09f942331275, type: 3}
+  scale: {x: 0.02, y: 0.02, z: 0.02}
+  rotation: {x: 177, y: 95, z: -124}
+  inHandScale: {x: 0.02, y: 0.02, z: 0.02}
+  inHandRotation: {x: 177, y: 95, z: -124}
   keyID: 0
   tabletNumber: 4
+  stoneValue: 0

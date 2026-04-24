@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerCamera : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class PlayerCamera : MonoBehaviour
     float rotateY;
 
     PlayerInput controls;
+    [SerializeField] private Slider sensitivitySlider;
 
     private void Awake()
     {
@@ -29,15 +31,23 @@ public class PlayerCamera : MonoBehaviour
         Vector3 startRotation = transform.rotation.eulerAngles;
         rotateX = startRotation.x;
         rotateY = startRotation.y;
+
+        if (sensitivitySlider != null)
+        {
+            sensitivitySlider.onValueChanged.AddListener(SetSensitivity);
+
+            // optional: initialize from current value
+            SetSensitivity(sensitivitySlider.value);
+        }
     }
 
     private void Update()
     {
         Vector2 mouseDelta = controls.Movement.Look.ReadValue<Vector2>();
 
-        float mouseX = mouseDelta.x * xSensitivity * 0.01f;
-        float mouseY = mouseDelta.y * ySensitivity * 0.01f;
-
+        float mouseX = mouseDelta.x * (xSensitivity * 0.001f);
+        float mouseY = mouseDelta.y * (ySensitivity * 0.001f);
+        
         rotateX -= mouseY;
         rotateY += mouseX;
         rotateX = Mathf.Clamp(rotateX, -90f, 90f);
@@ -48,6 +58,12 @@ public class PlayerCamera : MonoBehaviour
         RaycastFromCamera();
     }
 
+
+    public void SetSensitivity(float value)
+    {
+        xSensitivity = value;
+        ySensitivity = value;
+    }
     public void RaycastFromCamera()
     {
         Camera cam = Camera.main;

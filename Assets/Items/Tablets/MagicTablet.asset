@@ -12,12 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc513b4af99458438e47bdd56d9648e, type: 3}
   m_Name: MagicTablet
   m_EditorClassIdentifier: 
-  prefab: {fileID: 4372877152359286213, guid: 85a9c072f54c0f04cb8bf6bab269f321, type: 3}
   itemName: Tablet of Magic
   puzzleNumber: 0
   typeInput: 5
   sprite: {fileID: 21300000, guid: a5b742bf6882bc846bc07e4e70ecfa1e, type: 3}
   canBeInspected: 0
   itemInspectUI: {fileID: 0}
+  prefab: {fileID: 4372877152359286213, guid: 85a9c072f54c0f04cb8bf6bab269f321, type: 3}
+  scale: {x: 0.02, y: 0.02, z: 0.02}
+  rotation: {x: 177, y: 95, z: -124}
+  inHandScale: {x: 0.02, y: 0.02, z: 0.02}
+  inHandRotation: {x: 177, y: 95, z: -124}
   keyID: 0
   tabletNumber: 2
+  stoneValue: 0
