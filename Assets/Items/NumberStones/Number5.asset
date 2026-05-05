@@ -21,8 +21,8 @@ MonoBehaviour:
   prefab: {fileID: 3451791949190970687, guid: e5d6a302b03cb844c850e5191d3647db, type: 3}
   scale: {x: 1.6, y: 1.6, z: 1.6}
   rotation: {x: 200, y: 0, z: -90}
-  inHandScale: {x: 1, y: 1, z: 1}
-  inHandRotation: {x: 0, y: 0, z: 0}
+  inHandScale: {x: 1.6, y: 1.6, z: 1.6}
+  inHandRotation: {x: 200, y: 0, z: -90}
   keyID: 0
   tabletNumber: 0
   stoneValue: 5
