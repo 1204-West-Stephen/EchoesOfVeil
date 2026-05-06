@@ -128995,9 +128995,9 @@ MonoBehaviour:
   patrolSpeed: 1.3
   chaseSpeed: 1.65
   patrolPause: 0.5
-  chaseTime: 5
+  chaseTime: 3.7
   scream: {fileID: 8300000, guid: 229b23f7e427c594da680bde828c9ea6, type: 3}
-  chaseDetectionRadius: 5
+  chaseDetectionRadius: 4
   lurkInterval: 50
   lurkChance: 1
   jumpscareDistance: 1.3

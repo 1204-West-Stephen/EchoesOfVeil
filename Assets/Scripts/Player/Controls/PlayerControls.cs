@@ -72,8 +72,7 @@ public class PlayerControls : MonoBehaviour
         controls.Movement.PressF.performed += _ => pressedF = true;
         controls.Movement.PressF.canceled += _ => pressedF = false;
 
-        controls.Menus.Pause.performed += _ => isPaused = true;
-        controls.Menus.Pause.canceled += _ => isPaused = false;
+        controls.Menus.Pause.performed += _ => HandleEscape();
 
         controls.Menus.Journal.performed += _ => pressedJ = true;
         controls.Menus.Journal.canceled += _ => pressedJ = false;
@@ -127,11 +126,6 @@ public class PlayerControls : MonoBehaviour
             AutoDetectInteractable();
         }
 
-        if (isPaused)
-        {
-            HandleEscape();
-            isPaused = false;
-        }
 
         if (pressedJ && hasJournal)
         {
@@ -143,7 +137,7 @@ public class PlayerControls : MonoBehaviour
             else
             {
                 activeJournal.Close();
-                isPaused = true;
+                isPaused = false;
             }
 
             pressedJ = false;
